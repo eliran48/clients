@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תהליך קליטת ליד ואוטומציה</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-4xl">
+        <h1 class="text-2xl font-bold text-center text-gray-800 mb-8">תרשים זרימה: תהליך קליטת ליד ואוטומציה</h1>
+        <div class="mermaid-container flex justify-center">
+            <pre class="mermaid">
+                graph TD;
+                    A["<b>שלב א': קליטת ליד</b><br/>מתעניין פונה מאחד המקורות:<br/>- אתר אינטרנט<br/>- טופס ווטסאפ<br/>- גוגל (אורגני/ממומן)<br/>- פייסבוק/אינסטגרם<br/>- מפה לאוזן"] --> B{"<b>שלב ב': יצירה ב-CRM</b><br/>ליד חדש נוצר במערכת (Airtable)<br/>עם פרטים בסיסיים (שם, טלפון, מקור)"};
+                    B --> C["<b>שלב ג': בוט וואטסאפ אוטומטי</b><br/>המערכת שולחת הודעת וואטסאפ ללקוח<br/>עם 3 שאלות מנחות"];
+                    C --> D["<b>שאלות הבוט:</b><br/>1. כמה חוגגים?<br/>2. תאריך מבוקש (משוער)?<br/>3. מה סוג האירוע?"];
+                    D --> E["<b>שלב ד': הלקוח משיב</b><br/>המתעניין עונה על השאלות<br/>ישירות בוואטסאפ"];
+                    E --> F{"<b>שלב ה': עדכון ה-CRM</b><br/>תשובות הלקוח מעדכנות אוטומטית<br/>את כרטיס הליד ב-CRM"};
+                    F --> G["<b>שלב ו': עדכון סימונה</b><br/>- בוט שולח הודעה לסימונה: 'נקלט ליד חדש!' עם קישור<br/>- סטטוס הליד משתנה ל<b>'הלקוח מילא פרטים'</b>"];
+                    G --> H["<b>שלב ז': פעולה אנושית</b><br/>סימונה נכנסת לכרטיס הלקוח ויכולה:<br/>- לשלוח הצעת מחיר<br/>- ליצור קשר טלפוני<br/>- לבצע פעולות אחרות"];
+
+                    style A fill:#e3f2fd,stroke:#333,stroke-width:2px
+                    style B fill:#e8f5e9,stroke:#333,stroke-width:2px
+                    style C fill:#fff3e0,stroke:#333,stroke-width:2px
+                    style D fill:#f3e5f5,stroke:#333,stroke-width:2px
+                    style E fill:#e0f7fa,stroke:#333,stroke-width:2px
+                    style F fill:#e8f5e9,stroke:#333,stroke-width:2px
+                    style G fill:#ffecb3,stroke:#333,stroke-width:2px
+                    style H fill:#d1c4e9,stroke:#333,stroke-width:2px
+            </pre>
+        </div>
+    </div>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+</body>
+</html>
+
