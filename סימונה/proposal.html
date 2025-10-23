@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פרויקט CRM ואוטומציה - סימונה</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Mermaid.js for diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <!-- Google Font: Assistant -->
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #f7f9fc; /* רקע כללי בהיר */
+        }
+        /* סגנונות לדיאגרמות Mermaid */
+        .mermaid svg {
+            font-family: 'Assistant', sans-serif !important;
+            max-width: 100%;
+            height: auto;
+        }
+        /* סגנון לטאב הפעיל */
+        .tab-active {
+            border-bottom-color: #3b82f6; /* צבע כחול */
+            color: #3b82f6;
+            font-weight: 700;
+        }
+        /* סגנון לטאב לא פעיל */
+        .tab-inactive {
+            color: #4b5563; /* אפור כהה */
+            border-bottom-color: transparent;
+        }
+        /* אנימציית כניסה עדינה לפאנלים */
+        .tab-panel {
+            display: none; /* מוסתר כברירת מחדל */
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .tab-panel.active {
+            display: block; /* מוצג כשהוא פעיל */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+        
+        <!-- Header: Logos -->
+        <header class="bg-white p-4 md:p-6 border-b border-gray-200">
+            <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+                <!-- לוגו לקוח (סימונה) -->
+                <div class="flex-1 flex justify-start">
+                    <img src="https://www.seamona.co.il/wp-content/uploads/2021/12/%D7%A1%D7%99%D7%9E%D7%95%D7%A0%D7%94-%D7%94%D7%A9%D7%9B%D7%A8%D7%AA-%D7%99%D7%90%D7%9B%D7%98%D7%94-%D7%91%D7%94%D7%A8%D7%A6%D7%9C%D7%99%D7%94-2.png" 
+                         alt="לוגו סימונה" class="h-16 w-auto object-contain"
+                         onerror="this.onerror=null; this.src='https://placehold.co/200x60/000000/FFFFFF?text=Simona+Logo';">
+                </div>
+                <!-- כותרת -->
+                <div class="flex-1 text-center">
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-800">פרויקט CRM ואוטומציה</h1>
+                </div>
+                <!-- לוגו ספק (אלירן אור) -->
+                <div class="flex-1 flex justify-end">
+                    <img src="https://i0.wp.com/eliranor.com/wp-content/uploads/2020/02/eliran-OR-%D7%9C%D7%95%D7%92%D7%95-%D7%A9%D7%A0%D7%99-%D7%A9%D7%A7%D7%95%D7%A3.png?w=500&ssl=1" 
+                         alt="לוגו אלירן אור" class="h-16 w-auto object-contain"
+                         onerror="this.onerror=null; this.src='https://placehold.co/200x60/1E3A8A/FFFFFF?text=Eliran+Or+Logo';">
+                </div>
+            </div>
+        </header>
+
+        <!-- Tabs Navigation -->
+        <nav class="bg-gray-50 border-b border-gray-200">
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="flex space-x-4 sm:space-x-8 -mb-px overflow-x-auto">
+                    <!-- Tab 1 -->
+                    <button id="tab-btn-1" data-tab="1" class="tab-button tab-active py-4 px-1 sm:px-2 border-b-4 text-sm sm:text-base font-medium transition-colors duration-200 whitespace-nowrap">
+                        1. קליטת ליד
+                    </button>
+                    <!-- Tab 2 -->
+                    <button id="tab-btn-2" data-tab="2" class="tab-button tab-inactive py-4 px-1 sm:px-2 border-b-4 text-sm sm:text-base font-medium transition-colors duration-200 whitespace-nowrap">
+                        2. תהליך לקוח
+                    </button>
+                    <!-- Tab 3 -->
+                    <button id="tab-btn-3" data-tab="3" class="tab-button tab-inactive py-4 px-1 sm:px-2 border-b-4 text-sm sm:text-base font-medium transition-colors duration-200 whitespace-nowrap">
+                        3. הסכם והצעת מחיר
+                    </button>
+                    <!-- Tab 4 -->
+                    <button id="tab-btn-4" data-tab="4" class="tab-button tab-inactive py-4 px-1 sm:px-2 border-b-4 text-sm sm:text-base font-medium transition-colors duration-200 whitespace-nowrap">
+                        4. נספחים
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Tabs Content -->
+        <main class="p-6 md:p-10">
+
+            <!-- Tab Panel 1: קליטת ליד -->
+            <div id="tab-panel-1" class="tab-panel active">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">שלב 1: תהליך קליטת ליד ואוטומציה</h2>
+                <p class="text-lg text-gray-700 mb-8">
+                    כך יראה תהליך קליטת הליד האוטומטי, מרגע הפנייה הראשונית ועד לעדכון ה-CRM והעברת הטיפול לסימונה.
+                </p>
+                <div class="bg-gray-50 p-4 rounded-lg shadow-inner overflow-x-auto">
+                    <div class="mermaid-container flex justify-center">
+                        <pre class="mermaid">
+                            graph TD;
+                                A["<b>שלב א': קליטת ליד</b><br/>מתעניין פונה מאחד המקורות:<br/>- אתר אינטרנט<br/>- טופס ווטסאפ<br/>- גוגל (אורגני/ממומן)<br/>- פייסבוק/אינסטגרם<br/>- מפה לאוזן"] --> B{"<b>שלב ב': יצירה ב-CRM</b><br/>ליד חדש נוצר במערכת (Airtable)<br/>עם פרטים בסיסיים (שם, טלפון, מקור)"};
+                                B --> C["<b>שלב ג': בוט וואטסאפ אוטומטי</b><br/>המערכת שולחת הודעת וואטסאפ ללקוח<br/>עם 3 שאלות מנחות <b>ושליחת תמונות מהאירועים</b>"];
+                                C --> D["<b>שאלות הבוט:</b><br/>1. כמה חוגגים?<br/>2. תאריך מבוקש (משוער)?<br/>3. מה סוג האירוע?"];
+                                D --> E["<b>שלב ד': הלקוח משיב</b><br/>המתעניין עונה על השאלות<br/>ישירות בוואטסאפ"];
+                                E --> F{"<b>שלב ה': עדכון ה-CRM</b><br/>תשובות הלקוח מעדכנות אוטומטית<br/>את כרטיס הליד ב-CRM"};
+                                F --> G["<b>שלב ו': עדכון ופעולה אוטומטית</b><br/>- בוט שולח הודעה לסימונה: 'נקלט ליד חדש!' עם קישור<br/>- <b>נשלחת הצעת מחיר אוטומטית ללקוח</b><br/>- סטטוס הליד משתנה ל<b>'הלקוח מילא פרטים'</b>"];
+                                G --> H["<b>שלב ז': פעולה אנושית (פולואפ)</b><br/>סימונה נכנסת לכרטיס הלקוח ויכולה:<br/>- <b>ליצור קשר טלפוני</b><br/>- לבצע פעולות נוספות"];
+
+                                style A fill:#e3f2fd,stroke:#333,stroke-width:2px
+                                style B fill:#e8f5e9,stroke:#333,stroke-width:2px
+                                style C fill:#fff3e0,stroke:#333,stroke-width:2px
+                                style D fill:#f3e5f5,stroke:#333,stroke-width:2px
+                                style E fill:#e0f7fa,stroke:#333,stroke-width:2px
+                                style F fill:#e8f5e9,stroke:#333,stroke-width:2px
+                                style G fill:#ffecb3,stroke:#333,stroke-width:2px
+                                style H fill:#d1c4e9,stroke:#333,stroke-width:2px
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Panel 2: תהליך לקוח (נוסף) -->
+            <div id="tab-panel-2" class="tab-panel">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">שלב 2: תהליך הלקוח לאחר קבלת ההצעה</h2>
+                <p class="text-lg text-gray-700 mb-8">
+                    זהו התהליך האוטומטי שיתרחש מרגע שליחת הצעת המחיר, דרך התשלום, התזכורות ועד המשוב לאחר האירוע.
+                </p>
+                <div class="bg-gray-50 p-4 rounded-lg shadow-inner overflow-x-auto">
+                    <div class="mermaid-container flex justify-center">
+                        <pre class="mermaid">
+                            graph TD;
+                                subgraph "שלב 1: שליחת הצעה וסגירה"
+                                    A["<b>נקודת התחלה</b><br/>שליחת הצעת המחיר ללקוח"] --> B{"<b>שליחת הצעת מחיר ולינק למקדמה</b><br/>הודעה אוטומטית עם:<br/>- פרטי ההצעה מה-CRM<br/>- לינק לתשלום מקדמה"};
+                                    B --> C{האם המקדמה שולמה?};
+                                    C -- כן --> D_NEW["<b>עדכון הסקיפר</b><br/>הודעה אוטומטית לסקיפר<br/>עם פרטי ההפלגה"];
+                                    D_NEW --> D["<b>שליחת אישור תשלום, תקנון ומפה</b><br/>הודעה אוטומטית ללקוח עם:<br/>- אישור קבלת תשלום<br/>- תקנון ונהלי ביטולים<br/>- מפת הגעה"];
+                                    C -- לא --> E["<b>פולואפ לתשלום מקדמה</b><br/>(לאחר 24 שעות)"];
+                                end
+
+                                subgraph "שלב 2: תזכורות לפני האירוע"
+                                    D --> F["<b>תזכורת לפני אירוע</b><br/>(נקבע ל-24 שעות לפני ההפלגה)<br/>הודעה אוטומטית עם פרטי ההזמנה"];
+                                    F --> G["<b>תזכורת לתשלום יתרה</b><br/>(נקבע לבוקר יום ההפלגה)<br/>הודעה עם לינק לתשלום<br/>או אפשרות תשלום אצל הסקיפר"];
+                                end
+
+                                subgraph "שלב 3: מעקב לאחר האירוע"
+                                    G --> H["<b>האירוע הסתיים</b>"];
+                                    H --> I["<b>שליחת משוב 1</b><br/>(יום לאחר ההפלגה)<br/>הודעה אוטומטית עם לינק למילוי משוב"];
+                                    I --> J["<b>שליחת משוב 2 (ידני)</b><br/>סימונה שולחת ידנית<br/>לינק להמלצה בגוגל/פייסבוק"];
+                                    J --> K(("<b>סיום תהליך</b>"));
+                                end
+
+                                style A fill:#e8f5e9,stroke:#333,stroke-width:2px
+                                style B fill:#fff3e0,stroke:#333,stroke-width:2px
+                                style C fill:#ffebee,stroke:#333,stroke-width:2px
+                                style D_NEW fill:#e0f2f1,stroke:#333,stroke-width:2px
+                                style D fill:#e3f2fd,stroke:#333,stroke-width:2px
+                                style E fill:#fce4ec,stroke:#333,stroke-width:2px
+                                style F fill:#f3e5f5,stroke:#333,stroke-width:2px
+                                style G fill:#f3e5f5,stroke:#333,stroke-width:2px
+                                style H fill:#e0f2f1,stroke:#333,stroke-width:2px
+                                style I fill:#f9fbe7,stroke:#333,stroke-width:2px
+                                style J fill:#d1c4e9,stroke:#333,stroke-width:2px
+                                style K fill:#cfd8dc,stroke:#333,stroke-width:2px
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Panel 3: הסכם והצעת מחיר (היה 4) -->
+            <div id="tab-panel-3" class="tab-panel">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">שלב 3: הסכם והצעת מחיר</h2>
+                
+                <!-- הצעת מחיר מפורטת -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden mt-6">
+                    <!-- כותרת ההצעה -->
+                    <div class="bg-gray-50 p-6 border-b border-gray-200 flex justify-between items-center">
+                        <h3 class="text-xl font-bold text-gray-800">הצעת מחיר: הקמת מערך אוטומציה ו-CRM</h3>
+                        <div class="text-sm text-gray-600">
+                            <strong>תאריך:</strong> <span id="current-date-proposal">[טעינת תאריך...]</span>
+                        </div>
+                    </div>
+
+                    <!-- גוף ההצעה -->
+                    <div class="p-6 md:p-8 space-y-8">
+                        
+                        <!-- תכולת הפרויקט - הוחלף בתוכן החדש -->
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                <i data-lucide="target" class="w-5 h-5 ml-2 text-blue-600"></i>
+                                מטרות הפרויקט
+                            </h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                <li>הקמת מערכת CRM מותאמת אישית לניהול לידים ולקוחות.</li>
+                                <li>יישום אוטומציות שיווקיות: תזכורות, משובים, ופניות שוטפות.</li>
+                                <li>חיבורי ממשקים למקורות הלידים: וואטסאפ, אתר, וקמפיינים ממומנים.</li>
+                                <li>הפקת חשבוניות אוטומטיות ללקוחות.</li>
+                                <li>הדרכה ותמיכה לשימוש חלק ויעיל במערכת החדשה.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-800 mb-3 mt-8 flex items-center">
+                                <i data-lucide="server" class="w-5 h-5 ml-2 text-blue-600"></i>
+                                הפתרונות שאני מציע
+                            </h4>
+                            
+                            <!-- שלב 1: CRM -->
+                            <div class="mt-4 p-4 border rounded-lg bg-white shadow-sm">
+                                <h5 class="font-bold text-gray-700">שלב 1: הקמת מערכת CRM – AIRTABLE</h5>
+                                <p class="text-sm text-gray-600 mt-2 mb-3">
+                                    Airtable היא מערכת לניהול דאטה ואוטומציה בסביבת ענן, המספקת כלים לניהול לקוחות, לידים ונתונים נוספים בממשק אינטואיטיבי וגמיש. המערכת מאפשרת ניהול קל של לידים ולקוחות לפי שלבים שונים, ומכילה פונקציות מתקדמות כמו שדות מותאמים אישית, סינונים, קישורים בין טבלאות, ואינטגרציות עם מערכות חיצוניות.
+                                </p>
+                                <p class="text-sm font-semibold text-gray-700">יתרונות עיקריים:</p>
+                                <ul class="list-disc list-inside text-sm text-gray-600 ml-4 mb-3">
+                                    <li><strong>תמיכה במובייל:</strong> אפליקציה נוחה לשימוש המאפשרת גישה למידע בכל זמן ובכל מקום.</li>
+                                    <li><strong>ממשק ידידותי:</strong> קל לבצע חיפושים, לסנן לקוחות ולבצע מעקב.</li>
+                                </ul>
+                                <p class="text-sm font-semibold text-gray-700">מה כולל השלב:</p>
+                                <ul class="list-disc list-inside text-sm text-gray-600 ml-4">
+                                    <li><strong>הקמת המערכת ב-Airtable:</strong> בניית בסיסי נתונים, טבלאות, קשרים והגדרות תהליכים אוטומטיים.</li>
+                                    <li><strong>אינטגרציה ואוטומציה:</strong> הטמעת כלים חיצוניים לקליטה של לידים מהוואטסאפ, האתר והקמפיינים אל תוך ה-CRM.</li>
+                                    <li><strong>הדרכה וסיוע:</strong> הדרכה לסימונה על שימוש במערכת, כולל טיפים לעבודה ואופטימיזציה של תהליכים.</li>
+                                    <li><strong>תמיכה ותחזוקה:</strong> תמיכה טכנית ועדכונים על המערכת עד 30 יום בגמר הפרויקט.</li>
+                                </ul>
+                            </div>
+
+                            <!-- שלב 2: אוטומציות -->
+                            <div class="mt-4 p-4 border rounded-lg bg-white shadow-sm">
+                                <h5 class="font-bold text-gray-700">שלב 2: אפיון ויצירת אוטומציות (Make)</h5>
+                                <p class="text-sm font-semibold text-gray-700 mt-3">מה כולל השלב:</p>
+                                <ul class="list-disc list-inside text-sm text-gray-600 ml-4">
+                                    <li><strong>תכנון אוטומציות:</strong> פיתוח תוכנית לאוטומציה של תהליכים כגון: תזכורות, עדכונים אוטומטיים, ושליחת וואטסאפים תוך כדי תנועה במסלול המכירה.</li>
+                                    <li><strong>בדיקות ואופטימיזציה:</strong> בדיקות לוודא שהאוטומציות פועלות כראוי ומייצרות את התהליכים כמתוכנן.</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- שלב 3: צ'אטבוט (חדש) -->
+                            <div class="mt-4 p-4 border rounded-lg bg-white shadow-sm">
+                                <h5 class="font-bold text-gray-700">שלב 3: הקמת צ'אטבוט לקליטת לידים (Manychat)</h5>
+                                <p class="text-sm text-gray-600 mt-2 mb-3">
+                                    הקמת בוט וואטסאפ ייעודי לקליטת פניות ראשוניות (כמופיע בתהליך 1) שיפעל 24/7 ויבצע סינון ראשוני ללידים.
+                                </p>
+                                <p class="text-sm font-semibold text-gray-700">מה כולל השלב:</p>
+                                <ul class="list-disc list-inside text-sm text-gray-600 ml-4">
+                                    <li><strong>בניית תרחיש שיחה:</strong> הקמת בוט ב-Manychat הכולל 3 שאלות מנחות (כמות חוגגים, תאריך, סוג אירוע).</li>
+                                    <li><strong>שליחת מדיה:</strong> הוספת תמונות רלוונטיות מהאירועים לתוך שיחת הבוט.</li>
+                                    <li><strong>סנכרון ל-CRM:</strong> חיבור הבוט למערכת ה-Airtable כך שכל תשובה מהלקוח תתעדכן אוטומטית בכרטיס הליד.</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- שלב 4: חשבוניות (היה 3) -->
+                            <div class="mt-4 p-4 border rounded-lg bg-white shadow-sm">
+                                <h5 class="font-bold text-gray-700">שלב 4: חיבור מערכת סליקה וחשבוניות (Tranzila)</h5>
+                                <p class="text-sm font-semibold text-gray-700 mt-3">מה כולל השלב:</p>
+                                <ul class="list-disc list-inside text-sm text-gray-600 ml-4">
+                                    <li><strong>תכנון תהליך הפקת חשבוניות (Tranzila):</strong> אפיון תהליך הפקת חשבוניות אוטומטי דרך מערכת טרנזילה, החל מקבלת מקדמה ועד הפקת חשבונית סופית.</li>
+                                    <li><strong>אינטגרציה עם Tranzila:</strong> חיבור המערכת ל-CRM (דרך Make) כך שפרטי התשלום יתועדו אוטומטית, והפקת החשבוניות תבוצע בהתאם.</li>
+                                    <li><strong>בדיקות ואופטימיזציה:</strong> ביצוע בדיקות מקיפות לוודא שכל חשבונית מופקת ונשלחת ללקוחות בהתאם לשלבים בתהליך.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- סוף תכולת הפרויקט -->
+
+
+                        <!-- הפלטפורמות -->
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                <i data-lucide="cpu" class="w-5 h-5 ml-2 text-blue-600"></i>
+                                הפלטפורמות בהן נשתמש
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-gray-50 p-4 rounded-lg border">
+                                    <h5 class="font-semibold text-gray-700">Airtable</h5>
+                                    <p class="text-sm text-gray-600">לניהול ה-CRM, הלידים ובסיס הנתונים המרכזי.</p>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-lg border">
+                                    <h5 class="font-semibold text-gray-700">Manychat</h5>
+                                    <p class="text-sm text-gray-600">לבניית הבוט האינטראקטיבי ותקשורת הוואטסאפ.</p>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-lg border">
+                                    <h5 class="font-semibold text-gray-700">Make (Integromat)</h5>
+                                    <p class="text-sm text-gray-600">"הדבק" המחבר בין כל המערכות ובונה את תהליכי האוטומציה.</p>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-lg border">
+                                    <h5 class="font-semibold text-gray-700">Tranzila</h5>
+                                    <p class="text-sm text-gray-600">לסליקת אשראי וניהול תשלומים (מותנה בחשבון פעיל של הלקוחה).</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- הערכת עלויות חודשיות (צד-שלישי) - סעיף חדש -->
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                <i data-lucide="credit-card" class="w-5 h-5 ml-2 text-blue-600"></i>
+                                הערכת עלויות חודשיות (צד-שלישי)
+                            </h4>
+                            <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg text-sm text-yellow-800 space-y-3">
+                                <p><strong>הבהרה חשובה:</strong> העלויות הבאות הינן עלויות חיצוניות המשולמות ישירות לספקי הפלטפורמות ואינן כלולות בעלות ההקמה.</p>
+                                <ul class="list-disc list-inside space-y-2">
+                                    <li>
+                                        <strong>Manychat:</strong> העלות תלויה בכמות הלקוחות (Subscribers). מתחיל מ-$15 לחודש (עבור הבוט הראשוני).
+                                    </li>
+                                    <li>
+                                        <strong>Make (Integromat):</strong> העלות תלויה בכמות הפעולות (Operations) החודשית. החבילה הבסיסית (Core) מתחילה ב-$9 לחודש.
+                                    </li>
+                                    <li>
+                                        <strong>Airtable:</strong> ניתן להתחיל עם החבילה החינמית. חבילות בתשלום (Plus/Pro) נדרשות עבור נפח נתונים גדול יותר או יכולות מתקדמות (החל מ-$10 למשתמש/חודש).
+                                    </li>
+                                    <li>
+                                        <strong>Tranzila:</strong> עלויות סליקה בהתאם למסלול הלקוחה מול חברת האשראי (עמלת סליקה + עלות חודשית קבועה).
+                                    </li>
+                                </ul>
+                                <p class="font-semibold">אנו נסייע בהתאמת החבילות הנכונות ביותר לצורכי העסק כדי למזער עלויות.</p>
+                            </div>
+                        </div>
+
+                        <!-- השקעה ולו"ז -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <i data-lucide="calendar" class="w-5 h-5 ml-2 text-blue-600"></i>
+                                    משך הפרויקט
+                                </h4>
+                                <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg text-center">
+                                    <div class="text-2xl font-bold text-blue-700">עד 60 ימי עבודה</div>
+                                    <p class="text-sm text-blue-600">כ-30 יום להקמת CRM וכ-30 יום לאפיון אוטומציות.</p>
+                                    <p class="text-xs text-blue-600 mt-1">*תלוי גם בזמינות הלקוחה לשינויים והטמעות*</p>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <i data-lucide="dollar-sign" class="w-5 h-5 ml-2 text-blue-600"></i>
+                                    השקעה בפרויקט (חד פעמי)
+                                </h4>
+                                <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg text-center">
+                                    <div class="text-2xl font-bold text-blue-700">₪5,000</div>
+                                    <p class="text-sm text-blue-600">סה"כ לפני מע"מ</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- תנאים כלליים -->
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                <i data-lucide="file-text" class="w-5 h-5 ml-2 text-blue-600"></i>
+                                תנאים כלליים
+                            </h4>
+                            <ul class="list-disc list-inside space-y-2 text-sm text-gray-600">
+                                <li>תוקף ההצעה הינו 10 ימים ממועד שליחתה.</li>
+                                <li>תנאי תשלום: 50% מקדמה במעמד החתימה, ו-50% יתרה בסיום הפרויקט.</li>
+                                <li>ההצעה אינה כוללת עלויות חודשיות למערכות צד-שלישי (כמו Manychat, Make, Airtable, Tranzila), אשר יחולו על הלקוח ישירות.</li>
+                                <li>ההצעה אינה כוללת כתיבת תוכן שיווקי (קריאייטיב) או עיצוב גרפי.</li>
+                                <li>אחריות הלקוח: על הלקוח לוודא כי כלל הנמענים שאליהם יישלחו המסרים הינם מאושרי דיוור בהתאם לחוק.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- טופס אישור -->
+                    <div class="bg-gray-50 p-6 md:p-8 border-t border-gray-200">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6 text-center">אישור ההצעה ויציאה לדרך</h3>
+                        <form id="approval-form" action="https://formspree.io/f/xkgqlrjr" method="POST" class="max-w-xl mx-auto space-y-5">
+                            <!-- שדות נסתרים -->
+                            <input type="hidden" name="נושא" value="אישור הצעת מחיר - פרויקט CRM סימונה">
+                            <input type="hidden" name="הצעה" value="₪5,000 (פרויקט אוטומציה)">
+
+                            <!-- אישור אפיון -->
+                            <div class="flex items-start !mb-4">
+                                <div class="flex items-center h-5">
+                                    <input id="approve-spec" name="אישור אפיון" type="checkbox" required
+                                           class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                                </div>
+                                <div class="mr-3 text-sm">
+                                    <label for="approve-spec" class="font-medium text-gray-700">אני מאשר/ת את האפיון</label>
+                                    <p class="text-xs text-gray-500">קראתי את תהליכי העבודה בטאבים 1 ו-2 ומאשרת אותם.</p>
+                                </div>
+                            </div>
+
+                            <!-- אישור הצעה -->
+                            <div class="flex items-start !mt-0">
+                                <div class="flex items-center h-5">
+                                    <input id="approve-quote" name="אישור הצעה" type="checkbox" required
+                                           class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                                </div>
+                                <div class="mr-3 text-sm">
+                                    <label for="approve-quote" class="font-medium text-gray-700">אני מאשר/ת את הצעת המחיר</label>
+                                    <p class="text-xs text-gray-500">קראתי את תנאי ההצעה, העלויות והתנאים הכלליים ומאשרת אותם.</p>
+                                </div>
+                            </div>
+
+                            <!-- שם החברה -->
+                            <div>
+                                <label for="company-name" class="block text-sm font-medium text-gray-700 mb-1">שם החברה</label>
+                                <input type="text" id="company-name" name="שם החברה" required
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                       placeholder="סימונה - השכרת יאכטה בהרצליה">
+                            </div>
+                            
+                            <!-- חתימה (שם מלא) -->
+                            <div>
+                                <label for="signature" class="block text-sm font-medium text-gray-700 mb-1">חתימה (הקלדת שם מלא)</label>
+                                <input type="text" id="signature" name="חתימה" required
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                       placeholder="סימונה כהן">
+                                <p class="text-xs text-gray-500 mt-1">הקלדת השם המלא מהווה חתימה ואישור לתנאי ההצעה.</p>
+                            </div>
+
+                            <!-- תאריך (אוטומטי) -->
+                            <div>
+                                <label for="date" class="block text-sm font-medium text-gray-700 mb-1">תאריך</slabel>
+                                <input type="text" id="date" name="תאריך" readonly
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed">
+                            </div>
+
+                            <!-- כפתור אישור -->
+                            <div class="pt-2">
+                                <button type="submit"
+                                        class="w-full flex justify-center items-center gap-2 bg-green-600 text-white font-bold text-lg px-6 py-3 rounded-lg shadow-lg hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 transition-all duration-300 transform hover:-translate-y-0.5">
+                                    <i data-lucide="check-circle" class="w-6 h-6"></i>
+                                    אני מאשר/ת ורוצה להתחיל!
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Panel 4: נספחים (היה 5) -->
+            <div id="tab-panel-4" class="tab-panel">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">שלב 4: נספחים ומסמכים</h2>
+                
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">סרטון הדגמה: ניהול CRM ב-Airtable</h3>
+                <p class="text-gray-600 mb-4">
+                    סרטון קצר המדגים את הגמישות והיכולות של מערכת Airtable, אותה נתאים אישית לניהול הלידים והלקוחות של העסק.
+                </p>
+                
+                <!-- Responsive YouTube Embed -->
+                <div class="relative rounded-lg overflow-hidden shadow-xl border border-gray-200" style="padding-bottom: 56.25%;"> <!-- 16:9 Aspect Ratio -->
+                    <iframe 
+                        class="absolute top-0 left-0 w-full h-full" 
+                        src="https://www.youtube.com/embed/KZp9WPCe3H0?start=3" 
+                        title="Airtable CRM Demo" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+        </main>
+        
+        <!-- Footer: פרטי ספק -->
+        <footer class="bg-gray-800 text-gray-300 p-8">
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center text-center md:text-right space-y-4 md:space-y-0">
+                <div>
+                    <h4 class="font-bold text-white text-lg">אלירן אור | מתכנן תהליכי שיווק ואוטומציה</h4>
+                    <p class="text-sm">זמין לכל שאלה וייעוץ</p>
+                </div>
+                <div class="flex flex-col items-center md:items-end space-y-1 text-sm">
+                    <a href="mailto:info@eliranor.com" class="hover:text-white transition-colors">info@eliranor.com</a>
+                    <a href="tel:0553187548" class="hover:text-white transition-colors">055-3187548</a>
+                    <a href="https://eliranor.com" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">eliranor.com</a>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // הפעלת ספריות
+            try {
+                if (typeof mermaid !== 'undefined') {
+                    // 1. אתחול הספרייה ללא הרצה אוטומטית
+                    mermaid.initialize({ startOnLoad: false, theme: 'base' });
+                    
+                    // 2. הרצה ידנית רק על הטאב הפעיל בטעינה (טאב 1)
+                    const initialMermaid = document.querySelector('#tab-panel-1 .mermaid');
+                    if (initialMermaid) {
+                        // עיטוף ב-try/catch נוסף למקרה שהאלמנט לא מוכן
+                        try {
+                            mermaid.run({ nodes: [initialMermaid] });
+                        } catch(e) {
+                            console.error('Mermaid run error on initial tab:', e);
+                        }
+                    }
+                } else {
+                    console.error('Mermaid library not loaded.');
+                }
+                
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                } else {
+                    console.error('Lucide library not loaded.');
+                }
+            } catch (e) {
+                console.error('Error initializing libraries:', e);
+            }
+
+            // לוגיקת טאבים
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabPanels = document.querySelectorAll('.tab-panel');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.getAttribute('data-tab');
+
+                    // עדכון כפתורי הטאבים
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('tab-active');
+                        btn.classList.add('tab-inactive');
+                    });
+                    button.classList.add('tab-active');
+                    button.classList.remove('tab-inactive');
+
+                    // עדכון פאנלי התוכן
+                    tabPanels.forEach(panel => {
+                        if (panel.id === `tab-panel-${tabId}`) {
+                            panel.classList.add('active');
+                            
+                            // 3. הרצה ידנית של התרשים בטאב שנלחץ
+                            const mermaidElement = panel.querySelector('.mermaid');
+                            if (mermaidElement && typeof mermaid !== 'undefined') {
+                                // בודק אם התרשים כבר צויר בעבר
+                                if (mermaidElement.getAttribute('data-processed') !== 'true') {
+                                    try {
+                                        mermaid.run({ nodes: [mermaidElement] });
+                                    } catch(e) {
+                                        console.error('Mermaid run error on tab click:', e, mermaidElement);
+                                        // מנסה לעקוף שגיאה ע"י הסרת התוכן וריצה חוזרת
+                                        mermaidElement.removeAttribute('data-processed');
+                                        mermaidElement.innerHTML = mermaidElement.textContent || mermaidElement.innerText;
+                                        try {
+                                            mermaid.run({ nodes: [mermaidElement] });
+                                        } catch (e2) {
+                                            console.error('Mermaid retry failed:', e2);
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            panel.classList.remove('active');
+                        }
+                    });
+
+                    // Ensure icons are created if new content is shown (e.g., in tabs)
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                });
+            });
+
+            // פונקציה להגדרת תאריך אוטומטי בטפסים
+            function setDynamicDate() {
+                const today = new Date();
+                const day = String(today.getDate()).padStart(2, '0');
+                const month = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+                const year = today.getFullYear();
+                const formattedDate = `${day}/${month}/${year}`;
+
+                const dateField = document.getElementById('date');
+                if (dateField) {
+                    dateField.value = formattedDate;
+                }
+                
+                const dateProposal = document.getElementById('current-date-proposal');
+                if (dateProposal) {
+                    dateProposal.textContent = formattedDate;
+                }
+            }
+
+            // קריאה לפונקציית התאריך
+            setDynamicDate();
+
+            // טיפול בהודעת אישור לאחר שליחת טופס
+            const form = document.getElementById('approval-form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    // מונע שליחה מיידית כדי להציג אנימציית טעינה
+                    e.preventDefault();
+                    
+                    const submitButton = form.querySelector('button[type="submit"]');
+                    const originalButtonText = submitButton.innerHTML;
+                    submitButton.innerHTML = `
+                        <svg class="animate-spin h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        שולח אישור...
+                    `;
+                    submitButton.disabled = true;
+
+                    // שולח את הטופס
+                    fetch(form.action, {
+                        method: form.method,
+                        body: new FormData(form),
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    }).then(response => {
+                        if (response.ok) {
+                            // הצליח
+                            form.innerHTML = `
+                                <div class="text-center p-6 bg-green-100 border border-green-300 rounded-lg">
+                                    <i data-lucide="check-circle" class="w-16 h-16 text-green-600 mx-auto mb-4"></i>
+                                    <h3 class="text-2xl font-bold text-green-800">ההצעה אושרה ונשלחה!</h3>
+                                    <p class="text-green-700 mt-2">תודה רבה! ניצור קשר בהקדם ליציאה לדרך.</p>
+                                </div>
+                            `;
+                            if (typeof lucide !== 'undefined') {
+                                lucide.createIcons(); // רענון האייקונים
+                            }
+                        } else {
+                            // נכשל
+                            response.json().then(data => {
+                                // אם יש שגיאות ספציפיות
+                                console.error("Formspree error:", data);
+                                form.innerHTML = `
+                                    <div class="text-center p-6 bg-red-100 border border-red-300 rounded-lg">
+                                        <i data-lucide="alert-triangle" class="w-16 h-16 text-red-600 mx-auto mb-4"></i>
+                                        <h3 class="text-2xl font-bold text-red-800">אופס! משהו השתבש.</h3>
+                                        <p class="text-red-700 mt-2">השליחה נכשלה. אנא נסה שוב או צור איתי קשר ישירות.</p>
+                                        <p class="text-sm text-gray-600 mt-4">פרטי שגיאה: ${data.errors ? data.errors.map(e => e.message).join(', ') : 'שגיאה לא ידועה'}</p>
+                                    </div>
+                                `;
+                                if (typeof lucide !== 'undefined') {
+                                    lucide.createIcons();
+                                }
+                            });
+                        }
+                    }).catch(error => {
+                        // שגיאת רשת
+                        console.error("Network error:", error);
+                        form.innerHTML = `
+                            <div class="text-center p-6 bg-red-100 border border-red-300 rounded-lg">
+                                <i data-lucide="wifi-off" class="w-16 h-16 text-red-600 mx-auto mb-4"></i>
+                                <h3 class="text-2xl font-bold text-red-800">שגיאת רשת.</h3>
+                                <p class="text-red-700 mt-2">השליחה נכשלה. אנא בדוק את חיבור האינטרנט ונסה שוב.</p>
+
+                            </div>
+                        `;
+                        if (typeof lucide !== 'undefined') {
+                            lucide.createIcons();
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
