@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>לוח ניהול פרויקט - סימונה</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font: Assistant -->
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    
+    <!-- Firebase SDKs -->
+    <script type="module">
+        // ייבוא מודולים של Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, collection, doc, onSnapshot, addDoc, updateDoc, 
+            deleteDoc, setDoc, writeBatch, query, getDocs, limit 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- הגדרות Firebase (מוכן ל-GitHub) ---
+        // אלו הפרטים שהדבקת מהחשבון שלך
+        const firebaseConfig = {
+            apiKey: "AIzaSyDFYvzKavhrf4bnoFI0GckLk-dO40_ftJ4",
+            authDomain: "eliran-apps.firebaseapp.com",
+            projectId: "eliran-apps",
+            storageBucket: "eliran-apps.firebasestorage.app",
+            messagingSenderId: "383762752947",
+            appId: "1:383762752947:web:24fd294ce0cea858f557c6",
+            measurementId: "G-1NYMZVXBMP"
+        };
+        
+        // ---------------------------------------------
+        
+        // אתחול Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        
+        // אין צורך לשנות את ה-appId כאן, הוא ישתמש ב-projectId
+        const appId = firebaseConfig.projectId; 
+        
+        let userId = null; // המזהה הייחודי של המשתמש
+        let sourceColumn = null; // לשמירת העמודה ממנה נגררה משימה
+        let totalHours = 0; // סך שעות מקומי
+
+        // משתני ברירת מחדל למשימות (לטעינה ראשונית בלבד)
+        const defaultTasks = [
+            { title: "אתחול פרויקט", desc: "חתימה על הצעה וקבלת מקדמה 50%", categoryColor: "gray-400", status: "todo", order: 0, hours: 0 },
+            { title: "שלב 1 (Airtable): הקמת בסיס נתונים", desc: "בניית טבלאות, שדות וקשרים", categoryColor: "blue-600", status: "todo", order: 1, hours: 0 },
+            { title: "שלב 1 (Airtable): ממשק משתמש", desc: "הגדרת תצוגות (Views) וסינונים", categoryColor: "blue-600", status: "todo", order: 2, hours: 0 },
+            { title: "שלב 3 (Manychat): בניית צ'אטבוט (Lead)", desc: "הקמת תרחיש שיחה עם 3 שאלות", categoryColor: "purple-600", status: "todo", order: 3, hours: 0 },
+            { title: "שלב 2 (Make): חיבור בוט ל-CRM (Lead)", desc: "עדכון Airtable מ-Manychat", categoryColor: "green-600", status: "todo", order: 4, hours: 0 },
+            { title: "שלב 2 (Make): אוטומציית עדכון (Lead)", desc: "שליחת נוטיפיקציה לסימונה והצעה ללקוח", categoryColor: "green-600", status: "todo", order: 5, hours: 0 },
+            { title: "שלב 4 (Tranzila): חיבור סליקה", desc: "חיבור Make ל-Tranzila להפקת חשבוניות", categoryColor: "red-600", status: "todo", order: 6, hours: 0 },
+            { title: "שלב 2 (Make): אוטומציית סגירה (Ops)", desc: "שליחת אישור, תקנון ומפה", categoryColor: "green-600", status: "todo", order: 7, hours: 0 },
+            { title: "שלב 2 (Make): עדכון סקיפר (Ops)", desc: "שליחת הודעה אוטומטית לסקיפר", categoryColor: "green-600", status: "todo", order: 8, hours: 0 },
+            { title: "תהליך לקוח: פולואפ מקדמה (Ops)", desc: "תזכורת אוטומטית (24 שעות) לאי-תשלום", categoryColor: "yellow-600", status: "todo", order: 9, hours: 0 },
+            { title: "תהליך לקוח: תזכורת לפני (Ops)", desc: "תזכורת אוטומטית (24 שעות לפני)", categoryColor: "yellow-600", status: "todo", order: 10, hours: 0 },
+            { title: "תהליך לקוח: תזכורת יתרה (Ops)", desc: "תזכורת בבוקר האירוע לתשלום יתרה", categoryColor: "yellow-600", status: "todo", order: 11, hours: 0 },
+            { title: "תהליך לקוח: משוב 1 (Ops)", desc: "בקשת משוב אוטומטית (יום אחרי)", categoryColor: "yellow-600", status: "todo", order: 12, hours: 0 },
+            { title: "סיום פרויקט: הדרכה", desc: "הדרכת סימונה על שימוש שוטף ב-CRM", categoryColor: "gray-400", status: "todo", order: 13, hours: 0 },
+            { title: "סיום פרויקט: תשלום סופי", desc: "קבלת יתרת תשלום 50%", categoryColor: "gray-400", status: "todo", order: 14, hours: 0 }
+        ];
+
+        // --- פונקציות Firebase ---
+
+        // יצירת משימות ברירת המחדל אם אין
+        async function populateDefaultTasks() {
+            if (!userId) return;
+            try {
+                const batch = writeBatch(db);
+                // שים לב: הנתיב כאן פשוט יותר עבור פרויקט אישי
+                const tasksCol = collection(db, `users/${userId}/projects/simonaProject/tasks`);
+                defaultTasks.forEach(task => {
+                    const newDocRef = doc(tasksCol); // יוצר ID אוטומטי
+                    batch.set(newDocRef, task);
+                });
+                await batch.commit();
+            } catch (error) {
+                console.error("Error populating default tasks:", error);
+            }
+        }
+
+        // הגדרת מאזינים (listeners) לטעינה ועדכונים בזמן אמת
+        async function setupSnapshotListeners() {
+            if (!userId) return;
+
+            // מאזין למשימות
+            const tasksCol = collection(db, `users/${userId}/projects/simonaProject/tasks`);
+            onSnapshot(query(tasksCol), (snapshot) => {
+                // ניקוי עמודות
+                document.getElementById('tasks-todo').innerHTML = '';
+                document.getElementById('tasks-inProgress').innerHTML = '';
+                document.getElementById('tasks-done').innerHTML = '';
+
+                const tasks = [];
+                snapshot.forEach(doc => tasks.push({ id: doc.id, ...doc.data() }));
+
+                // מיון לפי שדה 'order'
+                tasks.sort((a, b) => (a.order || 0) - (b.order || 0));
+                
+                // חישוב סך שעות מכלל המשימות
+                totalHours = tasks.reduce((acc, task) => acc + (task.hours || 0), 0);
+                updateHoursDisplay();
+
+                tasks.forEach(task => {
+                    const taskElement = createTaskElement(task.id, task.title, task.desc, task.categoryColor);
+                    // הוספת מאזין לחיצה לפתיחת חלון עריכה
+                    taskElement.addEventListener('click', () => openEditModal(task));
+                    
+                    const columnId = `tasks-${task.status}`;
+                    const columnElement = document.getElementById(columnId);
+                    if (columnElement) {
+                        columnElement.appendChild(taskElement);
+                    }
+                });
+
+                attachDragListeners(document.querySelectorAll('.task-card'));
+                updateDashboard();
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            });
+        }
+        
+        // --- פונקציות אפליקציה ---
+
+        // יצירת אלמנט HTML של משימה
+        function createTaskElement(id, title, desc, categoryColor) {
+            const taskDiv = document.createElement('div');
+            taskDiv.className = `task-card bg-white p-4 rounded-lg shadow-md border-r-4 border-${categoryColor} relative`;
+            taskDiv.id = id;
+            taskDiv.draggable = true;
+
+            const titleH3 = document.createElement('h3');
+            titleH3.className = 'font-bold text-gray-800';
+            titleH3.textContent = title;
+
+            const descP = document.createElement('p');
+            descP.className = 'text-sm text-gray-600 mt-1';
+            descP.textContent = desc;
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'absolute top-2 left-2 p-1 text-gray-400 hover:text-red-500 transition-colors';
+            deleteBtn.innerHTML = '<i data-lucide="trash-2" class="w-4 h-4"></i>';
+            deleteBtn.onclick = async (e) => {
+                e.stopPropagation(); // מונע התחלת גרירה
+                if (confirm('האם למחוק את המשימה?')) {
+                    await deleteTask(id);
+                }
+            };
+
+            taskDiv.appendChild(deleteBtn);
+            taskDiv.appendChild(titleH3);
+            taskDiv.appendChild(descP);
+            
+            return taskDiv;
+        }
+
+        // הוספת משימה חדשה ל-Firestore
+        async function addNewTask(title, desc, categoryColor) {
+            if (!userId) return;
+            try {
+                // ספירת סה"כ המשימות כדי לקבוע את ה-'order' החדש
+                const tasksCol = collection(db, `users/${userId}/projects/simonaProject/tasks`);
+                const snapshot = await getDocs(tasksCol);
+                const taskCount = snapshot.size;
+
+                await addDoc(tasksCol, {
+                    title: title,
+                    desc: desc,
+                    categoryColor: categoryColor,
+                    status: "todo",
+                    order: taskCount, // המשימה החדשה תהיה אחרונה
+                    hours: 0 // אתחול שעות
+                });
+            } catch (error) {
+                console.error("Error adding task:", error);
+            }
+        }
+        
+        // מחיקת משימה
+        async function deleteTask(taskId) {
+            if (!userId) return;
+            try {
+                const taskRef = doc(db, `users/${userId}/projects/simonaProject/tasks`, taskId);
+                await deleteDoc(taskRef);
+            } catch (error) {
+                console.error("Error deleting task:", error);
+            }
+        }
+
+        // עדכון סדר משימות וסטטוס בגרירה
+        async function updateTasksOnDrop(newColumnElement) {
+            if (!userId) return;
+            
+            try {
+                const batch = writeBatch(db);
+                const columnsMap = {
+                    'tasks-todo': { status: 'todo', element: document.getElementById('tasks-todo') },
+                    'tasks-inProgress': { status: 'inProgress', element: document.getElementById('tasks-inProgress') },
+                    'tasks-done': { status: 'done', element: document.getElementById('tasks-done') }
+                };
+
+                // מעבר על כל העמודות ועדכון הסטטוס והסדר של כל משימה
+                Object.values(columnsMap).forEach(col => {
+                    const tasksInColumn = col.element.querySelectorAll('.task-card');
+                    tasksInColumn.forEach((task, index) => {
+                        const taskRef = doc(db, `users/${userId}/projects/simonaProject/tasks`, task.id);
+                        batch.update(taskRef, {
+                            status: col.status,
+                            order: index
+                        });
+                    });
+                });
+
+                await batch.commit();
+            } catch (error) {
+                console.error("Error updating tasks on drop:", error);
+            }
+        }
+        
+        // --- פונקציות גרירה ---
+        function attachDragListeners(tasks) {
+            tasks.forEach(task => {
+                if (task.dataset.listenerAttached) return;
+                task.dataset.listenerAttached = true;
+
+                task.addEventListener('dragstart', (e) => {
+                    e.currentTarget.classList.add('dragging');
+                    e.dataTransfer.setData('text/plain', e.currentTarget.id);
+                    sourceColumn = e.currentTarget.parentElement; // שמירת עמודת המקור
+                });
+
+                task.addEventListener('dragend', (e) => {
+                    e.currentTarget.classList.remove('dragging');
+                    sourceColumn = null;
+                });
+            });
+        }
+        
+        // --- פונקציות עזר (דאשבורד, שעות) ---
+        const progressBar = document.getElementById('progress-bar');
+        const progressPercentage = document.getElementById('progress-percentage');
+        const totalTasksCount = document.getElementById('total-tasks-count');
+        const completedTasksCount = document.getElementById('completed-tasks-count');
+
+        function updateDashboard() {
+            const allTasks = document.querySelectorAll('.task-card').length;
+            const completedTasks = document.querySelectorAll('#tasks-done .task-card').length;
+            
+            totalTasksCount.textContent = allTasks;
+            completedTasksCount.textContent = completedTasks;
+
+            let percentage = (allTasks > 0) ? Math.round((completedTasks / allTasks) * 100) : 0;
+            
+            progressBar.style.width = `${percentage}%`;
+            progressPercentage.textContent = `${percentage}%`;
+        }
+
+        let timerInterval = null;
+        let timerStartTime = 0;
+
+        function updateHoursDisplay() {
+            // הוגדר כאן כדי לוודא שהאלמנט קיים ב-DOM
+            const totalHoursDisplay = document.getElementById('total-hours-display');
+            if (totalHoursDisplay) { // בדיקת בטיחות
+                totalHoursDisplay.textContent = totalHours.toFixed(1);
+            }
+        }
+        
+        function formatTime(ms) {
+            const seconds = Math.floor(ms / 1000);
+            const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
+            const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+            const s = String(seconds % 60).padStart(2, '0');
+            return `${h}:${m}:${s}`;
+        }
+
+        // --- פונקציות חלון עריכה (Modal) ---
+        const editModal = document.getElementById('edit-task-modal');
+        const editTaskForm = document.getElementById('edit-task-form');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const editTaskId = document.getElementById('edit-task-id');
+        const editTaskTitle = document.getElementById('edit-task-title');
+        const editTaskDesc = document.getElementById('edit-task-desc');
+        const editTaskCategory = document.getElementById('edit-task-category');
+        const currentHoursDisplay = document.getElementById('edit-task-current-hours');
+        const logHoursInput = document.getElementById('log-hours-input');
+        const logHoursBtn = document.getElementById('log-hours-btn');
+
+        // משתנים גלובליים לטיימר המודאל
+        let modalTimerInterval = null;
+        let modalTimerStartTime = 0;
+        let modalTimerRunning = false;
+
+        function openEditModal(task) {
+            editTaskId.value = task.id;
+            editTaskTitle.value = task.title;
+            editTaskDesc.value = task.desc;
+            editTaskCategory.value = task.categoryColor;
+            
+            const currentHours = task.hours || 0;
+            currentHoursDisplay.textContent = `זמן שנרשם: ${currentHours.toFixed(1)} שעות`;
+            currentHoursDisplay.dataset.currentHours = currentHours; // שמירת ערך נוכחי
+            
+            logHoursInput.value = ''; // איפוס שדה הוספת שעות
+            
+            // איפוס טיימר המודאל
+            if (modalTimerRunning) {
+                clearInterval(modalTimerInterval);
+                modalTimerRunning = false;
+            }
+            modalTimerStartTime = 0;
+            const modalTimerDisplay = document.getElementById('modal-timer-display');
+            if (modalTimerDisplay) {
+                modalTimerDisplay.textContent = '00:00:00';
+            }
+            const timerBtnIcon = document.querySelector('#modal-timer-toggle i');
+            if (timerBtnIcon) {
+                timerBtnIcon.setAttribute('data-lucide', 'play');
+            }
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+
+            editModal.classList.remove('hidden');
+        }
+
+        function closeEditModal() {
+            editModal.classList.add('hidden');
+            
+            // ניקוי טיימר ביציאה
+            if (modalTimerRunning) {
+                clearInterval(modalTimerInterval);
+                modalTimerRunning = false;
+            }
+            modalTimerStartTime = 0;
+        }
+        
+        async function handleEditFormSubmit(e) {
+            e.preventDefault();
+            if (!userId) return;
+            
+            const taskId = editTaskId.value;
+            const taskRef = doc(db, `users/${userId}/projects/simonaProject/tasks`, taskId);
+            
+            try {
+                await updateDoc(taskRef, {
+                    title: editTaskTitle.value,
+                    desc: editTaskDesc.value,
+                    categoryColor: editTaskCategory.value
+                });
+                closeEditModal();
+            } catch (error) {
+                console.error("Error updating task:", error);
+            }
+        }
+        
+        async function handleLogHours() {
+            if (!userId) return;
+            
+            const taskId = editTaskId.value;
+            const currentHours = parseFloat(currentHoursDisplay.dataset.currentHours);
+            const hoursToAdd = parseFloat(logHoursInput.value);
+
+            if (taskId && !isNaN(hoursToAdd) && hoursToAdd > 0) {
+                const newTotalHours = currentHours + hoursToAdd;
+                const taskRef = doc(db, `users/${userId}/projects/simonaProject/tasks`, taskId);
+                
+                try {
+                    await updateDoc(taskRef, { hours: newTotalHours });
+                    
+                    // עדכון אופטימי של ה-UI בתוך המודאל
+                    currentHoursDisplay.textContent = `זמן שנרשם: ${newTotalHours.toFixed(1)} שעות`;
+                    currentHoursDisplay.dataset.currentHours = newTotalHours;
+                    logHoursInput.value = '';
+                } catch (error) {
+                    console.error("Error logging hours for task:", error);
+                }
+            }
+        }
+        
+        // --- אתחול האפליקציה ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const columns = document.querySelectorAll('.kanban-column .p-4[id^="tasks-"]');
+            const taskForm = document.getElementById('new-task-form');
+            const addTaskBtn = document.getElementById('add-task-btn');
+            const cancelTaskBtn = document.getElementById('cancel-task-btn');
+            
+            // אימות משתמש
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    // משתמש מחובר (אנונימית)
+                    userId = user.uid;
+                    
+                    // בדיקה אם צריך לאכלס משימות ברירת מחדל
+                    const tasksCol = collection(db, `users/${userId}/projects/simonaProject/tasks`);
+                    const q = query(tasksCol, limit(1));
+                    const snapshot = await getDocs(q);
+                    
+                    if (snapshot.empty) {
+                        await populateDefaultTasks();
+                    }
+                    
+                    // הפעלת מאזינים אחרי שיש לנו ID ונתונים
+                    await setupSnapshotListeners();
+
+                } else {
+                    // אם אין משתמש, נבצע התחברות אנונימית
+                    // 3. חשוב: בלוח הבקרה של Firebase, הפעל את 'Authentication' -> 'Sign-in method' -> 'Anonymous'.
+                    try {
+                        await signInAnonymously(auth);
+                    } catch (error) {
+                        console.error("Authentication error:", error);
+                        alert("שגיאת התחברות. ודא שהפעלת אימות אנונימי ב-Firebase.");
+                    }
+                }
+            });
+
+            // מאזיני גרירה לעמודות
+            columns.forEach(column => {
+                column.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    column.parentElement.classList.add('drag-over');
+                });
+                column.addEventListener('dragleave', (e) => {
+                    column.parentElement.classList.remove('drag-over');
+                });
+                
+                column.addEventListener('drop', async (e) => {
+                    e.preventDefault();
+                    column.parentElement.classList.remove('drag-over');
+                    const taskId = e.dataTransfer.getData('text/plain');
+                    const taskElement = document.getElementById(taskId);
+                    
+                    if (taskElement && taskElement.parentElement !== column) {
+                        column.appendChild(taskElement);
+                        await updateTasksOnDrop(column);
+                    }
+                });
+            });
+
+            // מאזינים לטופס הוספת משימה
+            addTaskBtn.addEventListener('click', () => taskForm.classList.toggle('show'));
+            cancelTaskBtn.addEventListener('click', () => taskForm.classList.remove('show'));
+            taskForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const title = document.getElementById('task-title').value;
+                const desc = document.getElementById('task-desc').value;
+                const categoryColor = document.getElementById('task-category').value;
+                
+                await addNewTask(title, desc, categoryColor);
+
+                taskForm.reset();
+                taskForm.classList.remove('show');
+            });
+            
+            // --- מאזינים לחלון עריכה ---
+            closeModalBtn.addEventListener('click', closeEditModal);
+            editModal.addEventListener('click', (e) => {
+                if (e.target === editModal) {
+                    closeEditModal();
+                }
+            });
+            editModal.addEventListener('submit', handleEditFormSubmit);
+            logHoursBtn.addEventListener('click', handleLogHours);
+
+            // --- מאזינים לטיימר המודאל ---
+            const modalTimerToggle = document.getElementById('modal-timer-toggle');
+            const modalTimerDisplay = document.getElementById('modal-timer-display');
+            const timerBtnIcon = document.querySelector('#modal-timer-toggle i');
+
+            if (modalTimerToggle) {
+                modalTimerToggle.addEventListener('click', () => {
+                    if (modalTimerRunning) {
+                        // --- עצירת הטיימר ---
+                        clearInterval(modalTimerInterval);
+                        modalTimerRunning = false;
+                        if (timerBtnIcon) timerBtnIcon.setAttribute('data-lucide', 'play');
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                        
+                        const elapsedMs = Date.now() - modalTimerStartTime;
+                        const hoursToAdd = elapsedMs / (1000 * 60 * 60);
+                        
+                        const currentInputVal = parseFloat(logHoursInput.value) || 0;
+                        logHoursInput.value = (currentInputVal + hoursToAdd).toFixed(2);
+                        
+                        modalTimerStartTime = 0;
+                    } else {
+                        // --- התחלת הטיימר ---
+                        modalTimerRunning = true;
+                        if (timerBtnIcon) timerBtnIcon.setAttribute('data-lucide', 'stop-circle');
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                        
+                        modalTimerStartTime = Date.now();
+                        modalTimerInterval = setInterval(() => {
+                            const elapsedMs = Date.now() - modalTimerStartTime;
+                            if (modalTimerDisplay) modalTimerDisplay.textContent = formatTime(elapsedMs);
+                        }, 1000);
+                    }
+                });
+            }
+            
+        });
+
+        // הפעלה ראשונית של אייקונים
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    </script>
+
+    <style>
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #f7f9fc; /* רקע כללי בהיר */
+        }
+        /* סגנון לכרטיס משימה */
+        .task-card {
+            cursor: pointer; /* שינוי ל-pointer כדי לרמז על לחיצה */
+            transition: all 0.2s ease;
+        }
+        .task-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        /* סגנון כשכרטיס נגרר */
+        .task-card.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        /* סגנון עמודה שמקבלת גרירה */
+        .kanban-column.drag-over {
+            background-color: #eef2ff; /* רקע כחלחל בהיר */
+            border-color: #3b82f6;
+            border-style: dashed;
+        }
+        /* הסתרת שדות טופס */
+        #new-task-form {
+            display: none;
+            transition: all 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0;
+        }
+        #new-task-form.show {
+            display: block;
+            max-height: 500px; /* אפשר גובה מקסימלי לאנימציה */
+        }
+        /* סגנונות לחלון עריכה (Modal) */
+        .modal-overlay {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: all 0.3s ease;
+        }
+        .hidden .modal-overlay {
+            opacity: 0;
+        }
+        .hidden .modal-content {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <!-- כותרת עליונה -->
+    <header class="bg-white p-4 shadow-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- Spacer -->
+            <div class="flex-1"></div>
+            
+            <!-- כותרת -->
+            <div class="flex-1 text-center">
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">לוח ניהול פרויקט: CRM ואוטומציה</h1>
+                <p class="text-sm text-gray-500">לקוח: סימונה - השכרת יאכטה</p>
+            </div>
+            
+            <!-- Spacer -->
+            <div class="flex-1"></div>
+        </div>
+    </header>
+
+    <!-- דאשבורד ולוח קנבן -->
+    <div class="max-w-7xl mx-auto p-4 md:p-8">
+        <!-- דאשבורד ובר התקדמות -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">דאשבורד התקדמות</h2>
+            <div class="flex justify-between items-center mb-2 text-sm font-medium">
+                <span class="text-gray-700">התקדמות הפרויקט</span>
+                <span class="text-blue-600 font-bold" id="progress-percentage">0%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-4">
+                <div id="progress-bar" class="bg-blue-600 h-4 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <div class="flex justify-between mt-3 text-sm text-gray-600">
+                <div>
+                    <span>סה"כ משימות: </span>
+                    <span class="font-bold" id="total-tasks-count">0</span>
+                </div>
+                <div>
+                    <span>משימות שהושלמו: </span>
+                    <span class="font-bold" id="completed-tasks-count">0</span>
+                </div>
+            </div>
+
+            <hr class="my-6 border-gray-200">
+            <div class="grid grid-cols-1">
+                <!-- תצוגת סה"כ שעות - ממורכז -->
+                <div class="bg-blue-50 p-4 rounded-lg text-center flex flex-col justify-center">
+                    <h3 class="text-lg font-semibold text-gray-700">סה"כ שעות בפרויקט</h3>
+                    <div id="total-hours-display" class="text-4xl font-bold text-blue-700 my-2">0.0</div>
+                    <p class="text-sm text-gray-600">סך השעות שנרשמו בכל המשימות</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- כפתור וטופס הוספת משימה -->
+        <div class="mb-6">
+            <button id="add-task-btn" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition duration-200 flex items-center justify-center space-x-2 space-x-reverse">
+                <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                <span>הוסף משימה חדשה</span>
+            </button>
+            <form id="new-task-form" class="mt-4 p-4 bg-white rounded-lg shadow-md space-y-3">
+                <h3 class="text-lg font-semibold text-gray-800">הוספת משימה חדשה</h3>
+                <div>
+                    <label for="task-title" class="block text-sm font-medium text-gray-700">כותרת המשימה</label>
+                    <input type="text" id="task-title" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="task-desc" class="block text-sm font-medium text-gray-700">תיאור קצר</label>
+                    <input type="text" id="task-desc" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="task-category" class="block text-sm font-medium text-gray-700">קטגוריה (שלב)</label>
+                    <select id="task-category" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <option value="gray-400">פרויקט</option>
+                        <option value="blue-600">שלב 1 (Airtable)</option>
+                        <option value: "green-600">שלב 2 (Make)</option>
+                        <option value="purple-600">שלב 3 (Manychat)</option>
+                        <option value="red-600">שלב 4 (Tranzila)</option>
+                        <option value="yellow-600">תהליך לקוח</option>
+                    </select>
+                </div>
+                <div class="flex space-x-2 space-x-reverse">
+                    <button type="submit" class="bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-green-700 transition duration-200">שמור משימה</button>
+                    <button type="button" id="cancel-task-btn" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-gray-600 transition duration-200">ביטול</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- לוח קנבן -->
+        <main>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="kanban-board">
+                
+                <!-- עמודה 1: לביצוע -->
+                <div class="kanban-column bg-gray-200 rounded-lg shadow-inner border-t-4 border-blue-500" id="column-todo" data-column-id="todo">
+                    <h2 class="text-lg font-bold text-gray-800 p-4 border-b border-gray-300 flex items-center space-x-2 space-x-reverse">
+                        <i data-lucide="list"></i>
+                        <span>לביצוע</span>
+                    </h2>
+                    <div class="p-4 space-y-4 min-h-[400px]" id="tasks-todo">
+                        <!-- המשימות יטענו לכאן מ-Firestore -->
+                    </div>
+                </div>
+                
+                <!-- עמודה 2: בתהליך -->
+                <div class="kanban-column bg-gray-200 rounded-lg shadow-inner border-t-4 border-yellow-500" id="column-inProgress" data-column-id="inProgress">
+                    <h2 class="text-lg font-bold text-gray-800 p-4 border-b border-gray-300 flex items-center space-x-2 space-x-reverse">
+                        <i data-lucide="activity"></i>
+                        <span>בתהליך</span>
+                    </h2>
+                    <div class="p-4 space-y-4 min-h-[400px]" id="tasks-inProgress">
+                        <!-- משימות שנגררו יופיעו כאן -->
+                    </div>
+                </div>
+                
+                <!-- עמודה 3: הושלם -->
+                <div class="kanban-column bg-gray-200 rounded-lg shadow-inner border-t-4 border-green-500" id="column-done" data-column-id="done">
+                    <h2 class="text-lg font-bold text-gray-800 p-4 border-b border-gray-300 flex items-center space-x-2 space-x-reverse">
+                        <i data-lucide="check-circle"></i>
+                        <span>הושלם</span>
+                    </h2>
+                    <div class="p-4 space-y-4 min-h-[400px]" id="tasks-done">
+                        <!-- משימות שנגררו יופיעו כאן -->
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div> <!-- סגירת ה-wrapper של הדאשבורד והלוח -->
+    
+    <!-- חלון עריכת משימה (Modal) -->
+    <div id="edit-task-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <!-- רקע מודאל -->
+        <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50"></div>
+        
+        <!-- תוכן מודאל -->
+        <div class="modal-content bg-white rounded-lg shadow-xl w-full max-w-lg relative max-h-[90vh] overflow-y-auto">
+            <!-- כותרת מודאל -->
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="text-xl font-bold text-gray-800">עריכת משימה</h3>
+                <button id="close-modal-btn" class="text-gray-400 hover:text-gray-600">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <!-- טופס עריכה -->
+            <form id="edit-task-form" class="p-6 space-y-4">
+                <input type="hidden" id="edit-task-id">
+                
+                <div>
+                    <label for="edit-task-title" class="block text-sm font-medium text-gray-700">כותרת המשימה</label>
+                    <input type="text" id="edit-task-title" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="edit-task-desc" class="block text-sm font-medium text-gray-700">תיאור קצר</label>
+                    <input type="text" id="edit-task-desc" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="edit-task-category" class="block text-sm font-medium text-gray-700">קטגוריה (שלב)</label>
+                    <select id="edit-task-category" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <option value="gray-400">פרויקט</option>
+                        <option value="blue-600">שלב 1 (Airtable)</option>
+                        <option value="green-600">שלב 2 (Make)</option>
+                        <option value="purple-600">שלב 3 (Manychat)</option>
+                        <option value="red-600">שלב 4 (Tranzila)</option>
+                        <option value="yellow-600">תהליך לקוח</option>
+                    </select>
+                </div>
+                
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow hover:bg-green-700 transition duration-200">שמור שינויים</button>
+                </div>
+            </form>
+            
+            <!-- אזור רישום שעות -->
+            <div class="p-6 border-t space-y-3">
+                <h4 class="text-lg font-semibold text-gray-800">מעקב שעות למשימה</h4>
+                <div id="edit-task-current-hours" class="text-gray-700 font-medium" data-current-hours="0">
+                    זמן שנרשם: 0.0 שעות
+                </div>
+                <div class="flex items-center space-x-2 space-x-reverse">
+                    <input type="number" id="log-hours-input" step="0.1" min="0" placeholder="הוסף שעות (לדוגמה: 1.5)" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    <button id="log-hours-btn" class="bg-blue-600 text-white font-bold py-2 px-3 rounded-lg shadow hover:bg-blue-700 transition duration-200 flex-shrink-0">
+                        <i data-lucide="plus" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                
+                <!-- טיימר חדש -->
+                <div class="flex items-center space-x-2 space-x-reverse mt-3 pt-3 border-t">
+                    <button type="button" id="modal-timer-toggle" class="bg-gray-500 text-white font-bold py-2 px-3 rounded-lg shadow hover:bg-gray-600 transition duration-200 flex-shrink-0">
+                        <i data-lucide="play" class="w-5 h-5"></i>
+                    </button>
+                    <span id="modal-timer-display" class="text-lg font-mono text-gray-800">00:00:00</span>
+                    <p class="text-xs text-gray-500 mr-2">התחל/עצור טיימר. בסיום, הזמן יתווסף לשדה "הוסף שעות".</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="text-center p-4 text-sm text-gray-500 mt-8">
+        מערכת ניהול פרויקטים
+    </footer>
+
+    <script>
+        // כל הלוגיקה הועברה לתוך תגית ה-script עם type="module" ב-head
+        // כדי שתוכל להשתמש ב-import
+    </script>
+</body>
+</html>
+
