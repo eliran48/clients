@@ -109,8 +109,22 @@
 
                 tasks.forEach(task => {
                     const taskElement = createTaskElement(task.id, task.title, task.desc, task.categoryColor);
-                    // הוספת מאזין לחיצה לפתיחת חלון עריכה
-                    taskElement.addEventListener('click', () => openEditModal(task));
+                    
+                    // -- תיקון גרירה/לחיצה --
+                    let isDragging = false;
+                    taskElement.addEventListener('mousedown', () => {
+                        isDragging = false;
+                    });
+                    taskElement.addEventListener('mousemove', () => {
+                        isDragging = true;
+                    });
+                    taskElement.addEventListener('mouseup', () => {
+                        if (!isDragging) {
+                            openEditModal(task);
+                        }
+                        isDragging = false; // איפוס
+                    });
+                    // -- סוף תיקון --
                     
                     const columnId = `tasks-${task.status}`;
                     const columnElement = document.getElementById(columnId);
@@ -146,7 +160,7 @@
             deleteBtn.className = 'absolute top-2 left-2 p-1 text-gray-400 hover:text-red-500 transition-colors';
             deleteBtn.innerHTML = '<i data-lucide="trash-2" class="w-4 h-4"></i>';
             deleteBtn.onclick = async (e) => {
-                e.stopPropagation(); // מונע התחלת גרירה
+                e.stopPropagation(); // מונע התחלת גרירה ופתיחת מודאל
                 if (confirm('האם למחוק את המשימה?')) {
                     await deleteTask(id);
                 }
@@ -635,7 +649,7 @@
                     <select id="task-category" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                         <option value="gray-400">פרויקט</option>
                         <option value="blue-600">שלב 1 (Airtable)</option>
-                        <option value: "green-600">שלב 2 (Make)</option>
+                        <option value="green-600">שלב 2 (Make)</option>
                         <option value="purple-600">שלב 3 (Manychat)</option>
                         <option value="red-600">שלב 4 (Tranzila)</option>
                         <option value="yellow-600">תהליך לקוח</option>
