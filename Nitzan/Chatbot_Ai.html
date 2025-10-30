@@ -1,1 +1,373 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הצעת מחיר: איפיון בוט AI לנדל"ן</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Assistant', sans-serif;
+            direction: rtl;
+        }
+        /* אנימציה עדינה לכניסת אלמנטים */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        /* סגנון כפתור ממיר */
+        .cta-button {
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        /* החלת אנימציה מדורגת */
+        .fade-in-delay-1 { animation-delay: 0.1s; }
+        .fade-in-delay-2 { animation-delay: 0.2s; }
+        .fade-in-delay-3 { animation-delay: 0.3s; }
+        .fade-in-delay-4 { animation-delay: 0.4s; }
+        .fade-in-delay-5 { animation-delay: 0.5s; }
+        .fade-in-delay-6 { animation-delay: 0.6s; }
+        .fade-in-delay-7 { animation-delay: 0.7s; }
+        .fade-in-delay-8 { animation-delay: 0.8s; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
 
+    <div class="container mx-auto max-w-4xl p-4 sm:p-8">
+        <!-- Header - לוגו ופרטים -->
+        <header class="flex flex-col sm:flex-row justify-between items-center pb-6 border-b border-gray-300">
+            <div class="mb-4 sm:mb-0 fade-in">
+                <img src="https://i0.wp.com/eliranor.com/wp-content/uploads/2020/02/eliran-OR-%D7%9C%D7%95%D7%92%D7%95-%D7%A9%D7%A0%D7%99-%D7%A9%D7%A7%D7%95%D7%A3.png?w=500&ssl=1" alt="לוגו אלירן אור" class="h-20 w-auto">
+            </div>
+            <div class="text-left text-sm text-gray-600 fade-in fade-in-delay-1">
+                <strong class="text-lg text-gray-900">אלירן אור</strong><br>
+                <a href="mailto:info@eliranor.com" class="hover:text-blue-600">info@eliranor.com</a><br>
+                <a href="tel:0553187548" class="hover:text-blue-600">055-3187548</a><br>
+                <a href="https://eliranor.com" target="_blank" class="hover:text-blue-600">eliranor.com</a>
+            </div>
+        </header>
+
+        <!-- כותרת ההצעה -->
+        <main class="my-8 bg-white rounded-xl shadow-lg">
+            <div class="p-6 sm:p-10">
+                <div class="flex justify-between items-start mb-6">
+                    <div class="fade-in fade-in-delay-2">
+                        <h1 class="text-2xl sm:text-3xl font-bold text-blue-700">הצעת מחיר: איפיון פרויקט בוט חכם (AI) לנדל"ן</h1>
+                        <!-- <p class="text-lg text-gray-600 mt-2">לכבוד: ניצן</p>  <-- הסרתי את השורה הזו -->
+                    </div>
+                    <div class="text-left text-sm text-gray-600 fade-in fade-in-delay-3">
+                        <strong>תאריך:</strong> <span id="current-date"></span><br>
+                        <strong>תוקף הצעה:</strong> 10 ימים
+                    </div>
+                </div>
+
+                <!-- פסקת פתיחה -->
+                <p class="text-lg text-gray-700 leading-relaxed mt-6 fade-in fade-in-delay-4">
+                    שלום!
+                    <br>
+                    בהמשך לשיחתנו, הנה הצעה מפורטת לאיפיון ותכנון ("Blueprint") עבור מערכת בוט חכם (AI) מבוסס וואטסאפ ללקוחת הנדל"ן.
+                    <br><br>
+                    הפרויקט הזה משלב בינה מלאכותית (AI) ומחבר בין כמה מערכות שונות, ושלב האיפיון (שלב א') הוא שלב סופר-חשוב.
+                    <br>
+                    <strong class="text-gray-900">חשוב להגיד:</strong> שלב האיפיון הוא תהליך עבודה משותף. הוא כולל שיחות איתך ו/או עם הלקוחה כדי להבין לעומק את תהליכי העבודה (הפלואו) והצרכים. ההבנה הזו חיונית כדי שנוכל לתכנן הכל בצורה הכי טובה ולמנוע טעויות יקרות בהמשך.
+                    <br><br>
+                    בסוף השלב הזה יהיה לנו "איפיון טכני ותהליכי" מסודר, שעל בסיסו אוכל לתת הצעת מחיר סופית ומדויקת לפיתוח עצמו (שלב ב').
+                </p>
+
+                <!-- פירוט תכולת הפרויקט -->
+                <section class="mt-10 fade-in fade-in-delay-5">
+                    <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-200 pb-2 mb-4">אז מה עושים בשלב האיפיון (שלב א')?</h2>
+                    <ul class="list-none space-y-4 text-gray-700">
+                        <li class="flex items-start p-3 bg-gray-50 rounded-lg">
+                            <span class="text-blue-600 font-bold text-xl mr-3 ml-3">1.</span>
+                            <div>
+                                <strong class="text-gray-900">תכנון "מחסן" הנתונים (של הנכסים):</strong>
+                                <p>נקבע יחד איך טבלת הנכסים שלכם צריכה להיראות (ב-Google Sheets או פתרון דומה) ומהם שדות החובה שה-AI צריך כדי לסנן (מחיר, חדרים, איזור וכו').</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start p-3 bg-gray-50 rounded-lg">
+                            <span class="text-blue-600 font-bold text-xl mr-3 ml-3">2.</span>
+                            <div>
+                                <strong class="text-gray-900">תכנון השיחה של הבוט:</strong>
+                                <p>נבנה תרשים זרימה שמסביר בדיוק מה הבוט שואל, מה המתעניין עונה, ומה "טון הדיבור" הרצוי (ידידותי, מקצועי וכו').</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start p-3 bg-gray-50 rounded-lg">
+                            <span class="text-blue-600 font-bold text-xl mr-3 ml-3">3.</span>
+                            <div>
+                                <strong class="text-gray-900">תכנון "המוח" של הבוט:</strong>
+                                <p>נגדיר איך הבוט מבין בקשות חופשיות ("מחפש 3 חדרים עם מרפסת"), איך הוא מתאים להן נכסים מהטבלה, ומה הוא עושה כשאין התאמה.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start p-3 bg-gray-50 rounded-lg">
+                            <span class="text-blue-600 font-bold text-xl mr-3 ml-3">4.</span>
+                            <div>
+                                <strong class="text-gray-900">תכנון החיבורים בין כל החלקים:</strong>
+                                <p>נבין בדיוק איך המערכות "מדברות" אחת עם השנייה (וואטסאפ, טבלת הנתונים, Airtable) ואיזה מידע עובר ל-CRM כדי לשמור את פרטי הליד.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start p-3 bg-gray-50 rounded-lg">
+                            <span class="text-blue-600 font-bold text-xl mr-3 ml-3">2.</span>
+                            <div>
+                                <strong class="text-gray-900">תכנון זרימת השיחה של הבוט:</strong>
+                                <p>נבנה תרשים זרימה שמראה בדיוק מה הבוט שואל, מה המתעניין עונה, ומה "טון הדיבור" הרצוי (ידידותי, מקצועי וכו').</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start p-3 bg-gray-50 rounded-lg">
+                            <span class="text-blue-600 font-bold text-xl mr-3 ml-3">3.</span>
+                            <div>
+                                <strong class="text-gray-900">תכנון "המוח" של ה-AI:</strong>
+                                <p>נקבע איך הבוט מבין בקשות חופשיות ("מחפש 3 חדרים עם מרפסת"), איך הוא מתאים להן נכסים מהטבלה, ומה הוא עושה כשאין התאמה.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start p-3 bg-gray-50 rounded-lg">
+                            <span class="text-blue-600 font-bold text-xl mr-3 ml-3">4.</span>
+                            <div>
+                                <strong class="text-gray-900">תכנון החיבורים בין המערכות:</strong>
+                                <p>נשרטט בדיוק איך המערכות "מדברות" אחת עם השנייה (וואטסאפ, טבלת הנתונים, Airtable) ואיזה מידע עובר ל-CRM כדי לשמור את פרטי הליד.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start p-3 bg-gray-50 rounded-lg">
+                            <span class="text-blue-600 font-bold text-xl mr-3 ml-3">5.</span>
+                            <div>
+                                <strong class="text-gray-900">תכנון מערכת ה-CRM (ב-Airtable):</strong>
+                                <p>נגדיר יחד את כל השדות והטבלאות שצריך, נתכנן את האוטומציות הפנימיות ב-CRM, ונוודא שהמערכת מוכנה לקלוט ולנהל את הלידים והנתונים בצורה חכמה.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start p-3 bg-gray-50 rounded-lg">
+                            <span class="text-blue-600 font-bold text-xl mr-3 ml-3">6.</span>
+                            <div>
+                                <strong class="text-gray-900">המלצה על הכלים שהכי מתאימים:</strong>
+                                <p>אמליץ על הכלים והפלטפורמות שהכי מתאימים לפרויקט הזה (למשל: Make, OpenAI API וכו') על בסיס צרכי המערכת.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+
+                <!-- השקעה ולוחות זמנים -->
+                <section class="mt-10 fade-in fade-in-delay-6">
+                    <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-200 pb-2 mb-4">עלויות וזמנים</h2>
+                    
+                    <!-- טבלת השקעה -->
+                    <div class="overflow-x-auto bg-white rounded-lg shadow border">
+                        <table class="w-full text-right">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="p-4 font-semibold text-gray-700">פירוט</th>
+                                    <th class="p-4 font-semibold text-gray-700">משך עבודה</th>
+                                    <th class="p-4 font-semibold text-gray-700">השקעה (לפני מע"מ)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-t">
+                                    <td class="p-4 text-gray-800">שלב א': איפיון ותכנון ("Blueprint")</td>
+                                    <td class="p-4 text-gray-800">
+                                        עד 10 ימי עבודה
+                                    </td>
+                                    <td class="p-4 text-gray-800 font-semibold">₪2,000</td>
+                                </tr>
+                                <!-- סיכום -->
+                                <tr class="border-t bg-gray-50">
+                                    <td colspan="2" class="p-4 text-gray-900 font-bold text-lg text-left">סה"כ לפני מע"מ</td>
+                                    <td class="p-4 text-gray-900 font-bold text-lg">₪2,000</td>
+                                </tr>
+                                <tr class="border-t">
+                                    <td colspan="2" class="p-4 text-gray-600 text-left">מע"מ (18%)</td>
+                                    <td class="p-4 text-gray-600">₪360</td>
+                                </tr>
+                                <tr class="border-t bg-blue-50">
+                                    <td colspan="2" class="p-4 text-blue-800 font-bold text-xl text-left">סה"כ לתשלום</td>
+                                    <td class="p-4 text-blue-800 font-bold text-xl">₪2,360</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- הטבה מיוחדת -->
+                    <div class="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-800 fade-in fade-in-delay-7">
+                        <h3 class="text-lg font-bold mb-1">⭐ הטבה מיוחדת</h3>
+                        <p class="leading-relaxed">במידה ותחליטו להתקדם איתנו לפיתוח המלא (שלב ב'), סכום האיפיון (2,000 ש"ח) <strong class="text-green-900">יתקזז במלואו ממחיר הפרויקט.</strong></p>
+                    </div>
+
+                    <!-- הערכת סדר גודל (Ballpark) -->
+                    <div class="mt-6 p-5 bg-blue-50 border border-blue-200 rounded-lg text-blue-800 fade-in fade-in-delay-7">
+                        <h3 class="text-lg font-bold mb-2">כמה זה ייצא בערך? (הערכת סדר גודל)</h3>
+                        <p class="leading-relaxed">
+                            כדי שתוכלו לתכנן תקציב, זו הערכת סדר גודל (Ballpark) לפרויקט המלא (כולל שלב ב' - הפיתוח וההקמה של הבוט, ה-AI והחיבורים):
+                            <strong class="text-xl">₪15,000 - ₪20,000 (לפני מע"מ)</strong>.
+                            <br>
+                            הצעת מחיר סופית ומחייבת לשלב ב' תינתן בסיום שלב האיפיון.
+                        </p>
+                    </div>
+
+                    <!-- תנאים כלליים -->
+                    <div class="mt-6 text-sm text-gray-600 space-y-2">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">אותיות קטנות (אבל חשובות)</h3>
+                        <p>• התשלום עבור שלב א' הוא מראש (טרם תחילת העבודה).</p>
+                        <p>• ההצעה בתוקף ל-10 ימים.</p>
+                        <p>• ההצעה לא כוללת עלויות חודשיות למערכות צד-שלישי (כמו Manychat, Make, OpenAI API וכו'), שיחולו על הלקוח ישירות.</p>
+                        <p>• הצעה זו היא עבור **שלב האיפיון (שלב א') בלבד**. עלויות הפיתוח (שלב ב') יוגשו בהצעת מחיר נפרדת בסיום שלב זה.</p>
+                    </div>
+
+                </section>
+
+                <!-- טופס אישור אינטראקטיבי -->
+                <section class="mt-12 pt-8 border-t border-gray-300 fade-in fade-in-delay-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">יאללה, מתחילים? (אישור הצעה)</h2>
+                    <form id="approval-form" 
+                          action="https://formspree.io/f/xgvplngq" 
+                          method="POST" 
+                          class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                        
+                        <!-- הודעת שגיאה/הצלחה -->
+                        <div id="form-status" class="mb-4 text-center" role="alert"></div>
+
+                        <div class="mb-4">
+                            <label for="company_name" class="block text-sm font-medium text-gray-700 mb-1">שם החברה / העסק</label>
+                            <input type="text" id="company_name" name="company_name" placeholder="נא להזין את שם החברה" required 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="full_name" class="block text-sm font-medium text-gray-700 mb-1">חתימה (הקלדת שם מלא)</label>
+                            <input type="text" id="full_name" name="full_name" placeholder="הקלדת השם מהווה חתימה" required 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">כתובת אימייל (לקבלת עותק)</label>
+                            <input type="email" id="email" name="_replyto" placeholder="your-email@example.com" required 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" style="direction: ltr; text-align: left;">
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="date" class="block text-sm font-medium text-gray-700 mb-1">תאריך אישור</label>
+                            <input type="text" id="date" name="date" readonly 
+                                   class="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg shadow-sm text-gray-600">
+                        </div>
+                        
+                        <!-- שדות נסתרים למידע נוסף -->
+                        <input type="hidden" name="proposal_name" value="איפיון בוט AI לנדל'ן">
+                        <input type="hidden" name="proposal_amount" value="₪2,360 (כולל מע'מ)">
+                        <input type="hidden" id="proposal_url" name="proposal_url" value="">
+
+                        <div>
+                            <button type="submit" id="submit-button" 
+                                    class="w-full cta-button bg-green-600 hover:bg-green-700 text-white font-bold text-lg py-3 px-6 rounded-lg shadow-lg focus:outline-none focus:ring-4 focus:ring-green-300">
+                                אני מאשר ורוצה להתחיל!
+                            </button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // מילוי תאריך אוטומטי
+        function setDates() {
+            const today = new Date();
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            const formattedDate = today.toLocaleDateString('he-IL', options);
+            
+            const currentDateEl = document.getElementById('current-date');
+            if (currentDateEl) {
+                currentDateEl.textContent = formattedDate;
+            }
+            
+            const dateInputEl = document.getElementById('date');
+            if (dateInputEl) {
+                dateInputEl.value = formattedDate;
+            }
+
+            // מילוי URL של ההצעה
+            const proposalUrlInput = document.getElementById('proposal_url');
+            if (proposalUrlInput) {
+                proposalUrlInput.value = window.location.href;
+            }
+        }
+        
+        setDates();
+
+        // טיפול בטופס Formspree
+        const form = document.getElementById('approval-form');
+        const formStatus = document.getElementById('form-status');
+        const submitButton = document.getElementById('submit-button');
+
+        async function handleSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+
+            // בדיקה אם ה-action URL הוחלף
+            if (event.target.action.includes("!!!")) {
+                showStatusMessage("שגיאה: יש לעדכן את קוד ה-Formspree בקוד ה-HTML.", "error");
+                return;
+            }
+
+            submitButton.disabled = true;
+            submitButton.textContent = "שולח אישור...";
+            showStatusMessage("שולח...", "pending");
+
+            try {
+                const response = await fetch(event.target.action, {
+                    method: event.target.method,
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    showStatusMessage("ההצעה אושרה ונשלחה בהצלחה! ניצור קשר בהקדם.", "success");
+                    form.reset();
+                    setDates(); // מילוי מחדש של התאריך
+                    submitButton.style.display = 'none'; // הסתרת הכפתור לאחר אישור
+                } else {
+                    const data = await response.json();
+                    const errorMessage = data.errors ? data.errors.map(e => e.message).join(', ') : "אירעה שגיאה. אנא נסה שוב.";
+                    showStatusMessage(`שגיאה בשליחה: ${errorMessage}`, "error");
+                    submitButton.disabled = false;
+                    submitButton.textContent = "אני מאשר ורוצה להתחיל!";
+                }
+            } catch (error) {
+                console.error("Form submission error:", error);
+                showStatusMessage("אירעה שגיאת רשת. אנא בדוק את החיבור ונסה שוב.", "error");
+                submitButton.disabled = false;
+                submitButton.textContent = "אני מאשר ורוצה להתחיל!";
+            }
+        }
+
+        function showStatusMessage(message, type) {
+            formStatus.textContent = message;
+            formStatus.className = 'mb-4 text-center p-3 rounded-lg ';
+            if (type === 'success') {
+                formStatus.classList.add('bg-green-100', 'text-green-800');
+            } else if (type === 'error') {
+                formStatus.classList.add('bg-red-100', 'text-red-800');
+            } else if (type === 'pending') {
+                formStatus.classList.add('bg-blue-100', 'text-blue-800');
+            }
+        }
+
+        if (form) {
+            form.addEventListener("submit", handleSubmit);
+        }
+
+        // הפעלת אנימציות בכניסה
+        document.addEventListener("DOMContentLoaded", () => {
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach(el => {
+                // הוספת קלאס 'opacity-0' כדי שיהיו מוסתרים לפני תחילת האנימציה
+                el.classList.add('opacity-0');
+            });
+        });
+    </script>
+</body>
+</html>
