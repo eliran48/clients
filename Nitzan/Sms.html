@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הצעת מחיר: הפעלת מערכת SMS ואוטומציה</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #f8f9fa;
+            --text-color: #333;
+            --heading-color: #111;
+            --border-color: #e0e0e0;
+            --success-color: #28a745;
+            --success-hover: #218838;
+        }
+
+        body {
+            font-family: 'Assistant', 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: var(--text-color);
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        /* --- Header --- */
+        header {
+            padding: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center; 
+            flex-wrap: wrap;
+            gap: 20px;
+            border-bottom: 2px solid var(--primary-color);
+            background-color: var(--secondary-color);
+        }
+
+        .supplier-info {
+            text-align: right;
+        }
+
+        .supplier-info h1 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            color: var(--heading-color);
+            font-weight: 700;
+        }
+
+        .supplier-info p {
+            margin: 4px 0;
+            font-size: 16px;
+        }
+
+        .supplier-info a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .supplier-info a:hover {
+            text-decoration: underline;
+        }
+
+        .logo img {
+            max-width: 180px;
+            height: auto;
+        }
+
+        /* --- Main Content --- */
+        main {
+            padding: 40px;
+        }
+
+        h1.proposal-title {
+            font-size: 32px;
+            color: var(--heading-color);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .client-info {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .placeholder-notice {
+            color: #d9534f; /* אדום לציון אזהרה */
+            background-color: #fdf7f7;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        section {
+            margin-bottom: 35px;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: var(--primary-color);
+            font-weight: 700;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        ul.project-scope {
+            list-style-type: none;
+            padding-right: 0;
+        }
+
+        ul.project-scope li {
+            position: relative;
+            padding-right: 35px;
+            font-size: 17px;
+            margin-bottom: 15px;
+        }
+
+        ul.project-scope li::before {
+            content: '✔';
+            position: absolute;
+            right: 0;
+            top: 0;
+            color: var(--success-color);
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        /* --- Summary & Pricing --- */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .summary-card {
+            background-color: var(--secondary-color);
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease; 
+        }
+
+        .summary-card:hover { 
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-card h3 {
+            margin-top: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--heading-color);
+        }
+
+        .summary-card p {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 5px 0 0 0;
+        }
+        
+        .summary-card .placeholder-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #d9534f;
+        }
+
+        /* --- Terms --- */
+        ul.terms {
+            list-style-type: disc;
+            padding-right: 25px;
+        }
+        ul.terms li {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        ul.terms ul { 
+            margin-right: 20px;
+            margin-top: 10px;
+        }
+
+        /* --- CTA Form --- */
+        .cta-form {
+            background-color: var(--secondary-color);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .form-group input[type="text"],
+        .form-group input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            box-sizing: border-box; /* חשוב ל- width 100% */
+            font-family: 'Assistant', sans-serif;
+        }
+        
+        button.cta-button {
+            background-color: var(--success-color);
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; 
+            display: inline-block;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3); 
+        }
+        
+        button.cta-button:hover {
+            background-color: var(--success-hover);
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4); 
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 30px;
+            font-size: 14px;
+            color: #777;
+            border-top: 1px solid var(--border-color);
+            margin-top: 30px;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .container {
+                margin: 15px;
+                padding: 0;
+            }
+            
+            /* *** התיקון כאן ***
+              הסרנו את ההגדרות שגרמו לשבירת העיצוב במובייל.
+              כעת ה-header יורש את התנהגות ה-flex מהדסקטופ.
+            */
+            
+            header {
+                padding: 30px; /* הקטנו קצת פדינג למובייל */
+            }
+
+            .logo img {
+                max-width: 150px; /* הקטנו את הלוגו למובייל */
+            }
+            
+            main, .cta-form {
+                padding: 30px;
+            }
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+            h1.proposal-title {
+                font-size: 28px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- ==== HEADER: ספק ==== -->
+        <header>
+            <div class="supplier-info">
+                <h1>אלירן אור</h1>
+                <p>מתכנן תהליכי שיווק ואוטומציות</p>
+                <p><strong>אימייל:</strong> <a href="mailto:info@eliranor.com">info@eliranor.com</a></p>
+                <p><strong>טלפון:</strong> <a href="tel:0553187548">055-3187548</a></p>
+                <p><strong>אתר:</strong> <a href="https://eliranor.com" target="_blank">eliranor.com</a></p>
+            </div>
+            <div class="logo">
+                <img src="https://i0.wp.com/eliranor.com/wp-content/uploads/2020/02/eliran-OR-%D7%9C%D7%95%D7%92%D7%95-%D7%A9%D7%A0%D7%99-%D7%A9%D7%A7%D7%95%D7%A3.png?w=500&ssl=1" alt="לוגו - אלירן אור">
+            </div>
+        </header>
+
+        <!-- ==== MAIN: גוף ההצעה ==== -->
+        <main>
+            <h1 class="proposal-title">הצעת מחיר: הפעלת מערכת SMS ואוטומציה</h1>
+            <p class="client-info">לכבוד: ניצן</p>
+
+            <p>בהמשך לשיחתנו, אני שמח להגיש לך הצעת מחיר להקמה, תפעול וניהול של מערך שליחת הודעות SMS ותהליכי אוטומציה מותאמים אישית לעסק שלך.</p>
+
+            <!-- ==== תכולת הפרויקט ==== -->
+            <section>
+                <h2>תכולת הפרויקט</h2>
+                <ul class="project-scope">
+                    <li>אפיון ותכנון מסע לקוח מלא.</li>
+                    <li>קבלה, ארגון וניהול של רשומות הטלפונים של הלקוחות.</li>
+                    <li>תכנון והקמה של סדרות הודעות SMS ומסעות לקוח מותאמים.</li>
+                    <li>הקמת חיבורי אוטומציה בין המערכות הרלוונטיות (למשל מערכת לידים, CRM וכו').</li>
+                    <li>תפעול שוטף של המערכת ובקרת תהליכים.</li>
+                </ul>
+            </section>
+
+            <!-- ==== סיכום והשקעה ==== -->
+            <section>
+                <h2>סיכום והשקעה</h2>
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <h3>לוח זמנים ותהליך</h3>
+                        <p style="font-size: 17px; color: var(--text-color); font-weight: normal;">הקמה, הפעלה ותזמון ההודעות יבוצעו עד 48 שעות לפני מועד השליחה המתוכנן.</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>השקעה בפרויקט</h3>
+                        <p>3,500 ש"ח<br>(+ מע"מ)</p>
+                        <p style="font-size: 16px; color: var(--text-color); font-weight: normal; margin-top: 10px;">כולל הקמה, חיבורים וחבילה של 5 שליחות SMS (5 מועדים שונים).</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==== תנאים כלליים ==== -->
+            <section>
+                <h2>תנאים כלליים</h2>
+                <ul class="terms">
+                    <li><strong>תנאי תשלום:</strong> 100% מהסכום יועבר מראש, טרם תחילת העבודה.</li>
+                    <li><strong>תוקף ההצעה:</strong> ההצעה בתוקף ל-10 ימים ממועד שליחתה.</li>
+                    <li><strong>קריאייטיב וקופי:</strong> ההצעה אינה כוללת כתיבת תוכן שיווקי (קופי) או עיצוב קריאייטיב להודעות. אלו יסופקו על ידי הלקוח.</li>
+                    <li><strong>גישה למערכות צד ג':</strong> לצורך חיבור תהליכי אוטומציה, תידרש גישה למערכות צד-שלישי (כגון CRM, מערכות דיוור וכו'). הלקוח מתחייב לספק גישות מלאות ופעילות למערכות אלו ככל שיידרש.</li>
+                    <li><strong>עלויות צד-שלישי:</strong>
+                        <ul>
+                            <li>ההצעה מתייחסת לעבודת האפיון, ההקמה והתפעול בלבד.</li>
+                            <li>השליחה תבוצע באמצעות מערכת <strong>Inforumobile</strong>.</li>
+                            <li>עלות רכישת בנק הודעות (לדוגמה: 50,000 הודעות) הינה בעלות <strong>1,250 ש"ח + מע"מ</strong> ותשולם על ידי הלקוח ישירות לחברת Inforumobile.</li>
+                        </ul>
+                    </li>
+                    <li><strong>אחריות הלקוח (חוק הספאם):</strong> בהתאם להוראות חוק התקשורת (בזק ושידורים), התשמ"ב-1982 ("חוק הספאם"), הלקוח מצהיר ומתחייב כי כלל רשומות הנמענים (מספרי טלפון) שיימסרו לספק הינן של נמענים אשר נתנו את הסכמתם המפורשת לקבלת דיוור אלקטרוני מסוג זה. האחריות המלאה והבלעדית על איסוף ההסכמות, ניהולן ועמידה בדרישות החוק חלה על הלקוח בלבד. לספק (אלירן אור) לא תהיה כל אחריות, ישירה או עקיפה, בגין כל תביעה, דרישה או קנס הנובעים מהפרת חוק זה.</li>
+                    <li><strong>הגבלת אחריות:</strong> אחריותו הכוללת של הספק בגין כל נזק, הפסד או אובדן הקשורים לביצוע שירותי הפרויקט תהיה מוגבלת לסכום הכולל ששולם בפועל על ידי הלקוח עבור שירותים אלו. הספק לא יישא באחריות לנזקים עקיפים, תוצאתיים או מיוחדים.</li>
+                </ul>
+            </section>
+
+            <!-- ==== טופס אישור והנעה לפעולה ==== -->
+            <section class="cta-form">
+                <h2>אישור ההצעה והתחלת העבודה</h2>
+                <p>מוכנ/ת לצאת לדרך? לאישור ההצעה וליציאה לדרך, אנא מלא/י את פרטיך ולחץ/י על הכפתור.</p>
+                
+                <form id="approvalForm" action="https://formspree.io/f/movpobad" method="POST">
+                    <div class="form-group">
+                        <label for="fullName">שם מלא:</label>
+                        <input type="text" id="fullName" name="name" placeholder="השם המלא שלך" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">כתובת אימייל:</label>
+                        <input type="email" id="email" name="email" placeholder="האימייל שלך" required>
+                    </div>
+                    
+                    <!-- שדות נסתרים שישלחו אליך אוטומטית -->
+                    <input type="hidden" id="approval_date" name="approval_date">
+                    <input type="hidden" id="proposal_url" name="proposal_url">
+                    <input type="hidden" name="proposal_subject" value="אישור הצעה: הפעלת מערכת SMS לניצן">
+                    
+                    <div class="form-group" style="text-align: center; margin-top: 25px; margin-bottom: 25px;">
+                        <label for="display_date" style="display: inline-block; margin-bottom: 0; font-size: 16px;">תאריך:</label>
+                        <span id="display_date" style="font-weight: 700; margin-right: 10px; font-size: 16px;"></span>
+                    </div>
+
+                    <button type="submit" class="cta-button">אני מאשר ורוצה להתחיל!</button>
+                </form>
+            </section>
+
+        </main>
+
+        <!-- ==== FOOTER ==== -->
+        <footer>
+            <p>בברכה ובתקווה לשיתוף פעולה פורה,</p>
+            <p><strong>אלירן אור</strong></p>
+            <p>info@eliranor.com | 055-3187548</p>
+        </footer>
+
+    </div>
+
+    <!-- ==== JAVASCRIPT: להפעלת הטופס הדינמי ==== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. מילוי תאריך אישור אוטומטי
+            const today = new Date().toLocaleDateString('he-IL', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+
+            // מילוי השדה הנסתר (לשליחה)
+            const dateField = document.getElementById('approval_date');
+            if(dateField) {
+                dateField.value = today;
+            }
+
+            // הצגת התאריך למשתמש (ויזואלי)
+            const displayDateField = document.getElementById('display_date');
+            if(displayDateField) {
+                displayDateField.textContent = today;
+            }
+            
+            // 2. מילוי כתובת ה-URL של ההצעה
+            const urlField = document.getElementById('proposal_url');
+            if(urlField) {
+                urlField.value = window.location.href;
+            }
+
+            // 3. (אופציונלי) טיפול בהצלחת שליחה
+            const form = document.getElementById('approvalForm');
+            if(form) {
+                form.addEventListener('submit', function(e) {
+                    // מציג הודעת "טוען" קטנה לכפתור
+                    const button = form.querySelector('.cta-button');
+                    if(button) {
+                        button.textContent = 'שולח אישור...';
+                        button.disabled = true;
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
+
