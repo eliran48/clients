@@ -237,10 +237,75 @@
             color: #444;
         }
 
-        /* ----- אזור אישור ההצעה ----- */
+        /* ----- אזור אישור ההצעה וטופס ----- */
         .approval-section {
             padding: 25px 30px;
-            }
+            background: var(--bg-light); /* הוספת רקע קל */
+            /* שינוי ערכים להתאמה נכונה בתוך הקונטיינר */
+            margin: 30px 0 0 0;
+            padding: 40px;
+            border-top: 1px solid var(--border-color);
+            border-radius: 0 0 12px 12px; /* עיגול פינות תחתונות */
+        }
+
+        .approval-form {
+            margin-top: 20px;
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-size: 1.05em;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"] {
+            padding: 12px 15px;
+            font-family: 'Assistant', sans-serif;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="email"]:focus {
+            outline: none;
+            border-color: var(--brand-blue);
+            box-shadow: 0 0 0 3px rgba(13, 74, 153, 0.1);
+        }
+
+        .form-group input[readonly] {
+            background-color: #f0f0f0;
+            color: #777;
+        }
+
+        .submit-btn {
+            background-color: var(--brand-blue);
+            color: #fff;
+            font-family: 'Assistant', sans-serif;
+            font-size: 1.2em;
+            font-weight: 700;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+            text-align: center;
+            width: 100%; /* רוחב מלא */
+        }
+
+        .submit-btn:hover {
+            background-color: #0a3a7a; /* גוון כהה יותר */
+            transform: translateY(-2px);
         }
         
         /* * ===================================================================
@@ -249,6 +314,74 @@
          * ===================================================================
          */
         
+        /* ----- פוטר ----- */
+        footer {
+            text-align: center;
+            padding: 30px 40px;
+            background-color: #f0f4f8;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.95em;
+            color: #555;
+            /* הוסר margin-top כדי שה-approval-section ינהל את הרווח */
+        }
+
+        footer p {
+            margin: 0;
+            line-height: 1.8;
+        }
+
+        footer a {
+            color: var(--brand-blue);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ----- Responsive Video Embed ----- */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+            border-radius: 8px;
+            margin-top: 15px;
+            margin-bottom: 25px;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* ----- כפתור קישור לווידאו (מחליף iFrame בעייתי) ----- */
+        .video-link-button {
+            display: block;
+            background-color: var(--brand-blue);
+            color: #fff !important; /* הבטחת צבע טקסט לבן */
+            padding: 20px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2em;
+            text-align: center;
+            margin: 20px 0;
+            transition: all 0.2s ease;
+        }
+
+        .video-link-button:hover {
+            background-color: #0a3a7a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body>
@@ -275,7 +408,7 @@
                 📈 אפיון ויזואלי
             </div>
             <div class="tab-link" onclick="openPage('appendix')">
-                Appendix 
+                📎 נספחים
             </div>
         </nav>
 
@@ -310,82 +443,10 @@
                             <strong>4. מערכת וואטסאפ אוטומטית</strong>
                             הגדרת בוט לקליטת לידים, שאלות סינון ראשוניות, הודעות אוטומטיות (תודה, פולואפ, סגירה) וחיבור מלא ל-CRM למעקב ודירוג לידים.
                         </li>
-                        <li>
-                            <strong>5. חוקיות וציות (Compliance)</strong>
-                            הטמעת תיבות אישור דיוור (בהתאם לחוק הספאם ותקנות אוגוסט 2024) בטפסים, וסיוע בעדכון מדיניות הפרטיות והביטולים באתר.
-                        </li>
                     </ul>
                 </section>
 
-                <section id="investment">
-                    <h2>💰 ההשקעה ולוחות זמנים</h2>
-                    <div class="investment-summary">
-                        <div class="box">
-                            <h3>השקעה בפרויקט</h3>
-                            <div class="price">5,800 ₪</div>
-                            <div class="vat-details">
-                                + 986 ₪ (17% מע"מ)
-                                <br>
-                                <strong>סה"כ לתשלום: 6,786 ₪</strong>
-                            </div>
-                        </div>
-                        <div class="box">
-                            <h3>משך הפרויקט</h3>
-                            <div class="price">עד 30</div>
-                            <div class="vat-details">
-                                ימי עסקים
-                                <br>
-                                מרגע קבלת כלל החומרים, הגישות והתשלום.
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="terms">
-                    <h2>📝 תנאים כלליים</h2>
-                    <ul class="terms-list">
-                        <li><strong>תוקף ההצעה:</strong> 7 ימים ממועד שליחתה.</li>
-                        <li><strong>תנאי תשלום:</strong> 100% מהסכום יועבר במלואו טרם תחילת העבודה.</li>
-                        <li><strong>עלויות צד-שלישי:</strong> ההצעה אינה כוללת עלויות חודשיות שוטפות עבור מערכות חיצוניות (כגון Make, Airtable, Manychat או WhatsApp API), אשר יחולו על הלקוח וישולמו ישירות לספקים הרלוונטיים.</li>
-                        <li><strong>אחריות הלקוח:</strong> אספקת כלל הגישות (אתר, דפים עסקיים, מערכות צד-שלישי), חומרים (טקסטים, לוגו) ואישורים נדרשים לתחילת העבודה.</li>
-                    </ul>
-                </section>
-
-                <!-- ----- אזור האישור האינטראקטיבי ----- -->
-                <section id="approval" class="approval-section">
-                    <h2>✅ אישור ההצעה והתחלת העבודה</h2>
-                    <p>מוכן להתחיל? אנא מלא את הפרטים מטה לאישור ההצעה ותחילת הפרויקט.</p>
-                    
-                    <form 
-                        action="https://formspree.io/f/xanawgvd" 
-                        method="POST" 
-                        class="approval-form"
-                    >
-                        <!-- נתונים נסתרים שנשלחים אליך -->
-                        <input type="hidden" name="_subject" value="אישור הצעת מחיר - ירון ויסברג - הקמת CRM ואוטומציה">
-                        <input type="hidden" name="project_name" value="הקמת CRM ואוטומציה לירון ויסברג">
-                        <input type="hidden" name="total_amount" value="6,786 ₪ (כולל מע''מ)">
-
-                        <div class="form-group">
-                            <label for="clientName">שם מלא (הקלדת שמך מהווה חתימה)</label>
-                            <input type="text" id="clientName" name="signature" placeholder="ירון ויסברג" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="clientEmail">דוא"ל (לקבלת עותק מהאישור)</label>
-                            <input type="email" id="clientEmail" name="email" placeholder="email@example.com" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="approvalDate">תאריך אישור</label>
-                            <!-- התאריך יוזן אוטומטית ע"י JS -->
-                            <input type="text" id="approvalDate" name="date" readonly required>
-                        </div>
-
-                        <!-- כפתור ההמרה הראשי -->
-                        <button type="submit" class="submit-btn">אני מאשר ורוצה להתחיל!</button>
-                    </form>
-                </section>
+                <!-- ----- אזור האישור האינטראקטיבי הוסר מכאן (כדי למנוע כפילות) ----- -->
             </div>
 
             <!-- ===== עמוד 2: אפיון ויזואלי ===== -->
@@ -399,7 +460,7 @@
                       * תוקן: וידוא שהתמונה הנכונה מוצגת
                       * =============================================
                     -->
-                    <img src="_- visual selection.png" alt="תרשים אפיון - תהליך קליטת ליד" style="width: 100%; height: auto; max-width: 100%; display: block; margin-top: 20px; border: 1px solid var(--border-color); border-radius: 8px; background: #fff;">
+                    <img src="https://i.postimg.cc/Mp9ZV1r8/visual-selection.png" alt="תרשים אפיון - תהליך קליטת ליד" style="width: 100%; height: auto; max-width: 100%; display: block; margin-top: 20px; border: 1px solid var(--border-color); border-radius: 8px; background: #fff;">
                     
                 </section>
             </div>
@@ -407,19 +468,69 @@
             <!-- ===== עמוד 3: נספחים ===== -->
             <div id="page-appendix" class="page-content">
                 <section id="appendix-content">
-                    <h2>Appendix </h2>
-                    <p>בסעיף זה ניתן לרכז נספחים משפטיים, הבהרות טכניות נוספות, או כל מידע משלים אחר שאינו חלק מהצעת המחיר הראשית אך מהווה חלק מההסכם.</p>
+                    <h2>📎 נספחים</h2>
                     
+                    <h3>סרטון הדגמה: ניהול CRM ב-Airtable</h3>
+                    <p>
+                        סרטון קצר המדגים את הגמישות והיכולות של מערכת Airtable, אותה נתאים אישית לניהול הלידים והלקוחות של העסק.
+                    </p>
+                    
+                    <!-- Responsive YouTube Embed הוחלף בכפתור-קישור ישיר -->
+                    <a href="https://youtu.be/KZp9WPCe3H0?si=_YX_Gq9_Kg4R_YYQ&t=3" target="_blank" rel="noopener noreferrer" class="video-link-button">
+                        ▶️ לצפייה בסרטון ההדגמה (נפתח בטאב חדש)
+                    </a>
+
+                    <!-- 
+                        הטקסט והרשימה הבאים הוסרו לבקשתך
+                    <p>בנוסף, בסעיף זה ניתן לרכז נספחים משפטיים...</p>
                     <h3>דוגמה לסעיף נספח:</h3>
                     <ul class="terms-list">
-                        <li><strong>סודיות (NDA):</strong> שני הצדדים מתחייבים לשמור בסודיות מלאה כל מידע עסקי, טכנולוגי או אחר שייחשף בפניהם במהלך הפרויקט.</li>
-                        <li><strong>קניין רוחני:</strong> כל הקוד, האוטומציות והתהליכים שייבנו במסגרת פרויקט זה הינם בבעלותו המלאה של הלקוח (ירון ויסברג) עם סיום התשלום המלא.</li>
-                        <li><strong>לוח זמנים מפורט:</strong> (ניתן לצרף כאן גאנט או פירוט שלבי הפרויקט)</li>
+                        ...
                     </ul>
+                    -->
                 </section>
             </div>
 
         </main>
+
+        <!-- ----- אזור האישור והפוטר הוצאו מחוץ ל-main ----- -->
+        <!-- ----- ומוקמו אחרי ה-main ולפני סגירת ה-container ----- -->
+        
+        <!-- ----- אזור האישור האינטראקטיבי ----- -->
+        <section id="approval" class="approval-section">
+            <h2>✅ אישור ההצעה והתחלת העבודה</h2>
+            <p>מוכן להתחיל? אנא מלא את הפרטים מטה לאישור ההצעה ותחילת הפרויקט.</p>
+            
+            <form 
+                action="https://formspree.io/f/xanawgvd" 
+                method="POST" 
+                class="approval-form"
+            >
+                <!-- נתונים נסתרים שנשלחים אליך -->
+                <input type="hidden" name="_subject" value="אישור הצעת מחיר - ירון ויסברג - הקמת CRM ואוטומציה">
+                <input type="hidden" name="project_name" value="הקמת CRM ואוטומציה לירון ויסברג">
+                <input type="hidden" name="total_amount" value="6,786 ₪ (כולל מע''מ)">
+
+                <div class="form-group">
+                    <label for="clientName">שם מלא (הקלדת שמך מהווה חתימה)</label>
+                    <input type="text" id="clientName" name="signature" placeholder="ירון ויסברג" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="clientEmail">דוא"ל (לקבלת עותק מהאישור)</label>
+                    <input type="email" id="clientEmail" name="email" placeholder="email@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="approvalDate">תאריך אישור</label>
+                    <!-- התאריך יוזן אוטומטית ע"י JS -->
+                    <input type="text" id="approvalDate" name="date" readonly required>
+                </div>
+
+                <!-- כפתור ההמרה הראשי -->
+                <button type="submit" class="submit-btn">אני מאשר ורוצה להתחיל!</button>
+            </form>
+        </section>
 
         <footer>
             <p>
