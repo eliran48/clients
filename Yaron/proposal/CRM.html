@@ -101,6 +101,11 @@
 
         /* ----- תוכן ראשי (Main) ----- */
         main {
+            /*
+            * =============================================
+            * QA: הוספתי padding לכאן במקום לכל עמוד בנפרד
+            * =============================================
+            */
             padding: 30px 40px;
         }
 
@@ -262,11 +267,6 @@
 
         /* ----- אזור אישור ההצעה וטופס ----- */
         .approval-section {
-            /*
-            * =============================================
-            * תוקן: עיצוב אזור האישור
-            * =============================================
-            */
             padding: 40px;
             background: #f0f4f8; /* רקע כחלחל עדין */
             margin-top: 30px;
@@ -313,6 +313,39 @@
             background-color: #f0f0f0;
             color: #777;
         }
+        
+        /*
+        * =============================================
+        * QA: הוספת עיצוב לתיבת הסימון
+        * =============================================
+        */
+        .form-group-checkbox {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            background-color: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--brand-blue); /* צבע מודרני לתיבת סימון */
+            cursor: pointer;
+            flex-shrink: 0; /* מניעת התכווצות */
+        }
+
+        .form-group-checkbox label {
+            margin-bottom: 0; /* איפוס margin */
+            font-weight: 600;
+            font-size: 1.05em;
+            color: var(--text-color);
+            line-height: 1.4;
+        }
+
 
         .submit-btn {
             background-color: var(--brand-blue);
@@ -431,15 +464,14 @@
             </div>
         </nav>
 
-        <!-- 
-          * =============================================
-          * תוקן: הסרת 'padding' כפול מ-main
-          * והעברתו לתוך ה-page-content
-          * =============================================
-        -->
         <main>
             <!-- ===== עמוד 1: פרטי ההצעה ===== -->
-            <div id="page-proposal" class="page-content active" style="padding: 30px 40px;">
+            <!-- 
+            * =============================================
+            * QA: הסרת style כפול מהעמוד
+            * =============================================
+            -->
+            <div id="page-proposal" class="page-content active">
                 <section id="intro" class="intro">
                     <h1>הקמת מערכת CRM ואוטומציה לניהול לידים</h1>
                     <p>שלום ירון,</p>
@@ -485,10 +517,11 @@
                                 <li><strong>חיבור ל-CRM:</strong> מעקב ודירוג לידים לפי אינטראקציה.</li>
                             </ul>
                         </li>
-                         <li>
-                            <strong>5. חוקיות וציות (Compliance)</strong>
-                            הטמעת תיבות אישור דיוור (בהתאם לחוק הספאם ותקנות אוגוסט 2024) בטפסים, וסיוע בעדכון מדיניות הפרטיות והביטולים באתר.
-                        </li>
+                         <!-- 
+                        * =============================================
+                        * QA: הסרת סעיף 5 לבקשת המשתמש
+                        * =============================================
+                        -->
                     </ul>
                 </section>
 
@@ -565,11 +598,6 @@
                     </ul>
                 </section>
 
-                <!-- 
-                  * =============================================
-                  * תוקן: אזור האישור הועבר לכאן, לתוך הטאב
-                  * =============================================
-                -->
                 <section id="approval" class="approval-section">
                     <h2>✅ אישור ההצעה והתחלת העבודה</h2>
                     <p>מוכן להתחיל? אנא מלא את הפרטים מטה לאישור ההצעה ותחילת הפרויקט.</p>
@@ -599,6 +627,16 @@
                             <!-- התאריך יוזן אוטומטית ע"י JS -->
                             <input type="text" id="approvalDate" name="date" readonly required>
                         </div>
+                        
+                        <!-- 
+                        * =============================================
+                        * QA: הוספת תיבת סימון לאישור האפיון
+                        * =============================================
+                        -->
+                        <div class="form-group-checkbox">
+                            <input type="checkbox" id="confirmAproval" name="confirm_spec" value="approved" required>
+                            <label for="confirmAproval">אני מאשר את האפיון הויזואלי (בטאב "אפיון ויזואלי") ואת תנאי ההצעה.</label>
+                        </div>
 
                         <!-- כפתור ההמרה הראשי -->
                         <button type="submit" class="submit-btn">אני מאשר ורוצה להתחיל!</button>
@@ -608,7 +646,7 @@
             </div> <!-- סגירה של #page-proposal -->
 
             <!-- ===== עמוד 2: אפיון ויזואלי ===== -->
-            <div id="page-flowchart" class="page-content" style="padding: 30px 40px;">
+            <div id="page-flowchart" class="page-content">
                 <section id="visual-flowchart-image">
                     <h2>📈 אפיון התהליך הויזואלי</h2>
                     <p>זהו תרשים הזרימה המלא של התהליך שנאפיין וניישם עבורך:</p>
@@ -619,7 +657,7 @@
             </div>
 
             <!-- ===== עמוד 3: נספחים ===== -->
-            <div id="page-appendix" class="page-content" style="padding: 30px 40px;">
+            <div id="page-appendix" class="page-content">
                 <section id="appendix-content">
                     <h2>📎 נספחים</h2>
                     
