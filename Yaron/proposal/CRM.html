@@ -202,13 +202,6 @@
             display: inline; /* הצגה בשורה אחת עם הטקסט */
         }
 
-        /* ----- נמחק: סגנון תרשים זרימה מבוסס טקסט (כעת ויזואלי) ----- */
-        /* .flowchart { ... }
-        .flowchart h3 { ... }
-        .flowchart ul { ... }
-        .flowchart-step { ... }
-        */
-
         /* ----- סיכום השקעה ולו"ז ----- */
         .investment-summary {
             display: grid;
@@ -269,13 +262,16 @@
 
         /* ----- אזור אישור ההצעה וטופס ----- */
         .approval-section {
-            padding: 25px 30px;
-            background: var(--bg-light); /* הוספת רקע קל */
-            /* שינוי ערכים להתאמה נכונה בתוך הקונטיינר */
-            margin: 30px 0 0 0;
+            /*
+            * =============================================
+            * תוקן: עיצוב אזור האישור
+            * =============================================
+            */
             padding: 40px;
-            border-top: 1px solid var(--border-color);
-            border-radius: 0 0 12px 12px; /* עיגול פינות תחתונות */
+            background: #f0f4f8; /* רקע כחלחל עדין */
+            margin-top: 30px;
+            border-top: 2px solid var(--brand-lightblue);
+            border-radius: 8px; /* עיגול פינות */
         }
 
         .approval-form {
@@ -338,12 +334,6 @@
             transform: translateY(-2px);
         }
         
-        /* * ===================================================================
-         * נמחק: כל סגנונות ה-CSS עבור תרשים הזרימה הויזואלי הישן הוסרו 
-         * (מעל 180 שורות קוד)
-         * ===================================================================
-         */
-        
         /* ----- פוטר ----- */
         footer {
             text-align: center;
@@ -352,7 +342,7 @@
             border-top: 1px solid var(--border-color);
             font-size: 0.95em;
             color: #555;
-            /* הוסר margin-top כדי שה-approval-section ינהל את הרווח */
+            margin-top: 30px; /* הפרדה מהתוכן */
         }
 
         footer p {
@@ -425,11 +415,10 @@
             <div class="client-info">
                 <!-- הוספתי את הלוגו של ירון -->
                 <img src="https://www.yaronw.co.il/wp-content/uploads/2016/03/%D7%9C%D7%95%D7%92%D7%95-%D7%A8%D7%90%D7%A9%D7%99.png" alt="לוגו ירון ויסברג" class="client-logo">
-                <!-- הטקסט "הצעת מחיר עבור:", שם הלקוח והתאריך הוסרו לבקשתך -->
             </div>
         </header>
 
-        <!-- ניווט הטאבים של המיני-סייט -->
+        <!-- ניווט הטאבים של המני-סייט -->
         <nav class="tabs-nav">
             <div class="tab-link active" onclick="openPage('proposal')">
                 📄 פרטי ההצעה
@@ -442,9 +431,15 @@
             </div>
         </nav>
 
+        <!-- 
+          * =============================================
+          * תוקן: הסרת 'padding' כפול מ-main
+          * והעברתו לתוך ה-page-content
+          * =============================================
+        -->
         <main>
             <!-- ===== עמוד 1: פרטי ההצעה ===== -->
-            <div id="page-proposal" class="page-content active">
+            <div id="page-proposal" class="page-content active" style="padding: 30px 40px;">
                 <section id="intro" class="intro">
                     <h1>הקמת מערכת CRM ואוטומציה לניהול לידים</h1>
                     <p>שלום ירון,</p>
@@ -458,11 +453,6 @@
                     <h2>📋 תכולת הפרויקט</h2>
                     <ul class="scope-list">
                         <li>
-                            <!-- 
-                              * =============================================
-                              * תוקן: שגיאת HTML בכותרת הסעיף
-                              * =============================================
-                            -->
                             <strong>1. בסיס נתונים (CRM – Airtable)</strong>
                             בניית טבלת CRM מרכזית לניהול לידים ולקוחות.
                             <ul class="sub-scope-list">
@@ -473,7 +463,6 @@
                         </li>
                         <li>
                             <strong>2. אוטומציות (Make)</strong>
-                            <!-- הטקסט הקודם הוחלף בפירוט -->
                             בניית מנוע אוטומציות לניהול כל תהליכי התקשורת והדאטה.
                             <ul class="sub-scope-list">
                                 <li><strong>קליטת לידים:</strong> חיבור כל מקורות הלידים (אתר, פייסבוק, וואטסאפ).</li>
@@ -488,12 +477,7 @@
                             חיבור המערכות: Airtable (CRM), Make (מנוע אוטומציה), מערכת סליקה, WhatsApp API (לתקשורת), וטפסי האתר (WordPress/Elementor).
                         </li>
                         <li>
-                            <!-- 
-                              * =============================================
-                              * תוקן: שגיאת HTML בכותרת הסעיף + הוספת פירוט
-                              * =============================================
-                            -->
-                            <strong>4. מערכת וואטסאפ אוטומטית</strong>
+                            <strong>4. הקמת צ'אטבוט לניהול התקשורת עם המתעניינים</strong>
                             הגדרת בוט לתקשורת אוטומטית וחיבור מלא ל-CRM.
                              <ul class="sub-scope-list">
                                 <li><strong>טיפול ראשוני:</strong> בוט קבלת לידים ושאלות סינון ראשוניות.</li>
@@ -501,14 +485,13 @@
                                 <li><strong>חיבור ל-CRM:</strong> מעקב ודירוג לידים לפי אינטראקציה.</li>
                             </ul>
                         </li>
+                         <li>
+                            <strong>5. חוקיות וציות (Compliance)</strong>
+                            הטמעת תיבות אישור דיוור (בהתאם לחוק הספאם ותקנות אוגוסט 2024) בטפסים, וסיוע בעדכון מדיניות הפרטיות והביטולים באתר.
+                        </li>
                     </ul>
                 </section>
 
-                <!-- 
-                  * =============================================
-                  * הוספת סעיף "הפלטפורמות בהן נשתמש"
-                  * =============================================
-                -->
                 <section id="platforms">
                     <h2>⚙️ הפלטפורמות בהן נשתמש</h2>
                     <ul class="scope-list">
@@ -531,11 +514,6 @@
                     </ul>
                 </section>
 
-                <!-- 
-                  * =============================================
-                  * הוספת סעיף "הערכת עלויות חודשיות"
-                  * =============================================
-                -->
                 <section id="costs">
                     <h2>💰 הערכת עלויות חודשיות (צד-שלישי)</h2>
                     <p><strong>הבהרה חשובה:</strong> העלויות הבאות הינן עלויות חיצוניות המשולמות ישירות לספקי הפלטפורמות ואינן כלולות בעלות ההקמה.</p>
@@ -548,11 +526,6 @@
                     <p>אנו נסייע בהתאמת החבילות הנכונות ביותר לצורכי העסק כדי למזער עלויות.</p>
                 </section>
 
-                <!-- 
-                  * =============================================
-                  * הוספת סעיף "השקעה ולוחות זמנים"
-                  * =============================================
-                -->
                 <section id="investment">
                     <h2>⏳ ההשקעה ולוחות זמנים</h2>
                     <div class="investment-summary">
@@ -560,11 +533,6 @@
                             <h3>השקעה בפרויקט (חד פעמי)</h3>
                             <div class="price">5,800 ₪</div>
                             <div class="vat-details">
-                                <!-- 
-                                  * =============================================
-                                  * תוקן: עדכון מחיר ל-5800 + 18% מע"מ
-                                  * =============================================
-                                -->
                                 + 1,044 ₪ (18% מע"מ)
                                 <br>
                                 <strong>סה"כ לתשלום: 6,844 ₪</strong>
@@ -584,33 +552,98 @@
                     </div>
                 </section>
 
+                <section id="terms">
+                    <h2>📝 תנאים כלליים</h2>
+                    <ul class="terms-list">
+                        <li><strong>תוקף ההצעה:</strong> 10 ימים ממועד שליחתה.</li>
+                        <li><strong>תנאי תשלום:</strong> 50% מקדמה במעמד החתימה, ו-50% יתרה בסיום הפרויקט.</li>
+                        <li><strong>עלויות צד-שלישי:</strong> ההצעה אינה כוללת עלויות חודשיות למערכות צד-שלישי (כמו Manychat, Make, Airtable, Tranzila), אשר יחולו על הלקוח ישירות.</li>
+                        <li><strong>תוכן:</strong> ההצעה אינה כוללת כתיבת תוכן שיווקי (קריאייטיב) או עיצוב גרפי.</li>
+                        <li><strong>אחריות הלקוח:</strong> על הלקוח לוודא כי כלל הנמענים שאליהם יישלחו המסרים הינם מאושרי דיוור בהתאם לחוק.</li>
+                        <li><strong>סליקה:</strong> על חברת טרנזילה לאפשר את ההתממשקות הטכנית הנדרשת לביצוע האוטומציות. במידה ולא יתאפשר חיבור תקין, נשקול מעבר לפלטפורמת סליקה חלופית.</li>
+                        <li><strong>מע"מ:</strong> ההצעה אינה כוללת מע"מ (הוא יתווסף בחשבונית).</li>
+                    </ul>
+                </section>
+
                 <!-- 
                   * =============================================
-                  * תוקן: עדכון סכום בטופס (5800 + 18% מע"מ)
+                  * תוקן: אזור האישור הועבר לכאן, לתוך הטאב
                   * =============================================
                 -->
-                <input type="hidden" name="total_amount" value="6,844 ₪ (כולל מע''מ)">
+                <section id="approval" class="approval-section">
+                    <h2>✅ אישור ההצעה והתחלת העבודה</h2>
+                    <p>מוכן להתחיל? אנא מלא את הפרטים מטה לאישור ההצעה ותחילת הפרויקט.</p>
+                    
+                    <form 
+                        action="https://formspree.io/f/xanawgvd" 
+                        method="POST" 
+                        class="approval-form"
+                    >
+                        <!-- נתונים נסתרים שנשלחים אליך -->
+                        <input type="hidden" name="_subject" value="אישור הצעת מחיר - ירון ויסברג - הקמת CRM ואוטומציה">
+                        <input type="hidden" name="project_name" value="הקמת CRM ואוטומציה לירון ויסברג">
+                        <input type="hidden" name="total_amount" value="6,844 ₪ (כולל מע''מ)">
 
-                <div class="form-group">
-                    <label for="clientName">שם מלא (הקלדת שמך מהווה חתימה)</label>
-                    <input type="text" id="clientName" name="signature" placeholder="ירון ויסברג" required>
-                </div>
+                        <div class="form-group">
+                            <label for="clientName">שם מלא (הקלדת שמך מהווה חתימה)</label>
+                            <input type="text" id="clientName" name="signature" placeholder="ירון ויסברג" required>
+                        </div>
 
-                <div class="form-group">
-                    <label for="clientEmail">דוא"ל (לקבלת עותק מהאישור)</label>
-                    <input type="email" id="clientEmail" name="email" placeholder="email@example.com" required>
-                </div>
+                        <div class="form-group">
+                            <label for="clientEmail">דוא"ל (לקבלת עותק מהאישור)</label>
+                            <input type="email" id="clientEmail" name="email" placeholder="email@example.com" required>
+                        </div>
 
-                <div class="form-group">
-                    <label for="approvalDate">תאריך אישור</label>
-                    <!-- התאריך יוזן אוטומטית ע"י JS -->
-                    <input type="text" id="approvalDate" name="date" readonly required>
-                </div>
+                        <div class="form-group">
+                            <label for="approvalDate">תאריך אישור</label>
+                            <!-- התאריך יוזן אוטומטית ע"י JS -->
+                            <input type="text" id="approvalDate" name="date" readonly required>
+                        </div>
 
-                <!-- כפתור ההמרה הראשי -->
-                <button type="submit" class="submit-btn">אני מאשר ורוצה להתחיל!</button>
-            </form>
-        </section>
+                        <!-- כפתור ההמרה הראשי -->
+                        <button type="submit" class="submit-btn">אני מאשר ורוצה להתחיל!</button>
+                    </form>
+                </section>
+
+            </div> <!-- סגירה של #page-proposal -->
+
+            <!-- ===== עמוד 2: אפיון ויזואלי ===== -->
+            <div id="page-flowchart" class="page-content" style="padding: 30px 40px;">
+                <section id="visual-flowchart-image">
+                    <h2>📈 אפיון התהליך הויזואלי</h2>
+                    <p>זהו תרשים הזרימה המלא של התהליך שנאפיין וניישם עבורך:</p>
+                    
+                    <img src="https://i.postimg.cc/Mp9ZV1r8/visual-selection.png" alt="תרשים אפיון - תהליך קליטת ליד" style="width: 100%; height: auto; max-width: 100%; display: block; margin-top: 20px; border: 1px solid var(--border-color); border-radius: 8px; background: #fff;">
+                    
+                </section>
+            </div>
+
+            <!-- ===== עמוד 3: נספחים ===== -->
+            <div id="page-appendix" class="page-content" style="padding: 30px 40px;">
+                <section id="appendix-content">
+                    <h2>📎 נספחים</h2>
+                    
+                    <h3>סרטון הדגמה: ניהול CRM ב-Airtable</h3>
+                    <p>סרטון קצר המדגים את הגמישות והיכולות של מערכת Airtable, אותה נתאים אישית לניהול הלידים והלקוחות של העסק.</p>
+
+                    <!-- Responsive YouTube Embed -->
+                    <div class="video-container">
+                        <iframe 
+                            src="https://www.youtube-nocookie.com/embed/KZp9WPCe3H0?si=_YX_Gq9_Kg4R_YYQ&amp;start=3" 
+                            title="Airtable CRM Demo" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <a href="https://youtu.be/KZp9WPCe3H0?si=_YX_Gq9_Kg4R_YYQ" target="_blank" class="video-link-button" style="margin-top: 15px;">
+                        צפייה בטאב חדש (במקרה של שגיאת נגן)
+                    </a>
+                </section>
+            </div>
+
+        </main>
 
         <footer>
             <p>
@@ -636,14 +669,6 @@
             }
 
             const formattedDate = getFormattedDate();
-
-            /*
-            // הגדרת התאריך בכותרת העליונה (האלמנט הוסר לבקשת המשתמש)
-            const dateDisplay = document.getElementById('current-date-display');
-            if(dateDisplay) {
-                dateDisplay.textContent = 'תאריך: ' + formattedDate;
-            }
-            */
 
             // הגדרת התאריך בטופס האישור (כשדה לקריאה בלבד)
             const dateInput = document.getElementById('approvalDate');
