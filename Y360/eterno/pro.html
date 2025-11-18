@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הצעת מחיר - אלירן אור</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: #f3f4f6;
+            -webkit-print-color-adjust: exact;
+        }
+        @media print {
+            .no-print {
+                display: none;
+            }
+            body {
+                background-color: white;
+            }
+            .shadow-lg {
+                box-shadow: none;
+            }
+            .container-page {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                max-width: 100%;
+            }
+            /* Ensure background colors print */
+            .bg-blue-50 { background-color: #eff6ff !important; }
+            .bg-gray-50 { background-color: #f9fafb !important; }
+            .bg-gray-900 { background-color: #111827 !important; color: white !important; }
+            .bg-emerald-50 { background-color: #ecfdf5 !important; } /* For the maintenance box */
+            .bg-emerald-500 { background-color: #10b981 !important; color: white !important; }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Control Bar -->
+    <div class="no-print fixed top-0 left-0 right-0 bg-gray-900 text-white p-4 shadow-md z-50 flex justify-between items-center">
+        <div class="text-sm opacity-80">תצוגה מקדימה להצעת המחיר</div>
+        <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 flex items-center gap-2">
+            <i class="fas fa-print"></i> שמירה כ-PDF / הדפסה
+        </button>
+    </div>
+
+    <div class="h-20 no-print"></div> <!-- Spacer -->
+
+    <!-- Document Container -->
+    <div class="container-page max-w-4xl mx-auto bg-white shadow-lg min-h-screen relative">
+        
+        <!-- Decorative Header Line -->
+        <div class="h-2 bg-gradient-to-r from-blue-600 to-cyan-500 w-full"></div>
+
+        <div class="p-12">
+            <!-- Header Section (Swapped Locations) -->
+            <div class="flex justify-between items-start mb-12 border-b border-gray-200 pb-8">
+                <!-- Right Side: Details -->
+                <div class="space-y-1">
+                    <p class="text-gray-600 text-sm">תאריך: <span class="font-medium text-gray-900">18.11.2025</span></p>
+                    <p class="text-gray-600 text-sm">לכבוד: <span class="font-bold text-gray-900 text-lg">אטרנו</span></p>
+                    <p class="text-gray-600 text-sm">מאת: <span class="font-medium text-gray-900">אלירן אור</span></p>
+                </div>
+
+                <!-- Left Side: Logo -->
+                <div class="text-left pl-2">
+                    <img src="https://i0.wp.com/eliranor.com/wp-content/uploads/2020/02/eliran-OR-%D7%9C%D7%95%D7%92%D7%95-%D7%A9%D7%A0%D7%99-%D7%A9%D7%A7%D7%95%D7%A3.png?fit=500%2C500&ssl=1" alt="לוגו אלירן אור" class="h-20 object-contain mr-auto">
+                    <p class="text-gray-500 text-xs mt-2 font-medium">מתכנן תהליכי שיווק ואוטומציה</p>
+                </div>
+            </div>
+
+            <!-- Intro -->
+            <div class="mb-10">
+                <h2 class="text-2xl font-bold text-blue-900 mb-3">הנדון: הקמת מערך אוטומציה ותקשורת (Monday CRM & ManyChat)</h2>
+                <p class="text-gray-600 leading-relaxed">
+                    שלום רב, בהמשך לפנייתכם, להלן הצעת המחיר לבניית תשתית אוטומציה לניהול לידים ווידוא הגעה לפגישות. 
+                    המערכת תבוסס על פלטפורמת <strong>ManyChat</strong> המתקדמת, ונועדה לייצר מענה מיידי לכל פנייה (Speed to Lead), לצמצם את אחוז הביטולים (No-Show) ולחסוך זמן יקר לצוות המכירות.
+                </p>
+            </div>
+
+            <!-- Scope of Work -->
+            <div class="space-y-8 mb-12">
+                
+                <!-- Phase 1 -->
+                <div class="bg-blue-50 rounded-xl p-6 border-r-4 border-blue-600">
+                    <h3 class="text-xl font-bold text-blue-800 mb-3 flex items-center gap-2">
+                        <i class="fas fa-cogs"></i> שלב א': תשתית טכנולוגית (Setup)
+                    </h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 mr-2">
+                        <li>הקמת חשבון <strong>ManyChat Pro</strong> וחיבור למספר WhatsApp עסקי.</li>
+                        <li>ליווי וביצוע אימות העסק מול <strong>Meta</strong> (פייסבוק) לקבלת אישור רשמי (API).</li>
+                        <li>בניית תרשימי שיחה (Flows) ב-ManyChat והגדרת תבניות (Templates) לאישור.</li>
+                        <li>יצירת חיבור טכני מאובטח בין Monday CRM ל-ManyChat באמצעות Make.</li>
+                    </ul>
+                </div>
+
+                <!-- Phase 2 -->
+                <div class="bg-gray-50 rounded-xl p-6 border-r-4 border-cyan-500">
+                    <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                        <i class="fas fa-bolt"></i> שלב ב': אוטומציה לטיפול בליד (Lead Handling)
+                    </h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 mr-2">
+                        <li><strong>תגובה מיידית:</strong> זיהוי ליד חדש במאנדיי ושליחת וואטסאפ אוטומטי דרך ManyChat.</li>
+                        <li><strong>מנגנון שעות (Router):</strong> הפרדה חכמה בין הודעת יום להודעת לילה (הבטחה לחזרה בבוקר).</li>
+                        <li><strong>התראת צוות (Ping):</strong> הקפצת התראה לנציג המטפל על ליד שממתין למענה.</li>
+                    </ul>
+                </div>
+
+                <!-- Phase 3 -->
+                <div class="bg-gray-50 rounded-xl p-6 border-r-4 border-cyan-500">
+                    <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                        <i class="far fa-calendar-check"></i> שלב ג': ניהול פגישות חכם
+                    </h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 mr-2">
+                        <li><strong>תזכורת ראשונה (72 שעות):</strong> הודעת הכנה ותזכורת רכה.</li>
+                        <li><strong>תזכורת שניה (24 שעות):</strong> הודעה עם כפתורי אישור/שינוי אינטראקטיביים ב-ManyChat.</li>
+                        <li><strong>סנכרון Monday:</strong> קליטת לחיצת הלקוח ועדכון סטטוס אוטומטי בלוח ("אושר סופית").</li>
+                        <li><strong>ניהול חריגים:</strong> התראה לנציג במקרה של בקשה לשינוי מועד.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="mb-12">
+                <h3 class="text-lg font-bold text-gray-900 mb-3">לוחות זמנים לפרויקט</h3>
+                <div class="bg-white border border-gray-200 p-5 rounded-lg space-y-3 text-gray-700">
+                    <div class="flex items-start gap-3">
+                        <i class="far fa-clock mt-1 text-blue-600"></i>
+                        <div>
+                            <strong>אימות Meta והקמת WhatsApp רשמי:</strong><br>
+                            בין 3 ל-14 ימי עבודה (תלוי באישורי Meta וקבלת מסמכים מהלקוחה).
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-rocket mt-1 text-blue-600"></i>
+                        <div>
+                            <strong>פיתוח והקמת אוטומציה:</strong><br>
+                            עד 14 ימי עסקים מרגע קבלת האישורים הסופיים ממטא.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing -->
+            <div class="bg-gray-900 text-white rounded-xl p-8 shadow-xl mb-10 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-32 h-32 bg-blue-600 rounded-full opacity-20 -translate-x-10 -translate-y-10"></div>
+                <h3 class="text-2xl font-bold mb-6 border-b border-gray-700 pb-4">הצעת מחיר</h3>
+                
+                <div class="flex justify-between items-end mb-4">
+                    <div>
+                        <p class="text-gray-300 text-lg">הקמה, אפיון, פיתוח ManyChat והדרכה</p>
+                        <p class="text-sm text-gray-400 mt-1">*המחיר אינו כולל מע"מ</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-4xl font-bold text-cyan-400">6,000 ₪</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly Costs Note -->
+            <div class="mb-8 text-sm text-gray-600 bg-blue-50 p-5 rounded-lg border border-blue-100 shadow-sm">
+                <h4 class="font-bold text-gray-800 mb-2"><i class="fas fa-info-circle ml-1"></i> דרישות טכניות ועלויות שוטפות (תשלום ישיר לספקים):</h4>
+                <ul class="space-y-1 text-gray-700">
+                    <li><strong>1. רישיון Monday.com:</strong> נדרשת חבילת <strong>Pro</strong> ומעלה לטובת חיבורי אינטגרציה ואוטומציות.</li>
+                    <li><strong>2. מערכת אוטומציה (Make):</strong> נדרשת חבילת <strong>Core</strong> ומעלה לטובת שילוב האוטומציות וחיבורי הממשקים.</li>
+                    <li><strong>3. רישיון ManyChat Pro:</strong> החל מ-$15 לחודש (המחיר תלוי בכמות אנשי הקשר הפעילים).</li>
+                    <li><strong>4. עלות הודעות (Meta):</strong> תשלום לפי שיחה (Conversation) בחלון של 24 שעות.</li>
+                </ul>
+            </div>
+
+            <!-- Retainer / Maintenance Package (Optional) -->
+            <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-6 mb-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-br-lg">מומלץ</div>
+                <div class="flex justify-between items-start flex-wrap gap-4">
+                    <div class="flex-1">
+                        <h3 class="text-lg font-bold text-emerald-900 mb-2"><i class="fas fa-shield-alt ml-2"></i> חבילת שירות ותחזוקה (אופציונלי)</h3>
+                        <p class="text-sm text-emerald-800 mb-4">הבטיחו לעצמכם שקט נפשי ומערכת שעובדת 24/7 ללא תקלות.</p>
+                        <ul class="text-sm text-emerald-700 space-y-2">
+                            <li><i class="fas fa-check ml-2 text-emerald-500"></i> <strong>ניטור שוטף:</strong> בדיקה שבועית לתקינות תרחישי האוטומציה (Make).</li>
+                            <li><i class="fas fa-check ml-2 text-emerald-500"></i> <strong>טיפול בתקלות:</strong> מענה מהיר לניתוקי API, שגיאות שרת או בעיות חיבור.</li>
+                            <li><i class="fas fa-check ml-2 text-emerald-500"></i> <strong>שינויים קלים:</strong> עד 2 שינויים בחודש (נוסח הודעות, החלפת תמונות).</li>
+                        </ul>
+                    </div>
+                    <div class="text-left min-w-[140px] bg-white/50 p-4 rounded-lg border border-emerald-100">
+                        <span class="block text-2xl font-bold text-emerald-600">450 ₪</span>
+                        <span class="text-xs text-emerald-500 block mb-3">לחודש + מע"מ</span>
+                        
+                        <div class="flex items-center gap-2 pt-2 border-t border-emerald-100 cursor-pointer hover:bg-emerald-100/50 p-1 rounded transition select-none" onclick="toggleMaintenance()">
+                            <div id="maintenance_visual_checkbox" class="w-5 h-5 border-2 border-emerald-500 rounded bg-white flex items-center justify-center transition-colors"></div>
+                            <span class="text-sm font-bold text-emerald-700">אני מעוניין/ת</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-xs text-emerald-600 mt-4 border-t border-emerald-100 pt-2">* החבילה אינה כוללת פיתוח פיצ'רים חדשים או תהליכים מורכבים נוספים.</p>
+            </div>
+
+            <!-- Terms and Conditions -->
+            <div class="bg-gray-50 p-8 rounded-xl border border-gray-200 mb-12 text-sm text-gray-700">
+                <h3 class="text-lg font-bold text-gray-900 mb-4 border-b border-gray-300 pb-2">📝 תנאים כלליים והערות חשובות</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                    <!-- Column 1 -->
+                    <ul class="space-y-3">
+                        <li><strong><i class="fas fa-clock text-blue-500 ml-1"></i> תוקף ההצעה:</strong> 10 ימים ממועד שליחתה.</li>
+                        <li><strong><i class="fas fa-credit-card text-blue-500 ml-1"></i> תנאי תשלום:</strong> 50% מקדמה במעמד החתימה, ו-50% יתרה בסיום הפרויקט.</li>
+                        <li><strong><i class="fas fa-file-invoice-dollar text-blue-500 ml-1"></i> מע"מ:</strong> ההצעה אינה כוללת מע"מ (יתווסף בחשבונית כחוק).</li>
+                        <li><strong><i class="fas fa-server text-blue-500 ml-1"></i> עלויות צד-שלישי:</strong> ההצעה אינה כוללת עלויות חודשיות למערכות חיצוניות. עלויות אלו יחולו על הלקוח וישולמו ישירות לספקים.</li>
+                    </ul>
+                    
+                    <!-- Column 2 -->
+                    <ul class="space-y-3">
+                        <li><strong><i class="fas fa-passport text-blue-500 ml-1"></i> אימות עסק (Meta):</strong> לצורך קבלת אישור רשמי מוואטסאפ (Meta), על הלקוח להעביר מסמכים רשמיים לאימות העסק (כגון תעודת התאגדות/עוסק מורשה) ולוודא שהנכסים הדיגיטליים (פייסבוק) תקינים.</li>
+                        <li><strong><i class="fas fa-tools text-blue-500 ml-1"></i> תמיכה ואחריות:</strong> בסיום הפרויקט תתבצע הדרכה וכן QA (בקרת איכות) למשך שבועיים. מעבר לכך, כל טיפול בעדכונים, שינויים והתאמות יבוצע במסגרת בנק שעות בעלות של 250 ₪ לשעה.</li>
+                        <li><strong><i class="fas fa-pencil-alt text-blue-500 ml-1"></i> תוכן ועיצוב:</strong> ההצעה אינה כוללת כתיבת תוכן שיווקי (קריאייטיב) או עיצוב גרפי.</li>
+                        <li><strong><i class="fas fa-balance-scale text-blue-500 ml-1"></i> אחריות דיוור:</strong> האחריות על תוכן ההודעות ואישור הנמענים לדיוור הינה של הלקוח בלבד בהתאם לחוק.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Signature Block (New Form) -->
+            <div class="mt-12 border-t border-gray-200 pt-8">
+                <h3 class="text-lg font-bold text-gray-900 mb-6">אישור והסכמה לביצוע הפרויקט</h3>
+                
+                <form action="https://formspree.io/f/mldzdqdo" method="POST" class="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                    <!-- Hidden Fields for Email Clarity -->
+                    <input type="hidden" name="Project_Name" value="הקמת מערך אוטומציה ותקשורת (Monday CRM & ManyChat)">
+                    <input type="hidden" name="Base_Project_Cost" value="6,000 ₪ + מע״מ (תשלום חד פעמי)">
+                    <input type="hidden" name="Maintenance_Package_Status" id="maintenance_input" value="ללא חבילת שירות ותחזוקה">
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Name Field -->
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">שם מלא</label>
+                            <input type="text" id="name" name="Client_Name" required 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                        </div>
+
+                        <!-- Email Field -->
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">אימייל (לקבלת העתק)</label>
+                            <input type="email" id="email" name="Client_Email" required 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <!-- Signature Field -->
+                        <div>
+                            <label for="signature" class="block text-sm font-medium text-gray-700 mb-1">חתימה (הקלד/י שם מלא)</label>
+                            <input type="text" id="signature" name="Signature" required placeholder="אני מאשר/ת את ההצעה בחתימתי"
+                                   class="w-full px-4 py-2 border-b-2 border-gray-300 bg-gray-50 focus:border-blue-600 focus:bg-white outline-none transition font-handwriting">
+                        </div>
+
+                        <!-- Date Field -->
+                        <div>
+                            <label for="date" class="block text-sm font-medium text-gray-700 mb-1">תאריך</label>
+                            <input type="date" id="date" name="Date" required 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end">
+                        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-10 rounded-lg shadow-md transition duration-300 flex items-center gap-2">
+                            <i class="fas fa-check-circle"></i> אשר וחתום דיגיטלית
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+            
+            <div class="mt-16 text-center text-gray-500 text-xs border-t border-gray-200 pt-6">
+                <p class="font-bold text-sm mb-1">אלירן אור | מתכנן תהליכי שיווק ואוטומציה</p>
+                <p dir="ltr" class="inline-block">055-3187548 | info@eliranor.com | eliranor.com</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set ISO date for the form input
+        const dateInput = document.getElementById('date');
+        if (dateInput) {
+            dateInput.valueAsDate = new Date();
+        }
+
+        // Toggle Maintenance Package Logic
+        function toggleMaintenance() {
+            const checkbox = document.getElementById('maintenance_visual_checkbox');
+            const input = document.getElementById('maintenance_input');
+            
+            // Check if "active" class or state is present (visual only) or check input value
+            const isCurrentlySelected = input.value.includes("כן");
+
+            if (!isCurrentlySelected) {
+                // Turn ON
+                input.value = 'כן, כולל חבילת שירות ותחזוקה (450 ₪ לחודש + מע״מ)';
+                checkbox.classList.remove('bg-white');
+                checkbox.classList.add('bg-emerald-500');
+                checkbox.innerHTML = '<i class="fas fa-check text-white text-xs"></i>';
+            } else {
+                // Turn OFF
+                input.value = 'ללא חבילת שירות ותחזוקה';
+                checkbox.classList.remove('bg-emerald-500');
+                checkbox.classList.add('bg-white');
+                checkbox.innerHTML = '';
+            }
+        }
+    </script>
+</body>
+</html>
