@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הצעה להטמעת בוט וואטסאפ (ManyChat)</title>
+    <!-- טעינת Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+        }
+        .whatsapp-bg {
+            background-color: #E5DDD5;
+            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+            background-repeat: repeat;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 leading-relaxed">
+
+    <div class="container mx-auto max-w-4xl p-6 sm:p-10 bg-white shadow-lg rounded-lg my-10 border-t-8 border-blue-800">
+
+        <!-- כותרת ומבוא -->
+        <header class="border-b pb-6 mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-blue-800 mb-4">הצעה אסטרטגית: הטמעת מערכת בוט וואטסאפ (ManyChat)</h1>
+            <div class="space-y-2 text-gray-600">
+                <p><span class="font-semibold text-gray-900">אל:</span> [יאן / Bestfit]</p>
+                <p><span class="font-semibold text-gray-900">מאת:</span> אלירן אור, יועץ ומתכנן תהליכי שיווק ואוטומציה</p>
+                <p><span class="font-semibold text-gray-900">נושא:</span> סיכום פגישה ופירוט תוכנית עבודה למערך שיווק ושירות חכם</p>
+            </div>
+        </header>
+
+        <main class="space-y-12">
+
+            <!-- סעיף 1: המערכת והדמיה -->
+            <section>
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4 border-r-4 border-blue-700 pr-3">1. הכוח של וואטסאפ בעסק שלך</h2>
+                <p class="mb-6 text-gray-700 text-lg">
+                    מערכת ManyChat מאפשרת לנו להפוך את הוואטסאפ של העסק לנכס דיגיטלי מניב. זו לא רק מערכת להודעות - זהו ערוץ תקשורת ישיר עם אחוזי פתיחה חסרי תקדים.
+                </p>
+
+                <!-- הדמיית צ'אט אינטראקטיבית -->
+                <div class="mb-10">
+                    <h3 class="text-xl font-semibold mb-4 text-center text-gray-800 italic">הצצה לבוט - איך זה מרגיש ללקוח:</h3>
+                    <div class="max-w-md mx-auto bg-gray-100 rounded-3xl shadow-2xl overflow-hidden border-8 border-gray-800">
+                        <!-- כותרת הצ'אט -->
+                        <div class="bg-gray-100 p-3 flex items-center border-b border-gray-300">
+                            <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
+                                [לוגו]
+                            </div>
+                            <div class="mr-3">
+                                <p class="font-semibold text-gray-900 leading-none">[BESTFIT]</p>
+                                <p class="text-xs text-green-600 mt-1">מחובר כעת</p>
+                            </div>
+                        </div>
+
+                        <!-- גוף הצ'אט -->
+                        <div class="p-4 h-80 space-y-4 overflow-y-auto whatsapp-bg">
+                            
+                            <!-- הודעה נכנסת (משתמש) -->
+                            <div class="flex justify-end">
+                                <div class="bg-white p-3 rounded-lg shadow-sm max-w-[80%]" style="border-top-right-radius: 0;">
+                                    <p class="text-sm">היי, אשמח לקבל פרטים נוספים על השירות שלכם</p>
+                                    <p class="text-[10px] text-gray-400 text-left mt-1">10:00</p>
+                                </div>
+                            </div>
+                            
+                            <!-- הודעה יוצאת (בוט) -->
+                            <div class="flex justify-start">
+                                <div class="bg-[#dcf8c6] p-3 rounded-lg shadow-sm max-w-[80%]" style="border-top-left-radius: 0;">
+                                    <p class="text-sm font-semibold">היי! איזה כיף שהגעת אלינו! 👋</p>
+                                    <p class="text-sm mt-1">במה נוכל לעזור לך היום?</p>
+                                    <p class="text-[10px] text-gray-400 text-left mt-1">10:00</p>
+                                </div>
+                            </div>
+
+                            <!-- כפתורים (בוט) -->
+                            <div class="flex justify-start">
+                                <div class="bg-white/90 backdrop-blur p-3 rounded-lg shadow-sm w-64 border border-gray-200">
+                                    <div class="space-y-2">
+                                        <button class="w-full text-center text-blue-600 font-bold py-2 px-4 rounded-full bg-blue-50 border border-blue-100 text-sm hover:bg-blue-100 transition">
+                                            [אפשרות א' - מעוניין לרדת במשקל]
+                                        </button>
+                                        <button class="w-full text-center text-blue-600 font-bold py-2 px-4 rounded-full bg-blue-50 border border-blue-100 text-sm hover:bg-blue-100 transition">
+                                            [אפשרות ב' - מעוניין להתחזק]
+                                        </button>
+                                        <button class="w-full text-center text-blue-600 font-bold py-2 px-4 rounded-full bg-blue-50 border border-blue-100 text-sm hover:bg-blue-100 transition">
+                                            [אפשרות ג' - רוצה כרטיסיה]
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-center text-sm text-gray-500 mt-4">הדמיה ויזואלית בלבד של תסריט השיחה</p>
+                </div>
+                
+                <h3 class="text-xl font-semibold mb-6 text-center text-gray-800 underline underline-offset-8 decoration-blue-500">למה וואטסאפ? (המספרים שמנצחים)</h3>
+        
+                <!-- Feature Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Card 1: Support -->
+                    <div class="bg-white border-2 border-gray-100 p-6 rounded-xl hover:border-blue-200 transition shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-100 p-3 rounded-full text-blue-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"></line><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line></svg>
+                            </div>
+                            <h4 class="text-lg font-bold text-gray-900 mr-3">שירות לקוחות 24/7</h4>
+                        </div>
+                        <p class="text-sm text-gray-600">צמצום משמעותי בזמן מענה. הבוט מטפל בשאלות חוזרות ומאפשר לך להתפנות לדברים החשובים באמת.</p>
+                    </div>
+        
+                    <!-- Card 2: Conversion -->
+                    <div class="bg-white border-2 border-gray-100 p-6 rounded-xl hover:border-blue-200 transition shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-100 p-3 rounded-full text-blue-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><path d="M6 21V9a9 9 0 0 1 9 9"></path></svg>
+                            </div>
+                            <h4 class="text-lg font-bold text-gray-900 mr-3">שיפור אחוזי המרה</h4>
+                        </div>
+                        <p class="text-sm text-gray-600">תקשורת מיידית עם הליד ברגע ההתעניינות מגדילה דרמטית את הסיכוי לסגירה. אף ליד לא נופל בין הכיסאות.</p>
+                    </div>
+        
+                    <!-- Card 3: Automation -->
+                    <div class="bg-white border-2 border-gray-100 p-6 rounded-xl hover:border-blue-200 transition shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-100 p-3 rounded-full text-blue-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                            </div>
+                            <h4 class="text-lg font-bold text-gray-900 mr-3">טריגרים ותזכורות</h4>
+                        </div>
+                        <p class="text-sm text-gray-600">אוטומציה ששומרת על הלקוחות "חמים". שליחת תזכורות אוטומטיות למי שלא השלים הרשמה או רכישה.</p>
+                    </div>
+        
+                    <!-- Card 4: Open Rates -->
+                    <div class="bg-blue-50 border-2 border-blue-200 p-6 rounded-xl shadow-md">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-600 p-3 rounded-full text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg>
+                            </div>
+                            <h4 class="text-lg font-bold text-blue-900 mr-3">90% אחוזי פתיחה</h4>
+                        </div>
+                        <p class="text-sm text-blue-800 font-medium">הנכס השיווקי החזק ביותר שלך. בניגוד לאימייל (20%), בוואטסאפ כמעט כל הודעה נקראת תוך דקות ספורות.</p>
+                    </div>
+                </div>
+
+                <!-- Meta Badge -->
+                <div class="mt-8 bg-green-50 border border-green-200 p-4 rounded-xl flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.78l1.21 1.21a1 1 0 0 0 1.41 0l1.21-1.21a4 4 0 0 1 4.78 4.78l-1.21 1.21a1 1 0 0 0 0 1.41l1.21 1.21a4 4 0 0 1-4.78 4.78l-1.21-1.21a1 1 0 0 0-1.41 0l-1.21 1.21a4 4 0 0 1-4.78-4.78l1.21-1.21a1 1 0 0 0 0-1.41L3.85 8.62z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                    <div class="mr-4">
+                        <h4 class="font-bold text-green-800 text-sm">פלטפורמה מאושרת META</h4>
+                        <p class="text-green-700 text-xs italic">עבודה רשמית עם ה-API של וואטסאפ - ללא סיכון לחסימות.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- סעיף 2: עלויות -->
+            <section>
+                <h2 class="text-2xl font-semibold text-blue-700 mb-6 border-r-4 border-blue-700 pr-3">2. מודל ההשקעה והעלויות</h2>
+                
+                <div class="space-y-6">
+                    <!-- Setup Fee -->
+                    <div class="bg-gradient-to-l from-blue-800 to-blue-600 p-6 rounded-2xl text-white shadow-lg">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h3 class="text-xl font-bold">עלות הקמה חד-פעמית</h3>
+                                <p class="text-blue-100 text-sm mt-1">אפיון, בניית תסריטים, חיבור טכני והטמעה מלאה.</p>
+                            </div>
+                            <div class="text-3xl font-black">4,000₪</div>
+                        </div>
+                        <p class="text-[10px] mt-3 opacity-80">*המחיר לפני מע"מ</p>
+                    </div>
+
+                    <!-- Monthly/Usage Fees -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-gray-50 border border-gray-200 p-5 rounded-xl">
+                            <h4 class="font-bold text-gray-800 mb-2">עלויות רישיון ודיוור</h4>
+                            <ul class="text-sm space-y-2 text-gray-600">
+                                <li class="flex justify-between"><span class="font-medium">רישיון ManyChat:</span> <span>החל מ-$15 לחודש</span></li>
+                                <li class="flex justify-between"><span class="font-medium">דיוור Meta:</span> <span>לפי שימוש בפועל</span></li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-50 border border-gray-200 p-5 rounded-xl">
+                            <h4 class="font-bold text-gray-800 mb-2">ניהול וליווי שוטף</h4>
+                            <div class="flex justify-between items-center mt-2">
+                                <span class="text-sm text-gray-600">תמיכה, שינויים וקמפיינים</span>
+                                <span class="font-bold text-blue-700">250₪ לשעה</span>
+                            </div>
+                            <p class="text-[10px] text-gray-400 mt-2">*לפי דרישת הלקוח</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- סעיף 3: צעדים הבאים -->
+            <section class="bg-gray-50 p-8 rounded-2xl border-dashed border-2 border-gray-300">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">צעדים הבאים להשקה מוצלחת</h2>
+                <ul class="space-y-4 text-gray-700 pr-5 list-outside">
+                    <li class="relative">
+                        <span class="absolute -right-7 top-1 w-5 h-5 bg-blue-600 text-white text-[10px] flex items-center justify-center rounded-full">1</span>
+                        <strong>עדכון משפטי:</strong> התאמת תקנון האתר ומדיניות הפרטיות לאיסוף דיוור.
+                    </li>
+                    <li class="relative">
+                        <span class="absolute -right-7 top-1 w-5 h-5 bg-blue-600 text-white text-[10px] flex items-center justify-center rounded-full">2</span>
+                        <strong>אינטגרציה באתר:</strong> הוספת תיבת אישור (Opt-in) בטפסים הקיימים.
+                    </li>
+                    <li class="relative">
+                        <span class="absolute -right-7 top-1 w-5 h-5 bg-blue-600 text-white text-[10px] flex items-center justify-center rounded-full">3</span>
+                        <strong>אפיון תסריטים:</strong> בניית המסלולים המדויקים עבור הלקוחות שלך.
+                    </li>
+                </ul>
+            </section>
+
+            <!-- סעיף 4: סיכום וחתימה -->
+            <section class="pt-8 border-t border-gray-200">
+                <p class="text-xl text-gray-800 mb-8 font-medium">
+                    אני מאמין שהצעד הזה יהווה קפיצת מדרגה משמעותית בשירות ובמכירות של העסק שלך. אני כאן כדי להפוך את התהליך הזה לפשוט, חכם ומניב.
+                </p>
+                
+                <div class="flex items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex-shrink-0">
+                        <img src="https://i0.wp.com/eliranor.com/wp-content/uploads/2020/02/eliran-OR-%D7%9C%D7%95%D7%92%D7%95-%D7%A9%D7%A0%D7%99-%D7%A9%D7%A7%D7%95%D7%A3.png?fit=500%2C500&ssl=1" alt="לוגו אלירן אור" class="w-24 h-24 rounded-full border-2 border-blue-50 shadow-inner">
+                    </div>
+                    <div class="mr-6">
+                        <p class="text-gray-500 text-sm">בברכה,</p>
+                        <p class="font-bold text-2xl text-blue-900 leading-tight">אלירן אור</p>
+                        <p class="text-blue-700 font-medium">יועץ ומתכנן תהליכי שיווק ואוטומציה</p>
+                        <div class="mt-2 flex gap-3 text-sm">
+                            <a href="https://eliranor.com" target="_blank" class="text-blue-600 hover:text-blue-800 font-bold decoration-2 underline underline-offset-4">eliranor.com</a>
+                            <span class="text-gray-300">|</span>
+                            <a href="https://wiseguys.co.il" target="_blank" class="text-blue-600 hover:text-blue-800 font-bold decoration-2 underline underline-offset-4">wiseguys.co.il</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+        
+        <footer class="mt-12 pt-6 border-t border-gray-100 text-center text-gray-400 text-xs">
+            © 2025 אלירן אור - ייעוץ עסקי וצמיחה דיגיטלית. כל הזכויות שמורות.
+        </footer>
+    </div>
+
+</body>
+</html>
