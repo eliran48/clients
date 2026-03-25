@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הצעה אסטרטגית - הקליניקה של אסנת יעבץ</title>
+    <!-- טעינת Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Assistant', sans-serif;
+        }
+        .whatsapp-bg {
+            background-color: #E5DDD5;
+            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+            background-repeat: repeat;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+        .sage-text { color: #6b8e8e; }
+        .sage-bg { background-color: #6b8e8e; }
+        .sage-border { border-color: #6b8e8e; }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .message-anim { animation: fadeIn 0.4s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-[#f9f7f5] text-slate-800 leading-relaxed text-right font-light">
+
+    <div class="container mx-auto max-w-5xl p-6 sm:p-10 bg-white shadow-2xl rounded-2xl my-10 border-t-[12px] border-[#6b8e8e]">
+
+        <!-- כותרת ומבוא -->
+        <header class="border-b pb-8 mb-12 flex flex-col sm:flex-row justify-between items-center sm:items-start gap-8 text-right">
+            <div class="text-right flex-1 w-full">
+                <div class="mb-6 text-right">
+                    <!-- לוגו הקליניקה -->
+                     <img src="https://static.wixstatic.com/media/23ae6f_741eb2cb7d4249ef8eb0f4ac8e8382b4~mv2.png/v1/fill/w_312,h_184,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/%D7%A2%D7%9D-%D7%A1%D7%9C%D7%95%D7%92%D7%95.png" 
+                          alt="לוגו הקליניקה של אסנת יעבץ" 
+                          class="h-24 sm:h-28 w-auto object-contain mb-2 text-right"
+                          onerror="this.style.display='none'; document.getElementById('text-fallback').style.display='block';">
+                     
+                     <div id="text-fallback" style="display:none;" class="sage-text font-serif text-3xl font-bold italic tracking-tight text-right text-right">הקליניקה של אסנת יעבץ</div>
+                     <p class="text-slate-400 text-sm font-semibold pr-1 text-right">דיאטנית קלינית | מטפלת ברפואה סינית ויפנית</p>
+                </div>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3 text-right text-right">צ'אטבוט וואטסאפ לשיפור תהליכי השיווק ומסעות הלקוח</h1>
+                <p class="text-xl sage-text font-bold mb-6 italic text-right text-right text-right">בניית מסע של אמון ואיזון מרגע הפנייה הדיגיטלית</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-2 text-slate-500 text-sm border-r-2 sage-border pr-4 text-right">
+                    <p class="text-right"><span class="font-bold text-slate-700">אל:</span> אסנת יעבץ</p>
+                    <p class="text-right"><span class="font-bold text-slate-700">מאת:</span> אלירן אור, יועץ ומתכנן תהליכי שיווק ואוטומציה</p>
+                    <p class="text-right"><span class="font-bold text-slate-700 text-right">תאריך:</span> 25 במרץ, 2026</p>
+                </div>
+            </div>
+            <div class="flex-shrink-0 text-right">
+                <img src="https://i0.wp.com/eliranor.com/wp-content/uploads/2020/02/eliran-OR-%D7%9C%D7%95%D7%92%D7%95-%D7%A9%D7%A0%D7%99-%D7%A9%D7%A7%D7%95%D7%A3.png?fit=500%2C500&ssl=1" 
+                     alt="לוגו אלירן אור" 
+                     class="w-28 h-28 object-contain drop-shadow-sm text-right">
+            </div>
+        </header>
+
+        <main class="space-y-16 text-right">
+
+            <!-- סעיף 1: המטרה האסטרטגית -->
+            <section class="text-right">
+                <div class="max-w-3xl mb-10 text-right">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3 justify-start text-right">
+                        <span class="w-2 h-8 sage-bg rounded-full text-right"></span>
+                        1. המטרה: מליד "קר" למתעניינת איכותית, רצינית ובשלה
+                    </h2>
+                    <p class="text-lg text-slate-600 leading-relaxed text-right">
+                        האסטרטגיה מבוססת על יצירת "מסננת חכמה" שתחסוך לכם זמן יקר. המערכת תאפשר לאסנת להגיע לשיחה רק אחרי שהמטופלת כבר ענתה על שאלות ראשוניות, נחשפה לתוכן המקצועי שלכם (סרטון או מאמר), בחרה את מסלול הטיפול המבוקש וסונכרנה ישירות למערכת ה-EasyBusy.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-right">
+                    <div class="feature-card bg-stone-50 p-6 rounded-2xl border border-stone-100 shadow-sm text-right">
+                        <h4 class="font-bold text-slate-900 mb-3 flex items-center gap-2 text-lg justify-start text-right text-right">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 sage-text text-right" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                            סינון וקליטה חכמה
+                        </h4>
+                        <p class="text-sm text-slate-600 text-right text-right">הבוט מבצע איפיון ראשוני הכולל מקום מגורים, גיל ונושא פנייה, לצד שאלות בחירה המשלבות את עולמות התזונה והרפואה הסינית, להבטחת ליד איכותי וממוקד.</p>
+                    </div>
+                    <div class="feature-card bg-stone-50 p-6 rounded-2xl border border-stone-100 shadow-sm text-right text-right text-right">
+                        <h4 class="font-bold text-slate-900 mb-3 flex items-center gap-2 text-lg justify-start text-right">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 sage-text text-right" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                            מסע חימום (Nurturing)
+                        </h4>
+                        <p class="text-sm text-slate-600 text-right text-right text-right">שליחה אוטומטית של תכנים ממוקדים (וידאו או בלוג) בהתאם לנושא הפנייה. המטופלת מגיעה לשיחה כשהיא כבר נחשפה לגישה של אסנת ורמת המוכנות שלה גבוהה.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- סעיף 2: הדמיית מסע אינטראקטיבית -->
+            <section class="text-right">
+                <div class="bg-slate-50 p-6 sm:p-10 rounded-[2.5rem] border border-slate-200 text-right text-right">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-2 flex items-center gap-3 justify-start text-right text-right text-right text-right">
+                        <span class="w-2 h-8 sage-bg rounded-full text-right text-right text-right text-right text-right text-right"></span>
+                        2. הדמיית המסע: נסי ללחוץ על הכפתורים
+                    </h2>
+                    <p class="text-sm text-slate-500 mb-10 italic text-right text-right text-right">הדמיה זו ממחישה את המענה האוטומטי ואת סנכרון הנתונים המיידי למערכת הניהול.</p>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 text-right text-right text-right text-right text-right">
+                        
+                        <!-- WhatsApp Simulation -->
+                        <div class="flex flex-col text-right text-right text-right text-right text-right">
+                            <div class="bg-gray-100 rounded-[2.5rem] shadow-2xl overflow-hidden border-[8px] border-slate-800 flex flex-col h-[520px] text-right text-right text-right text-right text-right">
+                                <div class="bg-[#075e54] p-4 flex items-center text-white shrink-0 text-right text-right text-right text-right text-right text-right text-right">
+                                    <div class="w-10 h-10 rounded-full bg-stone-200 flex items-center justify-center font-bold text-[#075e54] text-right text-right">א</div>
+                                    <div class="mr-3 text-right">
+                                        <p class="text-sm font-bold leading-none text-right">הקליניקה של אסנת יעבץ</p>
+                                        <p class="text-[10px] opacity-80 mt-1 text-right text-right">מחובר/ת כעת</p>
+                                    </div>
+                                </div>
+                                
+                                <div id="chat-box" class="flex-grow p-4 space-y-4 overflow-y-auto whatsapp-bg custom-scrollbar text-[13px] text-right text-right text-right text-right text-right">
+                                    <div class="flex justify-center text-slate-500 text-[10px] bg-slate-200/30 rounded-full py-1 mb-4 text-center">
+                                        השיחה מוצפנת ומאובטחת על ידי מטא
+                                    </div>
+                                </div>
+
+                                <div id="chat-controls" class="p-4 bg-white border-t space-y-2 shrink-0 text-right text-right text-right text-right text-right">
+                                    <button onclick="handleFlow(1)" class="w-full text-blue-600 font-bold py-3 bg-slate-50 rounded-xl text-xs border border-blue-100 hover:bg-blue-50 transition-colors px-4 shadow-sm text-right text-right">
+                                        "היי, ראיתי את המאמר שלכם לגבי איזון בגיל המעבר..."
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CRM simulation -->
+                        <div class="flex flex-col text-right text-right text-right text-right text-right text-right">
+                            <div class="bg-slate-900 rounded-[2rem] shadow-xl p-8 text-white font-mono text-[11px] leading-relaxed relative flex-grow text-right text-right text-right text-right text-right">
+                                <div class="flex items-center gap-3 mb-8 border-b border-slate-700 pb-4 justify-start text-right text-right">
+                                    <div class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse text-right text-right text-right"></div>
+                                    <p class="text-emerald-400 font-bold tracking-widest uppercase text-right text-right text-right">EasyBusy Sync Engine</p>
+                                </div>
+                                
+                                <div id="crm-data" class="space-y-5 opacity-30 transition-opacity duration-500 text-right text-right text-right text-right text-right text-right text-right">
+                                    <div class="flex justify-between border-b border-slate-800 pb-2 text-right text-right text-right text-right text-right">
+                                        <span class="text-blue-300 text-right text-right">סטטוס מטופלת:</span> <span id="crm-status" class="text-right text-right text-right text-right text-right">ממתינה לפנייה</span>
+                                    </div>
+                                    <div class="flex justify-between border-b border-slate-800 pb-2 text-right text-right text-right text-right text-right">
+                                        <span class="text-blue-300 text-right text-right text-right text-right">תיוגים חמים:</span> <div id="crm-tags" class="flex gap-1 justify-end text-right text-right text-right text-right text-right text-right">---</div>
+                                    </div>
+                                    <div class="flex justify-between border-b border-slate-800 pb-2 text-right text-right text-right text-right text-right">
+                                        <span class="text-blue-300 text-right text-right text-right text-right text-right">פעולה אחרונה:</span> <span id="crm-action" class="text-right text-right text-right text-right text-right text-right">---</span>
+                                    </div>
+                                    
+                                    <div class="mt-24 p-5 bg-slate-800 rounded-2xl border-r-4 border-slate-600 italic text-slate-400 text-right text-right text-right text-right text-right text-right text-right" id="crm-note">
+                                        ממתין לתחילת שיחה בוואטסאפ...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- סעיף 3: יתרונות נוספים -->
+            <section class="text-right">
+                <div class="max-w-3xl mb-10 text-right">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3 justify-start text-right text-right">
+                        <span class="w-2 h-8 sage-bg rounded-full text-right text-right text-right text-right text-right"></span>
+                        3. יתרונות נוספים: דיוור עוצמתי וניהול תפעולי
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start text-right text-right text-right text-right">
+                    <div class="bg-white p-6 rounded-3xl border-2 border-[#6b8e8e]/10 shadow-lg text-right text-right text-right text-right text-right text-right">
+                        <h4 class="text-xl font-bold sage-text mb-4 flex items-center gap-2 justify-start text-right text-right text-right text-right text-right">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" /></svg>
+                            דיוור תקופתי חכם
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-6 text-right text-right text-right text-right">
+                            הוואטסאפ מנצח כל מייל: בדיוור וואטסאפ אנחנו מגיעים ל-**90% פתיחה**. זהו כלי אידיאלי לעדכון על סדנאות, טיפים עונתיים או פוסטים חדשים בבלוג.
+                        </p>
+                        <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 text-right text-right text-right text-right">
+                            <p class="text-[10px] font-bold text-[#6b8e8e] mb-2 uppercase tracking-widest text-right text-right text-right">דוגמה להודעת דיוור:</p>
+                            <div class="bg-white p-3 rounded-lg shadow-sm border border-stone-100 text-sm italic text-slate-600 text-right text-right text-right text-right text-right text-right">
+                                "היי מיכל, כאן אסנת 🙏 לרגל חילופי העונות, הכנתי לך מדריך קצר עם 3 דרכים טבעיות להקל על נדודי שינה. מחכה לך כאן: [קישור]"
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-3xl border-2 border-[#6b8e8e]/20 shadow-lg text-right text-right text-right text-right text-right text-right text-right">
+                        <h4 class="text-xl font-bold sage-text mb-4 flex items-center gap-2 justify-start text-right text-right text-right text-right">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            ניהול תפעולי שוטף
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-4 text-right text-right text-right text-right text-right">
+                            הבוט מוריד את העומס הטכני. מטופלות יוכלו לבצע פעולות בשירות עצמי ב-24/7 מבלי להמתין למענה אנושי:
+                        </p>
+                        <ul class="text-sm space-y-3 sage-text font-bold text-right text-right text-right text-right text-right text-right">
+                            <li class="flex items-center gap-2 justify-start text-right text-right text-right text-right"><span class="w-1.5 h-1.5 sage-bg rounded-full text-right text-right text-right text-right text-right"></span> שינוי או הזזת מועד תור</li>
+                            <li class="flex items-center gap-2 justify-start text-right text-right text-right text-right text-right"><span class="w-1.5 h-1.5 sage-bg rounded-full text-right text-right text-right text-right text-right text-right"></span> ביטול תור (בהתאם למדיניות)</li>
+                            <li class="flex items-center gap-2 justify-start text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right"><span class="w-1.5 h-1.5 sage-bg rounded-full text-right text-right text-right text-right text-right text-right text-right text-right text-right"></span> בירור שעות פעילות ומיקום</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- סעיף 4: מסע הווידאו -->
+            <section class="bg-stone-50 p-8 sm:p-10 rounded-[2.5rem] border border-stone-200 text-right text-right text-right text-right text-right text-right text-right">
+                <h2 class="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3 justify-start text-right text-right text-right text-right text-right text-right text-right text-right text-right">
+                    <span class="w-2 h-8 sage-bg rounded-full text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right"></span>
+                    4. מסע הווידאו וההנעה לפעולה
+                </h2>
+                <p class="text-slate-600 mb-10 max-w-2xl text-right text-right text-right text-right text-right text-right text-right text-right text-right">
+                    כדי שהמטופלת תגיע לשיחה הראשונה כשהיא כבר מכירה את אסנת וסומכת עליה, הבוט ינהל פלואו ממוקד:
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 text-right text-right text-right text-right text-right text-right text-right text-right">
+                    <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-stone-100 text-right text-right text-right text-right text-right text-right">
+                        <div class="w-12 h-12 sage-bg text-white rounded-2xl flex items-center justify-center mb-4 text-2xl text-right text-right text-right text-right text-right text-right text-right">🎬</div>
+                        <p class="font-bold text-slate-900 mb-2 text-lg text-right text-right text-right text-right text-right text-right text-right text-right">מתן ערך וחשיפה לתוכן</p>
+                        <p class="text-sm text-slate-500 leading-relaxed text-right text-right text-right text-right text-right text-right text-right text-right text-right">שליחה אוטומטית של סרטון הסבר קצר או מאמר רלוונטי מהבלוג. המטופלת נחשפת לידע המקצועי של אסנת ומרגישה שיש פתרון לבעיה שלה.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-stone-100 text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right">
+                        <div class="w-12 h-12 sage-bg text-white rounded-2xl flex items-center justify-center mb-4 text-2xl text-right text-right text-right text-right text-right text-right text-right text-right text-right">✨</div>
+                        <p class="font-bold text-slate-900 mb-2 text-lg text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right">הנעה לפעולה מושכלת</p>
+                        <p class="text-sm text-slate-500 leading-relaxed text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right">רק לאחר שהמטופלת עברה את תהליך הסינון הראשוני והבינה את הערך דרך התוכן, הבוט יציע לה את הצעד הבא: תיאום שיחת הכרות אישית עם אסנת.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- סעיף 5: מי אני -->
+            <section class="flex flex-col md:flex-row items-center gap-10 bg-white p-10 rounded-[2.5rem] border border-stone-100 shadow-sm text-right text-right text-right text-right text-right text-right text-right">
+                <div class="flex-shrink-0 text-right text-right text-right text-right text-right text-right text-right text-right text-right">
+                    <img src="https://i0.wp.com/eliranor.com/wp-content/uploads/2020/02/eliran-OR-%D7%9C%D7%95%D7%92%D7%95-%D7%A9%D7%A0%D7%99-%D7%A9%D7%A7%D7%95%D7%A3.png?fit=500%2C500&ssl=1" 
+                         alt="אלירן אור" 
+                         class="w-32 h-32 rounded-full border-4 sage-border shadow-lg drop-shadow-md text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right">
+                </div>
+                <div class="text-right flex-1 text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4 text-right text-right text-right text-right text-right text-right">מי אני? אלירן אור</h2>
+                    <p class="text-slate-600 mb-4 text-right text-right text-right text-right text-right text-right text-right text-right text-right">
+                        נעים מאוד, שמי <span class="font-bold">אלירן אור</span>. בשנים האחרונות ליוויתי בעלי עסקים ומטפלים ביצירה של תהליכי אוטומציה, צ'אטבוטים ומסעות לקוח מותאמים אישית.
+                    </p>
+                    <p class="text-slate-600 text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right">
+                        יצרתי מגוון של תהליכי אוטומציה, צ'אטבוטים ומסעות לקוח למגוון של לקוחות בתחומי הטיפול, השירות והמכירות. הניסיון שלי מאפשר לי להבין את הצרכים הייחודיים שלכם – שילוב של דיוק טכנולוגי עם רגישות אנושית, במטרה לייצר שקט תפעולי ולייעל את הדרך שבה מתעניינות הופכות למטופלות מרוצות.
+                    </p>
+                </div>
+            </section>
+
+            <!-- סעיף 6: מפת דרכים -->
+            <section class="bg-slate-900 text-white p-12 rounded-[3rem] shadow-2xl relative overflow-hidden text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center">
+                <div class="absolute inset-0 sage-bg opacity-5 pointer-events-none text-center text-center text-center text-center text-center text-center text-center text-center"></div>
+                <h2 class="text-3xl font-bold mb-14 italic underline underline-offset-8 decoration-[#6b8e8e] text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center">הדרך לקליניקה חכמה</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-12 relative z-10 text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center">
+                    <div class="flex flex-col items-center text-center text-center text-center text-center text-center text-center text-center text-center">
+                        <div class="w-16 h-16 sage-bg rounded-2xl flex items-center justify-center mb-6 font-bold text-2xl shadow-lg ring-4 ring-slate-800 rotate-3 transition-transform hover:rotate-0 text-center text-center text-center text-center">1</div>
+                        <h4 class="font-bold text-xl mb-3 text-center text-center text-center text-center">אפיון ודיוק התהליכים</h4>
+                        <p class="text-xs text-slate-400 max-w-[200px] text-center text-center text-center text-center text-center">תכנון מפורט של שלבי השיחה, הגדרת השאלות לסינון הלידים וסידור שדות המידע שיזרמו ישירות ל-EasyBusy.</p>
+                    </div>
+                    <div class="flex flex-col items-center text-center text-center text-center text-center text-center text-center text-center text-center">
+                        <div class="w-16 h-16 sage-bg rounded-2xl flex items-center justify-center mb-6 font-bold text-2xl shadow-lg ring-4 ring-slate-800 -rotate-3 transition-transform hover:rotate-0 text-center text-center text-center text-center">2</div>
+                        <h4 class="font-bold text-xl mb-3 text-center text-center text-center text-center">סנכרון EasyBusy</h4>
+                        <p class="text-xs text-slate-400 max-w-[200px] text-center text-center text-center text-center text-center">חיבור הוואטסאפ והזרמת נתונים אוטומטית למערכת הניהול.</p>
+                    </div>
+                    <div class="flex flex-col items-center text-center text-center text-center text-center text-center text-center text-center text-center text-center">
+                        <div class="w-16 h-16 sage-bg rounded-2xl flex items-center justify-center mb-6 font-bold text-2xl shadow-lg ring-4 ring-slate-800 rotate-6 transition-transform hover:rotate-0 text-center text-center text-center text-center">3</div>
+                        <h4 class="font-bold text-xl mb-3 text-center text-center text-center text-center text-center">השקה וחימום</h4>
+                        <p class="text-xs text-slate-400 max-w-[200px] text-center text-center text-center text-center text-center text-center">בדיקת תרחישים ווידוא שכל פונה מקבלת את הערך המדויק לה.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- סעיף 7: התשתית הטכנולוגית -->
+            <section class="bg-stone-50 p-8 sm:p-10 rounded-[2.5rem] border border-stone-200 text-right text-right text-right text-right text-right text-right text-right text-right">
+                <h2 class="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3 justify-start text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right">
+                    <span class="w-2 h-8 sage-bg rounded-full text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right"></span>
+                    7. התשתית הטכנולוגית: עוצמה בגיבוי Meta
+                </h2>
+                <div class="space-y-4 text-slate-600 text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right">
+                    <p class="leading-relaxed text-right text-right text-right text-right text-right text-right text-right text-right text-right">
+                        הפתרון מבוסס על פלטפורמת **ManyChat**, השותפה הרשמית והמובילה של חברת **Meta** (פייסבוק/וואטסאפ) העולמית. 
+                    </p>
+                    <p class="leading-relaxed text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right">
+                        השימוש בבוט נעשה באמצעות ה-API הרשמי של WhatsApp Business, מה שמבטיח יציבות מקסימלית לאורך זמן, מניעת חסימות קו לא רצויות ואבטחת מידע ברמה הגבוהה ביותר. המערכת מאפשרת אינטגרציות גמישות, יכולות פילוח מתקדמות ושמירה על סדר וארגון בניהול הקשר עם המטופלות – מהפנייה הראשונה ועד לסגירת הטיפול.
+                    </p>
+                </div>
+            </section>
+
+        </main>
+        
+        <footer class="mt-20 pt-10 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-8 text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right">
+            <div class="flex items-center gap-5 text-right text-right text-right text-right text-right text-right text-right text-right text-right">
+                <img src="https://i0.wp.com/eliranor.com/wp-content/uploads/2020/02/eliran-OR-%D7%9C%D7%95%D7%92%D7%95-%D7%A9%D7%A0%D7%99-%D7%A9%D7%A7%D7%95%D7%A3.png?fit=500%2C500&ssl=1" alt="אלירן אור" class="w-16 h-16 text-right text-right text-right text-right text-right text-right text-right">
+                <div class="text-right text-right text-right text-right text-right text-right text-right">
+                    <p class="font-bold text-slate-800 text-lg text-right text-right text-right text-right text-right">אלירן אור</p>
+                    <div class="flex flex-col text-sm text-slate-500 text-right text-right text-right text-right text-right text-right">
+                        <a href="https://eliranor.com" target="_blank" class="hover:text-[#6b8e8e] transition-colors font-bold text-right text-right text-right text-right text-right text-right text-right text-right text-right">eliranor.com</a>
+                        <a href="mailto:eliran@eliranor.com" class="hover:text-[#6b8e8e] transition-colors text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right">eliran@eliranor.com</a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center sm:text-left text-slate-400 text-[11px] italic text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right">
+                © 2026 אלירן אור - ליווי עסקי וצמיחה דיגיטלית.
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const chatControls = document.getElementById('chat-controls');
+        const crmData = document.getElementById('crm-data');
+        
+        function addMessage(text, side) {
+            const wrapper = document.createElement('div');
+            wrapper.className = `flex ${side === 'user' ? 'justify-end' : 'justify-start'} message-anim`;
+            
+            const msg = document.createElement('div');
+            msg.className = `${side === 'user' ? 'bg-[#dcf8c6]' : 'bg-white'} p-3 rounded-2xl shadow-sm max-w-[85%] text-right leading-relaxed`;
+            msg.innerHTML = text;
+            
+            wrapper.appendChild(msg);
+            chatBox.appendChild(wrapper);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function updateCRM(status, tags, action, note) {
+            crmData.style.opacity = '1';
+            document.getElementById('crm-status').innerText = status;
+            document.getElementById('crm-tags').innerHTML = tags.map(t => `<span class="bg-blue-900/50 px-2 py-0.5 rounded text-[9px] border border-blue-400/30">#${t}</span>`).join(' ');
+            document.getElementById('crm-action').innerText = action;
+            document.getElementById('crm-note').innerHTML = `<p class="font-bold text-slate-200 mb-1 text-right text-right text-right text-right">התראה לאסנת:</p><p class="text-emerald-400 text-right text-right text-right leading-normal">"${note}"</p>`;
+        }
+
+        function handleFlow(step) {
+            chatControls.innerHTML = ''; // Clear buttons
+            
+            if (step === 1) {
+                addMessage("היי, ראיתי את המאמר שלכם לגבי איזון בגיל המעבר ואשמח לשמוע פרטים.", "user");
+                
+                setTimeout(() => {
+                    addMessage("שלום יקירה, איזה כיף שהגעת אלינו 🙏<br>הקליניקה שלנו היא מרחב בטוח לאיזון וחיבור גוף-נפש. אשמח להכיר אותך מעט יותר כדי להתאים לך את המענה המדויק.", "bot");
+                    
+                    setTimeout(() => {
+                        addMessage("מה אזור המגורים שלך ומהו הגיל?", "bot");
+                        chatControls.innerHTML = `
+                            <button onclick="handleFlow(2)" class="w-full text-blue-600 font-bold py-3 bg-slate-50 rounded-xl text-xs border border-blue-100 hover:bg-blue-50 transition-colors px-4 shadow-sm text-right text-right text-right text-right text-right">
+                                "אני מתל אביב, בת 54"
+                            </button>
+                        `;
+                    }, 1200);
+                }, 1000);
+            } 
+            else if (step === 2) {
+                addMessage("אני מתל אביב, בת 54", "user");
+                
+                setTimeout(() => {
+                    addMessage("תודה מיכל. לפני שנתאם שיחה, הכנתי לך סרטון קצר שבו אסנת מסבירה איך אפשר לעבור את התקופה הזו בצורה רכה יותר.", "bot");
+                    
+                    updateCRM("ליד בשל", ["תל_אביב", "גיל_54", "ביקור_באתר"], "נשלח סרטון", "מיכל בת 54 מתל אביב, הגיעה מביקור באתר וממתינה לצפייה בסרטון.");
+                    
+                    chatControls.innerHTML = `
+                        <button onclick="handleFlow(3)" class="w-full text-blue-600 font-bold py-3 bg-slate-50 rounded-xl text-xs border border-blue-100 hover:bg-blue-50 transition-colors px-4 shadow-sm text-right text-right text-right text-right text-right">
+                            צפייה בסרטון ההסבר (2 דק')
+                        </button>
+                    `;
+                }, 1000);
+            }
+            else if (step === 3) {
+                addMessage("צפייה בסרטון הושלמה ✅", "user");
+                
+                setTimeout(() => {
+                    addMessage("שמחה שצפית. האם תרצי שנתאם שיחת היכרות קצרה עם אסנת כדי לבחון התאמה לטיפול?", "bot");
+                    
+                    updateCRM("ליד רותח", ["צפתה_בסרטון", "מעוניינת_בשיחה"], "מוכנה לתיאום", "מיכל בת 54 מתל אביב, הגיעה מביקור באתר, צפתה בסרטון ההסבר ומעוניינת בשיחת המשך.");
+                    
+                    chatControls.innerHTML = `
+                        <button onclick="handleFlow(4)" class="w-full text-[#6b8e8e] font-bold py-3 bg-[#6b8e8e]/10 rounded-xl text-xs border border-[#6b8e8e] transition-all hover:bg-[#6b8e8e]/20 text-right text-right text-right text-right px-4 shadow-sm">
+                            "כן, אשמח לתאם שיחה"
+                        </button>
+                    `;
+                }, 1000);
+            }
+            else if (step === 4) {
+                addMessage("כן, אשמח לתאם שיחה", "user");
+                setTimeout(() => {
+                    addMessage("נהדר! אסנת תיצור איתך קשר בשעות הקרובות לשיחה נעימה. מחכות לפגוש אותך ❤️", "bot");
+                    chatControls.innerHTML = `<p class="text-center text-xs sage-text font-bold p-3 bg-stone-50 rounded-xl border border-dashed sage-border text-right text-right text-right text-right text-right">השיחה הועברה לטיפול אישי של אסנת</p>`;
+                }, 800);
+            }
+        }
+    </script>
+
+</body>
+</html>
