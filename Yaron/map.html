@@ -1,0 +1,489 @@
+import React, { useState } from 'react';
+import { 
+  Zap, Database, MessageCircle, CreditCard, UserPlus, ArrowDown,
+  ExternalLink, CheckCircle2, Clock, ChevronDown, ChevronUp,
+  Globe, Smartphone, Check, ListPlus, Info, ShoppingBag,
+  MousePointer2, Search, Video, Bell, Settings2, RefreshCcw,
+  Receipt, FileText, TestTube, BarChart3, TrendingUp, PieChart,
+  DollarSign, Users, Target, Tags, MousePointerClick, UserMinus,
+  ShieldCheck, LayoutDashboard
+} from 'lucide-react';
+
+const App = () => {
+  const [activeTab, setActiveTab] = useState('map'); // 'map', 'stats', or 'manychat'
+  const [expandedStep, setExpandedStep] = useState('capture_web');
+
+  const toggleStep = (id) => {
+    setExpandedStep(expandedStep === id ? null : id);
+  };
+
+  // נתונים מהדוח הסטטיסטי (מתוך קובץ ה-PDF)
+  const statsData = {
+    totalLeads: 134,
+    closedDeals: 41,
+    conversionRate: 30.6,
+    totalRevenue: 54000,
+    activeLeads: 56,
+    avgDeal: 1038,
+    monthlyGrowth: [
+      { month: 'ינואר', count: 33 },
+      { month: 'פברואר', count: 30 },
+      { month: 'מרץ', count: 43 }
+    ],
+    sources: [
+      { name: 'אתר', count: 61, pct: 45.5 },
+      { name: 'וואטסאפ', count: 36, pct: 26.9 },
+      { name: 'ידני', count: 28, pct: 20.9 }
+    ],
+    topProducts: [
+      { name: 'חבילת זוגיות מושלמת', count: 17 },
+      { name: 'פגישה אישית', count: 12 },
+      { name: 'אמנות החיזור', count: 11 }
+    ]
+  };
+
+  // נתונים מתוך ManyChat (מתוך צילום המסך)
+  const manychatData = {
+    totalContacts: 106,
+    tags: [
+      { label: 'נקלט_באירטייבל', count: 23, color: 'bg-indigo-500' },
+      { label: 'פנה_בהודעה_ישירה', count: 20, color: 'bg-green-500' },
+      { label: 'פנו_דרך_האתר', count: 16, color: 'bg-blue-500' },
+      { label: 'קיבלו_אין_מענה', count: 2, color: 'bg-orange-500' },
+      { label: 'ביקשו הסרה', count: 4, color: 'bg-rose-500' }
+    ],
+    widgets: [
+      { name: 'WhatsApp URL #3', clicks: 8 },
+      { name: 'WhatsApp URL #1', clicks: 0 }
+    ]
+  };
+
+  const steps = [
+    {
+      id: 'capture_web',
+      title: '1א. קליטה מהאתר - לידים בטפסים של חיזור וזוגיות',
+      icon: <Globe className="text-blue-600" />,
+      content: (
+        <div className="space-y-4 text-right">
+          <div className="p-4 bg-blue-50 rounded-xl border border-blue-100 shadow-sm">
+            <div className="flex items-center gap-2 mb-2">
+              <MousePointer2 size={16} className="text-blue-600" />
+              <h4 className="font-bold text-blue-900 text-sm">Yaron CRM | 00 - Lead Capture & Webhook</h4>
+            </div>
+            <p className="text-xs text-blue-800 leading-relaxed mb-3">
+              קליטה וסיווג אוטומטי של לידים המגיעים מטפסי <b>אמנות החיזור</b> ו-<b>יסודות הזוגיות</b>.
+            </p>
+            
+            <div className="bg-white p-3 rounded-lg border border-blue-200 mb-3 hover:border-blue-400 transition-colors">
+              <p className="text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
+                <ShieldCheck size={12} className="text-green-500" /> Scenario 00: Webhook to Airtable
+              </p>
+              <p className="text-[11px] text-slate-500 leading-relaxed italic">ביצוע בדיקת כפילויות (Duplicate Check) ויצירת רשומות ב-CRM.</p>
+              <a href="https://eu1.make.com/488101/scenarios/4003256/edit" target="_blank" className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-blue-600 hover:underline">
+                לסנריו ב-Make <ExternalLink size={10} />
+              </a>
+            </div>
+            
+            <div className="bg-white p-3 rounded-lg border border-indigo-200 shadow-sm hover:border-indigo-400 transition-colors">
+              <div className="flex items-center gap-2 mb-2 border-b border-indigo-50 pb-1">
+                <UserPlus size={14} className="text-indigo-500" />
+                <p className="text-xs font-bold text-indigo-900">Yaron CRM | 01 - Lead Onboarding</p>
+              </div>
+              <p className="text-[10px] text-slate-600 mb-2 font-medium italic">Airtable to ManyChat: הקמת משתמש ושליחת סרטון ייעודי.</p>
+              <ul className="space-y-1.5">
+                <li className="flex items-start gap-2 text-[11px] text-slate-600">
+                  <Check size={10} className="text-indigo-400 mt-1" /> בדיקה האם קיים במאניצ'ט והקמה במידה ולא קיים.
+                </li>
+                <li className="flex items-start gap-2 text-[11px] text-slate-700 font-bold">
+                  <Video size={10} className="text-indigo-500 mt-1" /> שליחת פלואו "ברוכים הבאים" עם הסרטון הרלוונטי לכל קורס.
+                </li>
+              </ul>
+              <a href="https://eu1.make.com/488101/scenarios/4096615/edit" target="_blank" className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-indigo-600 hover:underline">
+                לסנריו ב-Make <ExternalLink size={10} />
+              </a>
+            </div>
+          </div>
+          <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 flex items-start gap-3 border-dashed">
+            <ListPlus className="text-amber-600 shrink-0" size={18} />
+            <div>
+              <p className="font-bold text-amber-800 text-xs text-right italic underline underline-offset-4 decoration-amber-300">משימת המשך:</p>
+              <p className="text-amber-700 text-[11px] text-right font-medium">חיבור דפי נחיתה וטפסים נוספים לאותו מנגנון קליטה אוטומטי.</p>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'capture_wa',
+      title: '1ב. וואטסאפ דרך האתר לבוט או הודעה ישירות לוואטסאפ',
+      icon: <MessageCircle className="text-green-600" />,
+      content: (
+        <div className="space-y-4 text-right">
+          <div className="p-4 bg-green-50 rounded-xl border border-green-100 shadow-sm">
+            <h4 className="font-bold text-green-900 text-sm mb-3 italic tracking-tight underline decoration-green-200 underline-offset-4">פנייה לבוט או הודעה ישירה לוואטסאפ</h4>
+            <div className="space-y-3">
+              <div className="bg-white p-3 rounded-lg border border-green-200 shadow-sm">
+                <p className="text-[11px] font-bold text-slate-700 mb-1">ManyChat: פלואו מידע ויצירת קשר</p>
+                <p className="text-[10px] text-slate-500 mb-2 font-medium italic leading-relaxed">שליחת הודעת פתיחה אוטומטית + תפריט מותאם: מידע על קורסים או אפשרות לשיחה ישירה.</p>
+                <a href="https://app.manychat.com/fb3830744/cms/files/32421550--content20260118093957_93685" target="_blank" className="text-[10px] font-bold text-green-600 hover:underline inline-flex items-center gap-1">צפה בפלואו <ExternalLink size={8} /></a>
+              </div>
+              <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-200 flex items-start gap-3 shadow-sm border-dashed">
+                <Bell size={16} className="text-indigo-600 shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-[11px] font-bold text-indigo-900 italic">התראת פנייה לירון</p>
+                  <p className="text-[10px] text-indigo-700 font-medium italic leading-tight">שליחת התראה מיידית על פנייה חדשה או חוזרת בוואטסאפ לטיפול מהיר.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="p-3 bg-rose-50 rounded-xl border border-rose-200 flex items-start gap-3 border-dashed shadow-sm">
+            <ListPlus className="text-rose-600 shrink-0" size={18} />
+            <div className="text-right">
+              <p className="font-bold text-rose-800 text-xs italic underline">משימת המשך:</p>
+              <p className="text-rose-700 text-[11px] mt-0.5 italic text-right font-medium">סגירת נושא העדכונים וההתראות המלא לירון מהוואטסאפ.</p>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'capture_summit',
+      title: '1ג. קליטה וחשבוניות (Summit)',
+      icon: <Receipt className="text-rose-500" />,
+      content: (
+        <div className="space-y-4 text-right">
+          <div className="p-4 bg-rose-50 rounded-xl border border-rose-100 shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <FileText size={16} className="text-rose-600" />
+              <h4 className="font-bold text-rose-900 text-sm italic underline decoration-rose-200 underline-offset-4">Integration Summit & Invoicing</h4>
+            </div>
+            
+            <div className="space-y-3">
+              <div className="bg-white p-3 rounded-lg border border-rose-200 flex items-start gap-3 shadow-sm hover:border-rose-400 transition-colors">
+                <Zap size={14} className="text-rose-400 mt-0.5 shrink-0" />
+                <div>
+                  <p className="text-[11px] font-bold text-slate-800 italic">Scenario: create sumit invoice - airtable</p>
+                  <p className="text-[10px] text-slate-600 italic">טריגר הפקת חשבונית וסנכרון המידע חזרה ל-CRM.</p>
+                </div>
+              </div>
+              <div className="bg-white p-3 rounded-lg border border-rose-200 flex items-start gap-3 shadow-sm hover:border-rose-400 transition-colors">
+                <Search size={14} className="text-blue-500 mt-0.5 shrink-0" />
+                <div>
+                  <p className="text-[11px] font-bold text-slate-800 italic">Scenario: Integration SUMIT (Phone Check)</p>
+                  <p className="text-[10px] text-slate-600 italic">משיכת טלפון לקוח מכרטיס המערכת ובדיקה מול אירטייבל.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 flex items-start gap-3 text-right border-dashed shadow-sm">
+            <TestTube className="text-amber-600 shrink-0" size={18} />
+            <div>
+              <p className="font-bold text-amber-800 text-xs italic underline">משימת סאמיט:</p>
+              <p className="text-amber-700 text-[11px] mt-0.5 italic text-right font-bold underline underline-offset-2">לוודא מספר טלפון לקוח מול ירון וביצוע טסט מלא בלייב.</p>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'lead_management',
+      title: '2. פעולות ניהול ליד (אין מענה / מתלבט)',
+      icon: <Settings2 className="text-orange-500" />,
+      content: (
+        <div className="space-y-4 text-right">
+          <div className="p-4 bg-orange-50 rounded-xl border border-orange-100 shadow-sm">
+            <div className="flex items-center gap-2 mb-2">
+              <Clock size={16} className="text-orange-600" />
+              <h4 className="font-bold text-orange-900 text-sm italic">Yaron CRM | 02 - WhatsApp Actions Gateway</h4>
+            </div>
+            <p className="text-xs text-orange-800 leading-relaxed mb-3 font-medium underline decoration-orange-200 underline-offset-4">
+              טיפול אוטומטי בלידים שלא ענו או שנמצאים בשלב התלבטות.
+            </p>
+            <div className="bg-white p-3 rounded-lg border border-orange-200 shadow-sm hover:border-orange-400 transition-colors">
+              <p className="text-[11px] text-slate-600 font-bold italic underline decoration-slate-50">Scenario 02: WhatsApp Actions Gateway</p>
+              <p className="text-[10px] text-slate-500 mt-1 italic">שליחת הודעת וואטסאפ לשימור הקשר והחזרת הליד לתהליך המכירה.</p>
+              <a href="https://eu1.make.com/488101/scenarios/4143415/edit" target="_blank" className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-orange-600 hover:underline">לסנריו ב-Make <ExternalLink size={10} /></a>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'sales',
+      title: '3. סליקה וסגירת עסקה (WooCommerce)',
+      icon: <CreditCard className="text-emerald-600" />,
+      content: (
+        <div className="space-y-4 text-right">
+          <div className="p-4 bg-blue-50 rounded-xl border border-blue-200 shadow-sm">
+            <div className="flex items-center gap-2 mb-2 text-blue-900">
+              <ShoppingBag size={16} />
+              <h4 className="font-bold text-sm italic underline decoration-blue-100 underline-offset-4">Yaron CRM | 05- WooCommerce Sales</h4>
+            </div>
+            <p className="text-[11px] text-blue-700 mb-3 italic font-medium leading-relaxed">בדיקה שעתית (Polling) של הזמנות "Order Processing" וסנכרון סגירה ב-CRM.</p>
+            <div className="bg-white p-3 rounded-lg border border-blue-100 text-[10px] font-bold text-slate-500 flex justify-between items-center shadow-inner">
+              <span>Syncing Sales Status</span>
+              <span className="flex items-center gap-1 text-blue-400 italic"><RefreshCcw size={12} className="animate-spin-slow" /> Polling Every Hour</span>
+            </div>
+            <a href="https://eu1.make.com/488101/scenarios/4162215/edit" target="_blank" className="mt-3 inline-flex items-center gap-1 text-[10px] font-bold text-blue-600 hover:underline">לסנריו ב-Make <ExternalLink size={10} /></a>
+          </div>
+
+          <div className="p-3 bg-indigo-50 rounded-xl border border-indigo-200 flex items-start gap-2 border-dashed shadow-sm">
+            <Zap className="text-indigo-600 shrink-0 mt-0.5" size={16} />
+            <div>
+              <p className="font-bold text-indigo-900 text-[10px] underline italic decoration-indigo-200 underline-offset-4 uppercase tracking-wider">Next Optimization:</p>
+              <p className="text-indigo-700 text-[10px] leading-tight font-medium italic">בדיקה של מעבר לטריגר "Order Completed" (Webhooks) לשיפור מהירות התגובה וצמצום פולינג.</p>
+            </div>
+          </div>
+        </div>
+      )
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-slate-50 font-sans text-right" dir="rtl">
+      {/* Navigation Tabs */}
+      <nav className="bg-white border-b border-slate-200 sticky top-0 z-50 overflow-x-auto shadow-sm">
+        <div className="max-w-5xl mx-auto px-4 flex justify-center whitespace-nowrap">
+          <button 
+            onClick={() => setActiveTab('map')}
+            className={`px-6 py-4 text-sm font-bold transition-all border-b-2 ${activeTab === 'map' ? 'border-blue-600 text-blue-600 shadow-[inset_0_-2px_0_0_rgba(37,99,235,1)]' : 'border-transparent text-slate-500 hover:text-slate-800'}`}
+          >
+            <div className="flex items-center gap-2">
+              <Zap size={18} /> מפת אוטומציות
+            </div>
+          </button>
+          <button 
+            onClick={() => setActiveTab('stats')}
+            className={`px-6 py-4 text-sm font-bold transition-all border-b-2 ${activeTab === 'stats' ? 'border-blue-600 text-blue-600 shadow-[inset_0_-2px_0_0_rgba(37,99,235,1)]' : 'border-transparent text-slate-500 hover:text-slate-800'}`}
+          >
+            <div className="flex items-center gap-2">
+              <BarChart3 size={18} /> דוח Airtable
+            </div>
+          </button>
+          <button 
+            onClick={() => setActiveTab('manychat')}
+            className={`px-6 py-4 text-sm font-bold transition-all border-b-2 ${activeTab === 'manychat' ? 'border-blue-600 text-blue-600 shadow-[inset_0_-2px_0_0_rgba(37,99,235,1)]' : 'border-transparent text-slate-500 hover:text-slate-800'}`}
+          >
+            <div className="flex items-center gap-2">
+              <Smartphone size={18} /> סטטיסטיקה ManyChat
+            </div>
+          </button>
+        </div>
+      </nav>
+
+      {activeTab === 'map' && (
+        <main className="max-w-2xl mx-auto py-8 px-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <header className="mb-10 text-center">
+            <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 text-xs font-bold text-blue-700 bg-blue-50 rounded-full border border-blue-100">
+              <LayoutDashboard size={14} /> LIVE SYSTEM MAP
+            </div>
+            <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-3 tracking-tight italic underline decoration-blue-500 underline-offset-8">ירון וייסברג: מערך אוטומציה 360°</h1>
+            <p className="text-slate-500 text-sm font-medium italic">ניהול מסע לקוח מבוסס סנריוס פעילים ומנוטרים</p>
+          </header>
+          <div className="space-y-4">
+            {steps.map((step, index) => (
+              <div key={step.id} className="relative">
+                <button 
+                  onClick={() => toggleStep(step.id)}
+                  className={`w-full text-right p-5 rounded-2xl transition-all duration-500 flex items-center justify-between shadow-sm border ${
+                    expandedStep === step.id ? 'bg-white border-blue-400 ring-4 ring-blue-50 shadow-md scale-[1.01]' : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className={`p-3 rounded-xl transition-all duration-700 ${expandedStep === step.id ? 'bg-blue-600 text-white shadow-lg rotate-[360deg]' : 'bg-slate-100 text-slate-500'}`}>
+                      {React.cloneElement(step.icon, { size: 22 })}
+                    </div>
+                    <div>
+                      <h3 className={`font-bold text-base md:text-lg tracking-tight ${expandedStep === step.id ? 'text-blue-900' : 'text-slate-800'}`}>
+                        {step.title}
+                      </h3>
+                    </div>
+                  </div>
+                  {expandedStep === step.id ? <ChevronUp size={20} className="text-blue-500 animate-pulse" /> : <ChevronDown size={20} className="text-slate-400" />}
+                </button>
+                {expandedStep === step.id && (
+                  <div className="mt-3 p-6 bg-white rounded-2xl border border-blue-100 shadow-xl animate-in fade-in slide-in-from-top-4 duration-500 relative z-10 text-right">
+                    {step.content}
+                  </div>
+                )}
+                {index < steps.length - 1 && <div className="flex justify-center my-1 opacity-20"><ArrowDown size={24} className="text-blue-200" /></div>}
+              </div>
+            ))}
+          </div>
+        </main>
+      )}
+
+      {activeTab === 'stats' && (
+        <main className="max-w-4xl mx-auto py-8 px-4 animate-in fade-in duration-500 text-right">
+          <header className="mb-10 text-center">
+            <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-2 italic underline decoration-blue-500 underline-offset-8">דוח סטטיסטי - לידים ומכירות</h1>
+            <p className="text-slate-500 text-sm font-sans italic">ניתוח נתונים נכון למרץ 2026 (מערכת Airtable)</p>
+          </header>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-10">
+            <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col items-center text-center hover:border-blue-300 transition-colors shadow-sm">
+              <Users className="text-blue-500 mb-2" size={28} />
+              <span className="text-3xl font-black text-slate-800 font-sans tracking-tight">{statsData.totalLeads}</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest italic underline decoration-blue-100 underline-offset-4">סה"כ לידים</span>
+            </div>
+            <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col items-center text-center border-emerald-100 hover:border-emerald-300 transition-colors shadow-sm">
+              <CheckCircle2 className="text-emerald-500 mb-2" size={28} />
+              <span className="text-3xl font-black text-slate-800 font-sans tracking-tight">{statsData.closedDeals}</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest italic underline decoration-emerald-100 underline-offset-4">עסקאות שנסגרו</span>
+            </div>
+            <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col items-center text-center border-purple-100 hover:border-purple-300 transition-colors shadow-sm">
+              <Target className="text-purple-500 mb-2" size={28} />
+              <span className="text-3xl font-black text-slate-800 font-sans tracking-tight">{statsData.conversionRate}%</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest italic underline decoration-purple-100 underline-offset-4">שיעור המרה</span>
+            </div>
+            <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col items-center text-center border-amber-100 hover:border-amber-300 transition-colors shadow-sm">
+              <DollarSign className="text-amber-500 mb-2" size={28} />
+              <span className="text-3xl font-black text-slate-800 font-sans tracking-tight">₪54,000</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest italic underline decoration-amber-100 underline-offset-4">הכנסות מצטברות</span>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden">
+              <h3 className="font-black text-slate-800 mb-8 flex items-center gap-2 italic text-lg">
+                <TrendingUp size={20} className="text-blue-500" /> מגמת צמיחה רבעונית (2026)
+              </h3>
+              <div className="flex items-end justify-between h-48 gap-4 px-4 border-b border-slate-100 pb-2">
+                {statsData.monthlyGrowth.map((data, i) => (
+                  <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
+                    <span className="text-xs font-bold text-slate-600 group-hover:text-blue-600 transition-colors font-sans">{data.count}</span>
+                    <div className="w-full bg-blue-500 rounded-t-2xl shadow-lg group-hover:bg-blue-600 transition-all cursor-default" style={{ height: `${(data.count / 43) * 100}%` }}></div>
+                    <span className="text-xs text-slate-400 font-bold italic underline decoration-slate-100">{data.month}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full -mr-12 -mt-12"></div>
+            </div>
+            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden text-right">
+              <h3 className="font-black text-slate-800 mb-8 flex items-center gap-2 italic text-lg justify-end">
+                 פילוח מקורות הגעה <PieChart size={20} className="text-emerald-500" />
+              </h3>
+              <div className="space-y-6">
+                {statsData.sources.map((source, i) => (
+                  <div key={i} className="group">
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="font-bold text-slate-700 group-hover:text-emerald-600 transition-colors italic">{source.name}</span>
+                      <span className="text-slate-400 font-sans italic">{source.pct}%</span>
+                    </div>
+                    <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden shadow-inner border border-slate-50">
+                      <div className="h-full bg-emerald-500 rounded-full group-hover:bg-emerald-600 transition-all shadow-sm" style={{ width: `${source.pct}%` }}></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="absolute top-0 left-0 w-24 h-24 bg-emerald-500/5 rounded-full -ml-12 -mt-12"></div>
+            </div>
+          </div>
+        </main>
+      )}
+
+      {activeTab === 'manychat' && (
+        <main className="max-w-4xl mx-auto py-8 px-4 animate-in fade-in duration-500 text-right">
+          <header className="mb-10 text-center">
+            <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-2 italic underline decoration-blue-500 underline-offset-8 font-sans">MANYCHAT ANALYTICS</h1>
+            <p className="text-slate-500 text-sm italic font-medium italic underline decoration-slate-100 underline-offset-4">ניתוח בוט וואטסאפ (106 אנשי קשר פעילים)</p>
+          </header>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 text-right">
+            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col items-center text-center col-span-1 border-blue-100 relative overflow-hidden shadow-sm">
+              <Users className="text-blue-500 mb-3 relative z-10" size={36} />
+              <span className="text-5xl font-black text-slate-800 font-sans tracking-tighter relative z-10">{manychatData.totalContacts}</span>
+              <span className="text-xs font-bold text-slate-400 uppercase mt-2 italic underline decoration-blue-200 underline-offset-4 font-sans tracking-widest relative z-10">Active Contacts</span>
+              <div className="mt-6 flex items-center gap-2 text-xs font-bold text-rose-500 bg-rose-50 px-4 py-1.5 rounded-full border border-rose-100 shadow-sm italic relative z-10">
+                <UserMinus size={14} /> 4 Unsubscribed
+              </div>
+              <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-50 rounded-full blur-3xl opacity-50"></div>
+            </div>
+
+            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm col-span-1 md:col-span-2 border-indigo-100 shadow-sm">
+              <h3 className="font-black text-slate-800 mb-6 flex items-center gap-2 italic text-lg justify-end">
+                פילוח תגיות מערכת (Tags) <Tags size={24} className="text-indigo-500" />
+              </h3>
+              <div className="space-y-6">
+                {manychatData.tags.map((tag, i) => (
+                  <div key={i} className="group">
+                    <div className="flex justify-between items-center mb-1.5">
+                      <span className="text-sm font-bold text-slate-700 group-hover:text-indigo-600 transition-colors italic underline decoration-indigo-50 underline-offset-4">{tag.label}</span>
+                      <span className="text-xs font-bold text-slate-500 font-sans">{tag.count} Leads</span>
+                    </div>
+                    <div className="w-full h-4 bg-slate-100 rounded-full overflow-hidden shadow-inner border border-slate-50">
+                      <div 
+                        className={`h-full rounded-full transition-all duration-1000 ${tag.color} shadow-lg group-hover:brightness-110`}
+                        style={{ width: `${(tag.count / 23) * 100}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-right">
+            <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm border-amber-100 shadow-sm">
+              <h3 className="font-black text-slate-800 mb-8 flex items-center gap-2 italic text-lg justify-end">
+                ביצועי ווידג'טים וכניסות <MousePointerClick size={24} className="text-amber-500" />
+              </h3>
+              <div className="space-y-5">
+                {manychatData.widgets.map((widget, i) => (
+                  <div key={i} className="flex items-center justify-between p-5 bg-slate-50 rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg transition-all cursor-default group border-r-8 border-r-amber-400">
+                    <div className="text-right">
+                      <p className="text-sm md:text-base font-bold text-slate-800 tracking-tight group-hover:text-amber-700 transition-colors italic underline decoration-amber-100 underline-offset-4 font-sans">{widget.name}</p>
+                      <p className="text-[10px] text-slate-500 italic font-medium uppercase tracking-widest mt-1">Direct WhatsApp Link</p>
+                    </div>
+                    <div className="text-left bg-white px-4 py-2 rounded-xl shadow-inner">
+                      <span className="text-2xl font-black text-slate-900 font-sans">{widget.clicks}</span>
+                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter italic">Clicks</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-slate-900 p-10 rounded-[3rem] text-white shadow-2xl relative overflow-hidden flex flex-col justify-center border border-slate-800 shadow-xl">
+              <div className="relative z-10 text-right">
+                <h3 className="text-2xl font-black mb-6 flex items-center gap-3 justify-end underline decoration-indigo-500 underline-offset-8 italic font-sans uppercase tracking-widest">
+                  <Info size={28} className="text-indigo-400" /> INSIGHTS
+                </h3>
+                <ul className="space-y-6 font-medium italic">
+                  <li className="flex items-start gap-4 justify-end group">
+                    <span className="text-sm text-indigo-100 group-hover:text-white transition-colors underline decoration-indigo-800 underline-offset-4 leading-relaxed">כ-22% מהלידים במערכת המאניצ'ט כבר תויגו וסונכרנו בהצלחה לאירטייבל.</span>
+                    <div className="w-2 h-2 rounded-full bg-indigo-400 mt-2 shrink-0 group-hover:scale-[2] transition-transform shadow-[0_0_12px_rgba(129,140,248,1)]"></div>
+                  </li>
+                  <li className="flex items-start gap-4 justify-end group">
+                    <span className="text-sm text-indigo-100 group-hover:text-white transition-colors underline decoration-indigo-800 underline-offset-4 leading-relaxed">ישנה תנועה ערה ומשמעותית מהאתר (16 לידים) המהווה ערוץ קליטה אסטרטגי.</span>
+                    <div className="w-2 h-2 rounded-full bg-indigo-400 mt-2 shrink-0 group-hover:scale-[2] transition-transform shadow-[0_0_12px_rgba(129,140,248,1)]"></div>
+                  </li>
+                  <li className="flex items-start gap-4 justify-end group">
+                    <span className="text-sm text-indigo-100 group-hover:text-white transition-colors underline decoration-indigo-800 underline-offset-4 leading-relaxed">לינק WhatsApp URL #3 הוא הערוץ הממיר ביותר כרגע בפעילות השיווקית.</span>
+                    <div className="w-2 h-2 rounded-full bg-indigo-400 mt-2 shrink-0 group-hover:scale-[2] transition-transform shadow-[0_0_12px_rgba(129,140,248,1)]"></div>
+                  </li>
+                </ul>
+              </div>
+              <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/10 rounded-full blur-[80px] -mr-24 -mt-24 opacity-50"></div>
+              <div className="absolute bottom-0 left-0 w-40 h-40 bg-indigo-500/10 rounded-full blur-[80px] -ml-20 -mb-20 opacity-50"></div>
+            </div>
+          </div>
+        </main>
+      )}
+
+      <footer className="max-w-2xl mx-auto text-center text-slate-400 text-[10px] py-12 border-t border-slate-100 mt-12 font-sans italic font-medium tracking-widest uppercase opacity-60">
+        Yaron Weisberg • CRM Automation & Performance Analytics • 2026
+      </footer>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        .animate-spin-slow { animation: spin 10s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        body { background-color: #f8fafc; overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+      `}} />
+    </div>
+  );
+};
+
+export default App;
