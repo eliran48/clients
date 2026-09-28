@@ -162,7 +162,7 @@
                             <i class="fa-brands fa-whatsapp"></i> ערוץ Meta Cloud API רשמי
                         </span>
                         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200 mr-auto">
-                            <i class="fa-regular fa-calendar"></i> <span id="currentDocDate">27/09/2026</span>
+                            <i class="fa-regular fa-calendar"></i> <span id="currentDocDate">28/09/2026</span>
                         </span>
                     </div>
                     <h1 class="text-2xl sm:text-3xl lg:text-4xl font-black font-heading text-brand-navy tracking-tight leading-snug">
@@ -372,7 +372,7 @@
                     התנסו בשיחות חיות: פנייה יזומה ושידור ברודקאסט
                 </h2>
                 <p class="text-slate-600 text-xs sm:text-sm mt-1 max-w-lg mx-auto">
-                    בחרו בסוג ההדמיה הרצוי כדי לראות את האוטומציה בלייב: בדיקת התאמה לפונה חדש, או דיוור ברודקאסט לקראת פתיחת ההרשמה עם ניתוב למסלולי היחידה.
+                    בחרו בסוג ההדמיה הרצוי כדי לראות את האוטומציה בלייב: פתיח ושיחת בדיקת התאמה לפונה חדש, או דיוור ברודקאסט לקראת פתיחת ההרשמה עם ניתוב למסלולי היחידה.
                 </p>
 
                 <!-- Mode Switcher Tabs (Subtle & Clean) -->
@@ -741,6 +741,7 @@
 
         const TRAUMA_CONFIG = {
             title: 'טיפול הורה-ילד במצבי טראומה',
+            welcomeGreeting: 'שלום וברוכים הבאים ליחידה ללימודי המשך בביה״ס לעבודה סוציאלית ע״ש בוב שאפל באוניברסיטת תל אביב 🎓\nשמחים שבחרת להתעניין בתוכנית "טיפול הורה-ילד במצבי טראומה". כדי שנוכל לבדוק התאמה ולשלוח אליך את הסילבוס המלא, נשמח ל-2 שאלות רקע קצרות:',
             q1: '1. מהי ההכשרה המקצועית שלך? (חובה תואר שני טיפולי)',
             q1Options: [
                 { label: 'עובד/ת סוציאלי/ת עם תואר שני', qualified: true },
@@ -849,7 +850,7 @@
             }
         }
 
-        // Live Inbound Flow (Trauma Program) - Direct to Question 1
+        // Live Inbound Flow (Trauma Program) - Starts with official Greeting, then Question 1
         async function startLiveTraumaFlow() {
             const feed = document.getElementById('dynamicChatFeed');
             const chatMessages = document.getElementById('chatMessages');
@@ -857,9 +858,31 @@
             showTyping(false);
             if (chatMessages) chatMessages.scrollTop = 0;
 
-            await wait(100);
+            // 1. Initial Typing and Greeting Intro
+            await wait(150);
             showTyping(true);
+            await wait(750);
+            showTyping(false);
+            playWhatsAppPop();
+
+            feed.innerHTML = `
+                <!-- Intro / Greeting bubble -->
+                <div class="chat-bubble-received p-3 max-w-[92%] self-start space-y-1.5 shadow-sm border-r-2 border-sky-600">
+                    <p class="font-bold text-sky-950 text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-graduation-cap text-sky-600"></i>
+                        <span>היחידה ללימודי המשך • אונ' תל אביב</span>
+                    </p>
+                    <p class="text-slate-700 leading-relaxed text-[11px] whitespace-pre-line">${TRAUMA_CONFIG.welcomeGreeting}</p>
+                    <span class="text-[9px] text-slate-400 block text-left mt-0.5">${getNow()}</span>
+                </div>
+                <div id="liveTraumaQuestion1Container"></div>
+            `;
+            if (chatMessages) chatMessages.scrollTop = 0;
+
+            // 2. Typing for Question 1
             await wait(450);
+            showTyping(true);
+            await wait(900);
             showTyping(false);
             playWhatsAppPop();
 
@@ -870,17 +893,20 @@
                 </button>
             `).join('');
 
-            feed.innerHTML = `
-                <div class="chat-bubble-received p-3 max-w-[92%] self-start space-y-1 shadow-sm">
-                    <p class="font-bold text-slate-900 text-xs">${TRAUMA_CONFIG.q1}</p>
-                    <span class="text-[9px] text-slate-400 block text-left mt-0.5">${getNow()}</span>
-                </div>
-                <div id="liveTraumaQ1Btns" class="flex flex-col gap-1.5 pt-1">
-                    ${q1OptionsHtml}
-                </div>
-                <div id="liveTraumaAfterQ1Feed" class="space-y-3"></div>
-            `;
-            if (chatMessages) chatMessages.scrollTop = 0;
+            const q1Container = document.getElementById('liveTraumaQuestion1Container');
+            if (q1Container) {
+                q1Container.innerHTML = `
+                    <div class="chat-bubble-received p-3 max-w-[92%] self-start space-y-1 shadow-sm mt-2.5">
+                        <p class="font-bold text-slate-900 text-xs">${TRAUMA_CONFIG.q1}</p>
+                        <span class="text-[9px] text-slate-400 block text-left mt-0.5">${getNow()}</span>
+                    </div>
+                    <div id="liveTraumaQ1Btns" class="flex flex-col gap-1.5 pt-2">
+                        ${q1OptionsHtml}
+                    </div>
+                    <div id="liveTraumaAfterQ1Feed" class="space-y-3 mt-3"></div>
+                `;
+            }
+            scrollChat();
         }
 
         // Live Broadcast Flow ("החלה ההרשמה")
