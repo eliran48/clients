@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הצעת מחיר | תשתית WhatsApp רשמית ומענה אוטומטי - אוניברסיטת תל אביב</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Assistant & Heebo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            navy: '#0A2540',
+                            blue: '#0284C7',
+                            lightBlue: '#E0F2FE',
+                            accent: '#25D366',
+                            gold: '#D97706',
+                            dark: '#0F172A',
+                            surface: '#F8FAFC'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Assistant', 'Heebo', 'sans-serif'],
+                        heading: ['Heebo', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #F8FAFC;
+            color: #1E293B;
+            scroll-behavior: smooth;
+        }
+        .chat-bubble-received {
+            background-color: #FFFFFF;
+            border-radius: 14px 14px 14px 2px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            animation: popIn 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+        }
+        .chat-bubble-sent {
+            background-color: #DCF8C6;
+            border-radius: 14px 14px 2px 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            animation: popIn 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: translateY(8px) scale(0.97); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #64748B;
+            border-radius: 50%;
+            display: inline-block;
+            animation: typingBounce 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+        .card-hover {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -10px rgba(15, 23, 42, 0.08);
+        }
+
+        /* Print & PDF Export Rules */
+        @media print {
+            body {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                padding-bottom: 0 !important;
+            }
+            .no-print, header, #interactive-demo, #submitBtn, #floatingBar, .no-print * {
+                display: none !important;
+            }
+            .page-break-before {
+                page-break-before: always;
+            }
+            section, .bg-white, table {
+                box-shadow: none !important;
+                border-color: #CBD5E1 !important;
+                break-inside: avoid;
+            }
+            @page {
+                size: A4;
+                margin: 12mm 12mm 12mm 12mm;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen pb-24 selection:bg-sky-500 selection:text-white">
+
+    <!-- Top Sticky Navigation Bar -->
+    <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-40 transition-all no-print">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3 sm:gap-6">
+                <!-- Supplier Brand: Eliran Or -->
+                <div class="flex items-center gap-3">
+                    <img src="https://i0.wp.com/eliranor.com/wp-content/uploads/2020/02/eliran-OR-%D7%9C%D7%95%D7%92%D7%95-%D7%A9%D7%A0%D7%99-%D7%A9%D7%A7%D7%95%D7%A3.png?w=500&ssl=1" 
+                         alt="אלירן אור - מתכנן תהליכי שיווק ואוטומציה" 
+                         class="h-10 sm:h-12 w-auto object-contain"
+                         onerror="this.onerror=null; this.src='https://placehold.co/180x50/0A2540/FFFFFF?text=אלירן+אור';">
+                    <div class="hidden sm:block border-r border-slate-200 pr-3">
+                        <span class="text-xs font-bold text-slate-800 block">אלירן אור</span>
+                        <span class="text-[10px] text-slate-500 block">מתכנן תהליכי שיווק ואוטומציה</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Action Links -->
+            <div class="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm">
+                <button onclick="window.print()" class="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-3 py-2 rounded-xl border border-slate-300 transition shadow-sm" title="הדפסה או שמירה כ-PDF">
+                    <i class="fa-solid fa-file-pdf text-rose-600 text-sm"></i>
+                    <span class="hidden sm:inline">ייצוא ל-PDF</span>
+                </button>
+                <a href="#interactive-demo" class="hidden md:inline-flex items-center gap-1.5 text-slate-600 hover:text-sky-600 font-semibold px-3 py-2 rounded-xl hover:bg-slate-50 transition">
+                    <i class="fa-brands fa-whatsapp text-emerald-500 text-base"></i> הדגמה חיה
+                </a>
+                <a href="#pricing-section" class="hidden sm:inline-flex items-center gap-1.5 text-slate-600 hover:text-sky-600 font-semibold px-3 py-2 rounded-xl hover:bg-slate-50 transition">
+                    <i class="fa-solid fa-coins text-sky-600"></i> עלויות והשקעה
+                </a>
+                <a href="#approval-form-section" class="bg-brand-navy hover:bg-slate-800 text-white font-bold px-4 py-2 rounded-xl shadow-md hover:shadow-lg transition flex items-center gap-2">
+                    <span>לאישור ההצעה</span>
+                    <i class="fa-solid fa-arrow-down text-xs"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        
+        <!-- Proposal Header & Meta Section -->
+        <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200/90 mb-8 relative overflow-hidden">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-100">
+                <div class="w-full">
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-sky-50 text-sky-800 border border-sky-200">
+                            <i class="fa-solid fa-building-columns"></i> אוניברסיטת תל אביב
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                            <i class="fa-brands fa-whatsapp"></i> ערוץ Meta Cloud API רשמי
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200 mr-auto">
+                            <i class="fa-regular fa-calendar"></i> <span id="currentDocDate">27/09/2026</span>
+                        </span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-black font-heading text-brand-navy tracking-tight leading-snug">
+                        תשתית מענה וליווי מתעניינים בוואטסאפ לכלל תוכניות היחידה
+                    </h1>
+                    <p class="text-slate-600 mt-2 text-base sm:text-lg">
+                        מענה אישי, קשוב ומהיר למתעניינים 24/7, הזרמת סילבוסים ובדיקת התאמה ראשונית – כדי להעניק חוויה מכבדת למטפלים וליצור שקט ורווחה לצוות הרכזות לאורך כל השנה.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Client & Supplier Match Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
+                <!-- Client Box -->
+                <div class="bg-sky-50/60 rounded-2xl p-5 border border-sky-100 flex flex-col justify-between">
+                    <div>
+                        <p class="text-[11px] uppercase tracking-wider font-extrabold text-sky-800 mb-1.5 flex items-center gap-1.5">
+                            <i class="fa-solid fa-user-graduate"></i> מוכנה במיוחד עבור:
+                        </p>
+                        <h3 class="text-lg font-bold text-slate-900">הדס פלדמן וצוות היחידה ללימודי המשך</h3>
+                        <p class="text-slate-600 text-sm mt-0.5">בית הספר לעבודה סוציאלית ע״ש בוב שאפל • אוניברסיטת תל אביב</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-sky-200/60 text-xs text-sky-900 flex items-center gap-2">
+                        <i class="fa-solid fa-check-circle text-sky-600"></i>
+                        <span>מותאם באופן מלא לכלל תוכניות הלימוד, ההשתלמויות ומסלולי ההכשרה של היחידה</span>
+                    </div>
+                </div>
+
+                <!-- Supplier Box -->
+                <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <p class="text-[11px] uppercase tracking-wider font-extrabold text-slate-500 mb-1.5 flex items-center gap-1.5">
+                            <i class="fa-solid fa-briefcase"></i> תכנון וביצוע מקצועי:
+                        </p>
+                        <h3 class="text-lg font-bold text-slate-900">אלירן אור - מתכנן תהליכי שיווק ואוטומציה</h3>
+                        <p class="text-slate-600 text-xs mt-1.5 leading-relaxed">
+                            מומחה בהקמת מערכי אוטומציה מבוססי WhatsApp Business API רשמי, מנגנוני סינון והתאמה חכמים, וחיבור למערכות נתונים ו-CRM. מחויב לאיכות בלתי מתפשרת, שירות אישי וליווי מלא עד לפעילות שוטפת ויציבה.
+                        </p>
+                        <div class="grid grid-cols-2 gap-2 mt-3 pt-2.5 border-t border-slate-200/80 text-xs text-slate-600">
+                            <div class="flex items-center gap-1.5">
+                                <i class="fa-solid fa-phone text-slate-400"></i>
+                                <a href="tel:0553187548" class="hover:text-sky-600 font-bold">055-3187548</a>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <i class="fa-solid fa-envelope text-slate-400"></i>
+                                <a href="mailto:info@eliranor.com" class="hover:text-sky-600 font-medium truncate">info@eliranor.com</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-slate-200 text-xs text-slate-500 flex items-center justify-between">
+                        <span>אתר: <a href="https://eliranor.com" target="_blank" class="text-sky-600 font-bold hover:underline">eliranor.com</a></span>
+                        <span class="text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">מומחה תשתיות WhatsApp API</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- The Transformation: Calm & Effective Workflow -->
+        <section class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 mb-8">
+            <div class="text-center max-w-2xl mx-auto mb-7">
+                <span class="text-xs font-bold text-sky-700 bg-sky-50 px-3 py-1 rounded-full border border-sky-200 uppercase tracking-wider">
+                    שגרת עבודה נינוחה ואפקטיבית
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-brand-navy mt-2">
+                    מתקשורת עמוסה ומתישה – לשקט תפעולי וחוויית שירות אישית
+                </h2>
+                <p class="text-slate-600 text-sm mt-1">
+                    איך המעבר לתשתית וואטסאפ חכמה מקל על צוות הרכזות ומשפר את חוויית המועמדים
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Current Challenge -->
+                <div class="bg-red-50/40 border-2 border-red-100 rounded-2xl p-5 sm:p-6 relative">
+                    <div class="flex items-center gap-3 mb-4 text-red-700">
+                        <div class="w-9 h-9 rounded-xl bg-red-100 flex items-center justify-center font-bold text-base">
+                            <i class="fa-solid fa-phone-slash"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900">האתגר כיום: עומס שיחות וחזרתיות</h3>
+                    </div>
+                    <ul class="space-y-3 text-xs sm:text-sm text-slate-700">
+                        <li class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-circle-xmark text-red-500 mt-1 flex-shrink-0"></i>
+                            <span><strong>זמן יקר של הרכזות:</strong> מענה ידני חוזר ונשנה לאותן שאלות בסיסיות על תנאי סף, תאריכים ושכר לימוד.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-circle-xmark text-red-500 mt-1 flex-shrink-0"></i>
+                            <span><strong>המתנה למענה בשעות הנוחות למתעניינים:</strong> אנשי הטיפול מתפנים לברר על לימודים בשעות הערב, כשהמשרד אינו מאויש.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-circle-xmark text-red-500 mt-1 flex-shrink-0"></i>
+                            <span><strong>תחושת לחץ סביב מועדי פתיחה:</strong> הצורך לגייס נרשמים ברגע האחרון יוצר עומס רגשי ותפעולי מיותר על הצוות.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- The Calm Solution -->
+                <div class="bg-emerald-50/40 border-2 border-emerald-200 rounded-2xl p-5 sm:p-6 relative">
+                    <div class="flex items-center gap-3 mb-4 text-emerald-800">
+                        <div class="w-9 h-9 rounded-xl bg-emerald-100 flex items-center justify-center font-bold text-base">
+                            <i class="fa-solid fa-face-smile"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900">החוויה החדשה: מענה זורם ונעים</h3>
+                    </div>
+                    <ul class="space-y-3 text-xs sm:text-sm text-slate-700">
+                        <li class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-circle-check text-emerald-600 mt-1 flex-shrink-0"></i>
+                            <span><strong>בדיקת התאמה ראשונית בקצב של המתעניין:</strong> הבוט שואל בעדינות שאלות רקע ומאפשר למתעניין להבין בעצמו את התאמתו.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-circle-check text-emerald-600 mt-1 flex-shrink-0"></i>
+                            <span><strong>הסילבוס מגיע מיד לנייד:</strong> המתעניין מקבל את המידע האקדמי השלם בלחיצת כפתור בוואטסאפ, בכל שעה ביממה.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-circle-check text-emerald-600 mt-1 flex-shrink-0"></i>
+                            <span><strong>שיחה אנושית ממוקדת ואיכותית:</strong> הרכזת משוחחת רק עם מועמדים מתאימים שכבר קראו את החומר ובשלים להירשם.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- The 4 Core System Components -->
+        <section class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 mb-8">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-lg">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-brand-navy">מה כולל הפרויקט?</h2>
+                    <p class="text-xs text-slate-500">תשתית מקיפה ומודולרית שנבנית עבור כלל תוכניות הלימוד וההשתלמויות של היחידה</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- Pillar 1 -->
+                <div class="border border-slate-200 rounded-2xl p-5 card-hover bg-slate-50/30">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold mb-3 text-lg">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-base mb-1.5">1. ערוץ WhatsApp רשמי ומאומת (Meta Cloud API)</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                        הקמת מספר וואטסאפ ייעודי רשמי מטעם היחידה, הפועל על גבי התשתית המורשית של חברת Meta. מאחר שמדובר במספר רשמי ומאומת, <strong>הוא מוגן לחלוטין מחסימות או שיבושים</strong> ומעניק ביטחון מלא ושקט ארגוני.
+                    </p>
+                    <ul class="text-xs text-slate-500 space-y-1.5 font-medium">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-shield-check text-emerald-500"></i> פעילות מורשית, יציבה ובטוחה לחלוטין</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> ניתוב חכם בין כל תוכניות הלימוד ביחידה</li>
+                    </ul>
+                </div>
+
+                <!-- Pillar 2 -->
+                <div class="border border-slate-200 rounded-2xl p-5 card-hover bg-slate-50/30">
+                    <div class="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-600 flex items-center justify-center font-bold mb-3 text-lg">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-base mb-1.5">2. שיח בדיקת התאמה נעים ומדויק לכל תוכנית</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                        המערכת מקבלת את פני הפונה בצורה מכבדת ונעימה, ומבררת 2–3 שאלות רקע רלוונטיות לתחום (רקע אקדמי, ניסיון מעשי, תעודות רלוונטיות). כך המתעניין מבין מיד האם התוכנית מתאימה עבורו, ללא המתנה מיותרת. בנוסף, <strong>בכל רגע נתון הפונה יכול לבקש לעבור למענה אנושי ולדבר ישירות עם נציג או רכזת התוכנית</strong>.
+                    </p>
+                    <ul class="text-xs text-slate-500 space-y-1.5 font-medium">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-headset text-sky-600"></i> אפשרות לבקש מענה אנושי בכל שלב בשיחה</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> חוויה מכבדת וברורה לאנשי מקצוע ומטפלים</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> הקלה משמעותית בעומס שיחות הבירור של הרכזות</li>
+                    </ul>
+                </div>
+
+                <!-- Pillar 3 -->
+                <div class="border border-slate-200 rounded-2xl p-5 card-hover bg-slate-50/30">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-600 flex items-center justify-center font-bold mb-3 text-lg">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-base mb-1.5">3. הנגשת סילבוס, מידע על תוכניות הלימוד והתאמה אישית לכל טקסט ולכל פלואו שיחה</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                        הנגשה מיידית של הסילבוס המפורט ב-PDF, תאריכי פתיחה, מערכת שעות ומידע על שכר לימוד. כל תוכנית מקבלת אפיון ייחודי של תוכן, ניסוחים מדויקים והתאמה אישית מלאה לכל תרחיש שיחה (Flow), כך שהפונה מקבל את המענה המקצועי והרלוונטי ביותר עבורו ברגע שבו הקשב שלו בשיאו.
+                    </p>
+                    <ul class="text-xs text-slate-500 space-y-1.5 font-medium">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> התאמה מלאה של הטקסטים ותרחישי השיחה לכל מסלול לימודים</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> שליחה מיידית של קובצי סילבוס ומידע אקדמי לנייד בלחיצת כפתור</li>
+                    </ul>
+                </div>
+
+                <!-- Pillar 4 -->
+                <div class="border border-slate-200 rounded-2xl p-5 card-hover bg-slate-50/30">
+                    <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-600 flex items-center justify-center font-bold mb-3 text-lg">
+                        <i class="fa-solid fa-bullhorn"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-base mb-1.5">4. עדכונים מותאמים, פילוח קהלים וחיבור אישי לרכזת</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                        המערכת מאפשרת שליחת עדכונים ממוקדים לרשימות תפוצה מאושרות לקראת פתיחת הרשמה או ימים פתוחים, תוך פילוח לפי תחומי עניין. בנוסף, מועמד מתאים שמעוניין בהרשמה מועבר בלחיצת כפתור ישירות לרכזת המתאימה. <strong>(שליחת דיוורים ישירים כרוכה בעלויות נוספות פר נמען/הודעה לפי תעריפי Meta).</strong>
+                    </p>
+                    <ul class="text-xs text-slate-500 space-y-1.5 font-medium">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> כ-93% פתיחה להודעות וואטסאפ לעומת מייל רגיל</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> חיבור אנושי חם ורציף בין המועמד לצוות</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-circle-info text-amber-600"></i> שליחת דיוורים ישירים היא בעלויות נוספות פר נמען</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive WhatsApp Simulator Section (Subtle, Clean & Non-Prominent Neutral Styling) -->
+        <section id="interactive-demo" class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 mb-8">
+            <div class="max-w-2xl mx-auto text-center mb-6">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200 mb-2.5">
+                    <i class="fa-brands fa-whatsapp text-emerald-600"></i> הדגמת שיחה חיה • וואטסאפ רשמי
+                </span>
+                <h2 class="text-xl sm:text-2xl font-bold font-heading text-brand-navy">
+                    התנסו בשיחות חיות: פנייה יזומה ושידור ברודקאסט
+                </h2>
+                <p class="text-slate-600 text-xs sm:text-sm mt-1 max-w-lg mx-auto">
+                    בחרו בסוג ההדמיה הרצוי כדי לראות את האוטומציה בלייב: בדיקת התאמה לפונה חדש, או דיוור ברודקאסט לקראת פתיחת ההרשמה עם ניתוב למסלולי היחידה.
+                </p>
+
+                <!-- Mode Switcher Tabs (Subtle & Clean) -->
+                <div class="mt-4 flex flex-wrap justify-center gap-2">
+                    <button type="button" id="tabInboundBtn" onclick="switchDemoMode('inbound')" class="p-2 px-3.5 rounded-xl bg-slate-800 text-white text-xs font-bold transition flex items-center gap-2 shadow-sm">
+                        <i class="fa-solid fa-comments text-emerald-400"></i>
+                        <span>1. פניית מתעניין (טיפול הורה-ילד)</span>
+                    </button>
+                    <button type="button" id="tabBroadcastBtn" onclick="switchDemoMode('broadcast')" class="p-2 px-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-xs font-bold transition flex items-center gap-2">
+                        <i class="fa-solid fa-bullhorn text-sky-600"></i>
+                        <span>2. דיוור ברודקאסט ("החלה ההרשמה")</span>
+                    </button>
+                    <button type="button" onclick="restartCurrentDemo()" class="p-2 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs font-bold text-slate-600 transition" title="הפעל מחדש">
+                        <i class="fa-solid fa-rotate-right text-slate-500"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Phone Frame -->
+            <div class="max-w-md mx-auto bg-slate-900 rounded-[2.5rem] p-3 shadow-lg border-4 border-slate-200">
+                <!-- Phone Top Bar -->
+                <div class="bg-[#075E54] rounded-t-[1.8rem] px-4 py-3 flex items-center justify-between text-white">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center font-black text-xs text-white tracking-wider border border-white/30">
+                            TAU
+                        </div>
+                        <div>
+                            <p class="font-bold text-xs">לימודי המשך • עבודה סוציאלית</p>
+                            <p id="chatHeaderStatus" class="text-[10px] text-emerald-200 flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse"></span> מחובר/ת (מענה רשמי)
+                            </p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-ellipsis-vertical text-sm text-emerald-100"></i>
+                </div>
+
+                <!-- Chat Canvas Window -->
+                <div id="chatMessages" class="bg-[#EFEAE2] p-3 text-slate-800 text-xs min-h-[410px] max-h-[500px] overflow-y-auto space-y-3 flex flex-col justify-start rounded-b-[1.8rem]">
+                    
+                    <!-- Dynamic chat container for live flows -->
+                    <div id="dynamicChatFeed" class="space-y-3"></div>
+
+                    <!-- Typing indicator placeholder -->
+                    <div id="typingIndicator" class="hidden chat-bubble-received p-2.5 px-3 max-w-[120px] self-start flex items-center gap-1.5 shadow-sm">
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                        <span class="text-[10px] text-slate-500 mr-1.5">מקליד/ה...</span>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Implementation Timeline -->
+        <section class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 mb-8">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-lg">
+                    <i class="fa-solid fa-timeline"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-brand-navy">שלבי יישום ולוח זמנים</h2>
+                    <p class="text-xs text-slate-500">הקמה והטמעה מלאה: כ-45 ימי עסקים (בכפוף לקבלת אישורי Meta ומסמכים רלוונטיים)</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <span class="text-xs font-bold text-purple-700 bg-purple-100/70 px-2 py-0.5 rounded-md inline-block mb-2">שלב 1 • שבועות 1–2</span>
+                    <h4 class="font-bold text-slate-800 text-sm mb-1">אפיון מסמכים ותרחישים</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">הגדרת שאלות הסף האקדמיות לתוכניות, קובצי סילבוסים, מספרי טלפון והגדרת עץ השיחה.</p>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <span class="text-xs font-bold text-purple-700 bg-purple-100/70 px-2 py-0.5 rounded-md inline-block mb-2">שלב 2 • שבועות 3–5</span>
+                    <h4 class="font-bold text-slate-800 text-sm mb-1">הגשות ואישורי Meta רשמיים</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">אימות ארגוני (Business Verification), חיבור המספר הייעודי, רישוי WhatsApp API ואישורי תבניות.</p>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <span class="text-xs font-bold text-purple-700 bg-purple-100/70 px-2 py-0.5 rounded-md inline-block mb-2">שלב 3 • שבועות 6–7</span>
+                    <h4 class="font-bold text-slate-800 text-sm mb-1">פיתוח אוטומציה & Warm Handoff</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">בניית הלוגיקה ב-ManyChat, חיבור תיעוד לידים, סגמנטציה והעברת שיחות ישירה לרכזות.</p>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <span class="text-xs font-bold text-purple-700 bg-purple-100/70 px-2 py-0.5 rounded-md inline-block mb-2">שלב 4 • שבועות 8–9</span>
+                    <h4 class="font-bold text-slate-800 text-sm mb-1">בדיקות QA, הדרכה והשקה</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">סימולציות מלאות, הדרכת צוות הרכזות לתפעול שוטף, ובדיקת קמפיין מודעות מקשר לוואטסאפ.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing & Investment Breakdown -->
+        <section id="pricing-section" class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 mb-8">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-lg">
+                    <i class="fa-solid fa-coins"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-brand-navy">פירוט ההשקעה בפרויקט</h2>
+                    <p class="text-xs text-slate-500">תמחור שקוף ומודולרי עבור הקמת התשתית המלאה</p>
+                </div>
+            </div>
+
+            <!-- Pricing Table -->
+            <div class="overflow-x-auto rounded-2xl border border-slate-200 mb-6">
+                <table class="w-full text-right text-sm">
+                    <thead class="bg-slate-50 text-slate-700 font-bold border-b border-slate-200">
+                        <tr>
+                            <th class="py-3.5 px-4">מרכיב השירות</th>
+                            <th class="py-3.5 px-4">פירוט תכולה</th>
+                            <th class="py-3.5 px-4 text-left">מחיר (לפני מע״מ)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr>
+                            <td class="py-3.5 px-4 font-bold text-slate-900">
+                                הקמת תשתית WhatsApp Business API & בוט אפיון
+                            </td>
+                            <td class="py-3.5 px-4 text-slate-600 text-xs">
+                                חיבור המספר, הגדרת חשבון Meta רשמי, בניית תסריט שיחה ראשי וקליטת לידים 24/7.
+                            </td>
+                            <td class="py-3.5 px-4 text-left font-mono font-bold text-slate-800">
+                                ₪3,500
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-3.5 px-4 font-bold text-slate-900">
+                                מערך בדיקת התאמה והזרמת סילבוסים מותאמים אישית לתוכניות היחידה
+                            </td>
+                            <td class="py-3.5 px-4 text-slate-600 text-xs">
+                                שאלות התאמה אקדמיות מותאמות למסלולים השונים, מנגנון מסירת קובצי סילבוס, תאריכים ושכ״ל.
+                            </td>
+                            <td class="py-3.5 px-4 text-left font-mono font-bold text-slate-800">
+                                ₪2,000
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-3.5 px-4 font-bold text-slate-900">
+                                מנגנון חיבור אישי לרכזת (Warm Handoff) וסנכרון נתונים
+                            </td>
+                            <td class="py-3.5 px-4 text-slate-600 text-xs">
+                                העברה ישירה וחלקה לרכזת התוכנית הרלוונטית, תיעוד מתעניינים ואישורי דיוור למערכות היחידה.
+                            </td>
+                            <td class="py-3.5 px-4 text-left font-mono font-bold text-slate-800">
+                                ₪1,500
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="bg-slate-50/90 font-bold border-t border-slate-200">
+                        <tr>
+                            <td colspan="2" class="py-3 px-4 text-slate-600">סה"כ לפני מע"מ:</td>
+                            <td class="py-3 px-4 text-left font-mono text-slate-900 text-base">₪7,000</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="py-2 px-4 text-slate-500 text-xs font-normal">מע"מ (18%):</td>
+                            <td class="py-2 px-4 text-left font-mono text-slate-600 text-xs font-normal">₪1,260</td>
+                        </tr>
+                        <tr class="bg-sky-50/80 text-sky-950">
+                            <td colspan="2" class="py-4 px-4 text-lg">סה"כ לתשלום כולל מע"מ:</td>
+                            <td class="py-4 px-4 text-left font-mono text-xl font-black text-sky-900">₪8,260</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Third Party Software Costs Box (Neutral Slate Styling) -->
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 mb-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="flex items-start gap-3.5">
+                    <div class="w-10 h-10 rounded-xl bg-slate-200 text-slate-700 flex items-center justify-center flex-shrink-0 text-lg">
+                        <i class="fa-solid fa-server"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm">עלויות מערכת צד ג׳: Manychat (מאניצ'ט)</h4>
+                        <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                            ההצעה אינה כוללת רישוי שוטף למערכת האוטומציה. העלויות משולמות ישירות ל-Manychat, נעות בהתאם לכמות היוזרים (אנשי הקשר) המחוברים למערכת, ומתחילות מ-<strong class="text-slate-900 font-semibold">$14 לחודש</strong> בתשלום שנתי.
+                        </p>
+                    </div>
+                </div>
+                <div class="bg-white px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 whitespace-nowrap self-end sm:self-center shadow-sm">
+                    החל מ-$14 / חודש (שנתי)
+                </div>
+            </div>
+
+            <!-- General Terms & Notes -->
+            <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 text-xs text-slate-600 space-y-2.5">
+                <h4 class="font-bold text-slate-800 text-sm mb-1 flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-info text-sky-600"></i> תנאים כלליים והערות:
+                </h4>
+                <ol class="list-decimal list-inside space-y-2 text-slate-600">
+                    <li><strong>תוקף ההצעה:</strong> הינו 10 ימים ממועד שליחתה.</li>
+                    <li><strong>זמני עבודה והקמה:</strong> כ-45 ימי עסקים מרגע אישור ההצעה וקבלת כלל המסמכים הרלוונטיים מהלקוח, ותלוי במשך האישורים שמתקבלים מחברת Meta (פתיחת חשבון עסקי מאומת, שיוך מספר וואטסאפ ואישורי תבניות הודעה).</li>
+                    <li><strong>תנאי תשלום:</strong> התשלום יועבר במלואו טרם תחילת העבודה (או בהסדר תשלומים מקובל מול מוסדות אקדמיים).</li>
+                    <li><strong>תכולת ההצעה:</strong> ההצעה כוללת את תהליך ההקמה המלא, הגדרת הסגמנטציה וחיבור הבוט לקמפיינים הממומנים ולמערכות הנתונים של הלקוח. כל שינוי עתידי, בניית תרחישים חדשים או תוספות בהמשך יתומחרו בנפרד.</li>
+                    <li><strong>וואטסאפ רשמי של Meta והגנה מחסימות:</strong> הפעילות מוקמת על גבי תשתית WhatsApp Cloud API הרשמית של חברת Meta. מדובר בערוץ תקשורת מוסדר ומאושר ע"י Meta, כך שהמספר אינו נחסם ואינו ניזוק.</li>
+                    <li><strong>עלויות צד שלישי (Manychat ו-Meta):</strong> ההצעה אינה כוללת עלויות חודשיות למערכות צד-שלישי (רישיון מערכת Manychat המתחיל מ-$14 לחודש בתשלום שנתי בהתאם לכמות היוזרים המחוברים למערכת, וכן שיחות בתעריף Meta WhatsApp API), אשר יחולו על הלקוח ישירות.</li>
+                    <li><strong>שליחת הודעות ברודקאסט (דיוורים):</strong> שליחת הודעות ברודקאסט יזומות לרשימות תפוצה כרוכה בעלויות נוספות פר נמען (בהתאם לתעריפי Meta הרשמיים לשיחות שיווק / הודעות שירות).</li>
+                    <li><strong>הקצאת מספר לוואטסאפ רשמי:</strong> כדי לקבל את האישורים הנדרשים מ-Meta לפתיחת ערוץ וואטסאפ רשמי (API), יש להקצות מספר ייעודי לטובת הפעילות. מספר זה יכול להיות מספר נייח של המשרד או מספר נייד נפרד, שאינו מחובר לחשבון וואטסאפ פעיל אחר, ושממנו יישלחו ההודעות.</li>
+                    <li><strong>תוכן ועיצוב:</strong> ההצעה אינה כוללת כתיבת תוכן שיווקי (קריאייטיב) או עיצוב גרפי מעבר לתבניות המערכת.</li>
+                    <li><strong>אחריות הלקוח (חוק הספאם):</strong> על הלקוח לוודא כי כלל הנמענים שאליהם יישלחו המסרים הינם מאושרי דיוור בהתאם לחוק ונתנו את הסכמתם המפורשת כדין. לא תהיה לספק כל אחריות משפטית בנוגע לחוקיות שליחת המסרים.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- ROI Callout Box (Subtle, Unified Theme matching the proposal) -->
+        <section class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 mb-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-start gap-4">
+                    <div class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center text-xl flex-shrink-0">
+                        <i class="fa-solid fa-seedling"></i>
+                    </div>
+                    <div>
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 mb-1.5 uppercase tracking-wider">
+                            השקעה שחוזרת לעצמה במהירות
+                        </span>
+                        <h3 class="text-xl sm:text-2xl font-bold font-heading text-brand-navy">
+                            די בהרשמה של סטודנט אחד נוסף כדי לכסות את מלוא הפרויקט
+                        </h3>
+                        <p class="text-slate-600 text-xs sm:text-sm mt-1.5 leading-relaxed max-w-2xl">
+                            שכר הלימוד בתוכניות היחידה עומד על אלפי ועשרות אלפי שקלים. ברגע שמועמד מתאים מקבל מענה חם ומיידי בוואטסאפ במקום להמתין ימים – מנענו נשירה. הרשמה בודדת נוספת בכל אחת מתוכניות היחידה מחזירה את ההשקעה במלואה, ומותירה את היחידה עם תשתית קבועה לשנים קדימה.
+                        </p>
+                    </div>
+                </div>
+                <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl text-center min-w-[170px] flex-shrink-0">
+                    <p class="text-xs text-slate-500 font-medium">השקעה כוללת</p>
+                    <p class="text-2xl font-black font-mono text-emerald-600 mt-0.5">₪7,000</p>
+                    <p class="text-[11px] text-slate-500 mt-1">חיסכון קבוע בעשרות שעות עבודה</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Approval Section & Sign Form -->
+        <section id="approval-form-section" class="bg-white rounded-3xl p-6 sm:p-10 shadow-lg border-2 border-sky-500/20 mb-8 relative">
+            <div class="max-w-2xl mx-auto">
+                <div class="text-center mb-6">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 mb-2">
+                        <i class="fa-solid fa-file-signature"></i> שלב סופי ואישור
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold font-heading text-brand-navy">
+                        אישור ההצעה והתחלת העבודה
+                    </h2>
+                    <p class="text-slate-600 text-sm mt-1">
+                        נא למלא את הפרטים מטה וללחוץ על הכפתור כדי לתאם את תחילת הפרויקט.
+                    </p>
+                </div>
+
+                <!-- Interactive Form -->
+                <form id="proposalForm" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1" for="orgName">שם החברה / המוסד המאשר</label>
+                        <input type="text" id="orgName" name="organization" required 
+                               value="אוניברסיטת תל אביב - היחידה ללימודי המשך בביה״ס לעבודה סוציאלית"
+                               class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 text-sm font-medium bg-slate-50/50">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1" for="signerName">
+                                חתימה (הקלדת שם מלא) *
+                            </label>
+                            <input type="text" id="signerName" name="signer_name" required 
+                                   placeholder="הדס פלדמן"
+                                   class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 text-sm font-medium">
+                            <span class="text-[10px] text-slate-400 mt-1 block">הקלדת השם מהווה חתימה מחייבת</span>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1" for="approvalDate">
+                                תאריך (נמשך אוטומטית)
+                            </label>
+                            <input type="text" id="approvalDate" name="approval_date" readonly 
+                                   class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-100 text-slate-600 text-sm font-mono cursor-not-allowed">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1" for="clientEmail">
+                            אימייל לעדכון וקבלת העתק
+                        </label>
+                        <input type="email" id="clientEmail" name="email" required
+                               placeholder="hadas@tauex.tau.ac.il"
+                               class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1" for="clientNotes">
+                            הערות או דגשים מיוחדים (אופציונלי)
+                        </label>
+                        <textarea id="clientNotes" name="notes" rows="2" 
+                                  placeholder="דגשים לצוות, סדר עדיפויות לתוכניות וכו'"
+                                  class="w-full px-4 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 text-sm"></textarea>
+                    </div>
+
+                    <div class="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
+                        <input type="checkbox" id="termsAgree" required class="mt-0.5 rounded text-sky-600 focus:ring-sky-500 h-4 w-4">
+                        <label for="termsAgree" class="text-xs text-slate-600 cursor-pointer">
+                            קראתי ואני מאשר/ת את תכולת הפרויקט, התמחור והתנאים הכלליים (לרבות אחריות הלקוח לעמידה בחוק הספאם ואישורי דיוור כדין).
+                        </label>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 px-6 rounded-2xl shadow-lg shadow-emerald-600/25 hover:shadow-xl transition flex items-center justify-center gap-2 text-base">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>אני מאשרת ורוצה להתחיל!</span>
+                    </button>
+                </form>
+
+                <!-- Feedback Message Container -->
+                <div id="feedbackMessage" class="hidden mt-4 p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-center">
+                    <p class="font-extrabold text-lg flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-circle-check text-emerald-600 text-2xl"></i>
+                        ההצעה אושרה בהצלחה!
+                    </p>
+                    <p class="text-xs sm:text-sm mt-1 text-emerald-800">
+                        הפרטים נשלחו בהצלחה. ניצור קשר בהקדם לתיאום תחילת העבודה ואיסוף החומרים.
+                    </p>
+                    <p class="text-xs font-semibold text-slate-600 mt-3">ברכת שנת לימודים פורייה ומוצלחת!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-xs text-slate-500 py-6 border-t border-slate-200">
+            <p class="font-semibold text-slate-700">אלירן אור | מתכנן תהליכי שיווק ואוטומציה</p>
+            <p class="mt-1">טלפון: 055-3187548 | דוא"ל: info@eliranor.com | אתר: eliranor.com</p>
+        </footer>
+    </main>
+
+    <!-- Floating Action Bar for Mobile & Desktop -->
+    <div id="floatingBar" class="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200 py-3 px-4 shadow-xl z-30 flex items-center justify-between max-w-5xl mx-auto rounded-t-2xl no-print">
+        <div class="flex items-center gap-3">
+            <div class="hidden sm:block">
+                <p class="text-xs font-bold text-slate-800">תשתית גיוס שנתית בוואטסאפ</p>
+                <p class="text-[11px] text-slate-500">אוניברסיטת תל אביב • היחידה ללימודי המשך</p>
+            </div>
+            <div class="sm:hidden text-xs">
+                <span class="font-bold text-slate-800">סה"כ: ₪7,000</span>
+                <span class="text-slate-400 text-[10px] block">+ מע"מ</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <button onclick="window.print()" class="px-3 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 border border-slate-200 rounded-xl hover:bg-slate-50 transition">
+                <i class="fa-solid fa-file-pdf text-rose-600 ml-1"></i> PDF
+            </button>
+            <a href="#approval-form-section" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl shadow-md transition flex items-center gap-1.5">
+                <i class="fa-solid fa-file-signature"></i>
+                <span>אישור ההצעה עכשיו</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Interactive Scripts -->
+    <script>
+        /* Formspree Endpoint Configuration */
+        const FORMSPREE_ENDPOINT = "https://formspree.io/f/mzezkngz";
+
+        let currentActiveMode = 'inbound'; // 'inbound' or 'broadcast'
+
+        const TRAUMA_CONFIG = {
+            title: 'טיפול הורה-ילד במצבי טראומה',
+            q1: '1. מהי ההכשרה המקצועית שלך? (חובה תואר שני טיפולי)',
+            q1Options: [
+                { label: 'עובד/ת סוציאלי/ת עם תואר שני', qualified: true },
+                { label: 'פסיכולוג/ית', qualified: true },
+                { label: 'פסיכיאטר/ית', qualified: true },
+                { label: 'מטפל/ת בהבעה ויצירה (תואר שני)', qualified: true },
+                { label: 'קרימינולוג/ית (תואר שני)', qualified: true },
+                { label: 'מקצוע אחר', qualified: false }
+            ],
+            q2: '2. האם יש לך ניסיון בעבודה טיפולית עם הורים וילדים?',
+            q2Options: [
+                { label: 'כן, יותר משלוש שנים', qualified: true },
+                { label: 'כן, בין שנה לשלוש שנים', qualified: true },
+                { label: 'פחות משנה', qualified: false },
+                { label: 'אין לי ניסיון טיפולי', qualified: false }
+            ]
+        };
+
+        const BROADCAST_CONFIG = {
+            broadcastHeader: '📢 החלה ההרשמה לשנת הלימודים תשפ״ז!',
+            broadcastBody: 'שלום רב,\nשמחים לבשר כי נפתחה ההרשמה לתוכניות ההכשרה וההתמחות המתקדמות של היחידה ללימודי המשך בביה״ס לעבודה סוציאלית באוניברסיטת תל אביב.\n\nבאיזה מסלול לימודים את/ה מתעניין/ת השנה?',
+            programs: [
+                { id: 'trauma', name: 'טיפול הורה-ילד (טראומה)', file: 'סילבוס_הורה_ילד_תשפז.pdf' },
+                { id: 'psychotherapy', name: 'פסיכותרפיה פסיכודינמית', file: 'סילבוס_פסיכותרפיה_תשפז.pdf' },
+                { id: 'family', name: 'טיפול זוגי ומשפחתי', file: 'סילבוס_טיפול_משפחתי_תשפז.pdf' },
+                { id: 'elders', name: 'ניהול בתי אבות', file: 'סילבוס_ניהול_בתי_אבות_תשפז.pdf' },
+                { id: 'animals', name: 'טיפול בנוכחות בעלי חיים', file: 'סילבוס_בעלי_חיים_תשפז.pdf' }
+            ]
+        };
+
+        function getNow() {
+            return new Date().toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Web Audio API subtle message ping sound
+        function playWhatsAppPop() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.04, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.12);
+            } catch (e) {}
+        }
+
+        function scrollChat() {
+            const chatMessages = document.getElementById('chatMessages');
+            if (chatMessages) {
+                setTimeout(() => {
+                    chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
+                }, 40);
+            }
+        }
+
+        function showTyping(isTyping) {
+            const indicator = document.getElementById('typingIndicator');
+            const headerStatus = document.getElementById('chatHeaderStatus');
+            if (indicator) {
+                if (isTyping) {
+                    indicator.classList.remove('hidden');
+                    indicator.classList.add('flex');
+                    if (headerStatus) {
+                        headerStatus.innerHTML = `<span class="text-emerald-300 font-bold animate-pulse">מקליד/ה...</span>`;
+                    }
+                } else {
+                    indicator.classList.add('hidden');
+                    indicator.classList.remove('flex');
+                    if (headerStatus) {
+                        headerStatus.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse"></span> מחובר/ת (מענה רשמי)`;
+                    }
+                }
+            }
+            scrollChat();
+        }
+
+        const wait = (ms) => new Promise(res => setTimeout(res, ms));
+
+        function switchDemoMode(mode) {
+            currentActiveMode = mode;
+            const tabInbound = document.getElementById('tabInboundBtn');
+            const tabBroadcast = document.getElementById('tabBroadcastBtn');
+
+            if (mode === 'inbound') {
+                tabInbound.className = "p-2 px-3.5 rounded-xl bg-slate-800 text-white text-xs font-bold transition flex items-center gap-2 shadow-sm";
+                tabBroadcast.className = "p-2 px-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-xs font-bold transition flex items-center gap-2";
+                startLiveTraumaFlow();
+            } else {
+                tabBroadcast.className = "p-2 px-3.5 rounded-xl bg-slate-800 text-white text-xs font-bold transition flex items-center gap-2 shadow-sm";
+                tabInbound.className = "p-2 px-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-xs font-bold transition flex items-center gap-2";
+                startLiveBroadcastFlow();
+            }
+        }
+
+        function restartCurrentDemo() {
+            if (currentActiveMode === 'inbound') {
+                startLiveTraumaFlow();
+            } else {
+                startLiveBroadcastFlow();
+            }
+        }
+
+        // Live Inbound Flow (Trauma Program) - Direct to Question 1
+        async function startLiveTraumaFlow() {
+            const feed = document.getElementById('dynamicChatFeed');
+            const chatMessages = document.getElementById('chatMessages');
+            feed.innerHTML = '';
+            showTyping(false);
+            if (chatMessages) chatMessages.scrollTop = 0;
+
+            await wait(100);
+            showTyping(true);
+            await wait(450);
+            showTyping(false);
+            playWhatsAppPop();
+
+            let q1OptionsHtml = TRAUMA_CONFIG.q1Options.map((opt, idx) => `
+                <button type="button" onclick="handleLiveStep1Choice(${idx})" class="bg-white hover:bg-sky-50 text-slate-800 font-semibold p-2.5 rounded-xl border border-sky-200 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                    <span>${opt.label}</span>
+                    <i class="fa-solid fa-chevron-left text-[10px] text-sky-600"></i>
+                </button>
+            `).join('');
+
+            feed.innerHTML = `
+                <div class="chat-bubble-received p-3 max-w-[92%] self-start space-y-1 shadow-sm">
+                    <p class="font-bold text-slate-900 text-xs">${TRAUMA_CONFIG.q1}</p>
+                    <span class="text-[9px] text-slate-400 block text-left mt-0.5">${getNow()}</span>
+                </div>
+                <div id="liveTraumaQ1Btns" class="flex flex-col gap-1.5 pt-1">
+                    ${q1OptionsHtml}
+                </div>
+                <div id="liveTraumaAfterQ1Feed" class="space-y-3"></div>
+            `;
+            if (chatMessages) chatMessages.scrollTop = 0;
+        }
+
+        // Live Broadcast Flow ("החלה ההרשמה")
+        async function startLiveBroadcastFlow() {
+            const feed = document.getElementById('dynamicChatFeed');
+            feed.innerHTML = '';
+            showTyping(false);
+
+            // Simulation of receiving an outbound broadcast campaign
+            await wait(300);
+            showTyping(true);
+            await wait(1000);
+            showTyping(false);
+            playWhatsAppPop();
+
+            let programButtons = BROADCAST_CONFIG.programs.map((prog, idx) => `
+                <button type="button" onclick="handleBroadcastChoice(${idx})" class="bg-white hover:bg-sky-50 text-slate-800 font-semibold p-2.5 rounded-xl border border-sky-200 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                    <span>${prog.name}</span>
+                    <i class="fa-solid fa-chevron-left text-[10px] text-sky-600"></i>
+                </button>
+            `).join('');
+
+            feed.innerHTML = `
+                <div class="text-center my-1">
+                    <span class="bg-amber-100/90 text-amber-900 border border-amber-300 text-[10px] px-3 py-1 rounded-full font-bold inline-block shadow-sm">
+                        <i class="fa-solid fa-paper-plane mr-1 text-amber-700"></i> דיוור ברודקאסט לרשימת תפוצה מאושרת
+                    </span>
+                </div>
+
+                <div class="chat-bubble-received p-3.5 max-w-[92%] self-start space-y-2 border-r-4 border-sky-600 shadow-sm">
+                    <p class="font-black text-sky-900 text-xs">${BROADCAST_CONFIG.broadcastHeader}</p>
+                    <p class="text-slate-700 leading-relaxed text-[11px] whitespace-pre-line">${BROADCAST_CONFIG.broadcastBody}</p>
+                    <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                </div>
+
+                <div id="broadcastButtonsContainer" class="flex flex-col gap-1.5 pt-1">
+                    ${programButtons}
+                </div>
+
+                <div id="broadcastAftermathFeed" class="space-y-3"></div>
+            `;
+            scrollChat();
+        }
+
+        async function handleBroadcastChoice(idx) {
+            const chosen = BROADCAST_CONFIG.programs[idx];
+            const btns = document.getElementById('broadcastButtonsContainer');
+            if (btns) btns.classList.add('hidden');
+
+            const container = document.getElementById('broadcastAftermathFeed');
+            const now = getNow();
+
+            container.innerHTML += `
+                <div class="chat-bubble-sent p-3 max-w-[85%] self-end">
+                    <p class="font-medium text-slate-900">${chosen.name} ✓</p>
+                    <span class="text-[9px] text-slate-500 block text-left mt-1">${now} ✓✓</span>
+                </div>
+            `;
+            scrollChat();
+
+            await wait(350);
+            showTyping(true);
+            await wait(1200);
+            showTyping(false);
+            playWhatsAppPop();
+
+            container.innerHTML += `
+                <div class="chat-bubble-received p-3 max-w-[92%] self-start space-y-2 border-r-4 border-emerald-500">
+                    <p class="font-bold text-slate-900 text-xs">מעולה! הנה הסילבוס המלא של התוכנית:</p>
+                    <div class="p-2.5 bg-slate-100 rounded-xl border border-slate-200 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-file-pdf text-red-500 text-2xl"></i>
+                            <div>
+                                <p class="font-bold text-[11px] text-slate-800">${chosen.file}</p>
+                                <span class="text-[9px] text-slate-500">תשפ״ז • מועדי לימוד, תנאי קבלה ושכ״ל</span>
+                            </div>
+                        </div>
+                        <span class="text-[10px] text-sky-700 font-bold bg-sky-50 px-2 py-1 rounded border border-sky-200">הורדה ⬇</span>
+                    </div>
+                    <p class="text-slate-700 text-[11px] pt-1">
+                        האם תרצה/י שרכזת התוכנית תבדוק את התאמתך ותיצור עמך קשר לשמירת מקום?
+                    </p>
+                    <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                </div>
+
+                <div id="broadcastFollowupBtns" class="flex flex-col gap-1.5 pt-1">
+                    <button type="button" onclick="confirmBroadcastFollowup(true, '${chosen.name}')" class="bg-white hover:bg-emerald-50 text-emerald-800 font-bold p-2.5 rounded-xl border border-emerald-300 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>כן, אשמח שרכזת תיצור איתי קשר</span>
+                        <i class="fa-solid fa-phone text-[10px] text-emerald-600"></i>
+                    </button>
+                    <button type="button" onclick="confirmBroadcastFollowup(false, '${chosen.name}')" class="bg-white hover:bg-slate-50 text-slate-700 font-medium p-2.5 rounded-xl border border-slate-300 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>תודה, אעיין בינתיים בסילבוס בעצמי</span>
+                        <i class="fa-solid fa-check text-[10px] text-slate-400"></i>
+                    </button>
+                </div>
+                <div id="broadcastFinalFeed" class="space-y-3"></div>
+            `;
+            scrollChat();
+        }
+
+        async function confirmBroadcastFollowup(wantsCallback, progName) {
+            const btns = document.getElementById('broadcastFollowupBtns');
+            if (btns) btns.classList.add('hidden');
+
+            const container = document.getElementById('broadcastFinalFeed');
+            const now = getNow();
+
+            let userText = wantsCallback ? 'כן, אשמח שרכזת תיצור איתי קשר' : 'תודה, אעיין בינתיים בסילבוס בעצמי';
+            container.innerHTML += `
+                <div class="chat-bubble-sent p-3 max-w-[85%] self-end">
+                    <p class="font-medium text-slate-900">${userText}</p>
+                    <span class="text-[9px] text-slate-500 block text-left mt-1">${now} ✓✓</span>
+                </div>
+            `;
+            scrollChat();
+
+            await wait(350);
+            showTyping(true);
+            await wait(1000);
+            showTyping(false);
+            playWhatsAppPop();
+
+            if (wantsCallback) {
+                container.innerHTML += `
+                    <div class="chat-bubble-received p-3 max-w-[90%] self-start border-r-4 border-emerald-500 space-y-1.5">
+                        <p class="font-bold text-slate-900">מצוין! הפרטים הועברו לרכזת 📋</p>
+                        <p class="text-slate-600 text-[11px] leading-relaxed">
+                            ההתעניינות בתוכנית <strong>${progName}</strong> תועדה במערכת. הרכזת תיצור איתך קשר בהקדם לפרטים נוספים והרשמה.
+                        </p>
+                        <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                    </div>
+                `;
+            } else {
+                container.innerHTML += `
+                    <div class="chat-bubble-received p-3 max-w-[90%] self-start border-r-4 border-sky-500 space-y-1.5">
+                        <p class="font-bold text-slate-900">קריאה מהנה ובהצלחה! 🎓</p>
+                        <p class="text-slate-600 text-[11px] leading-relaxed">
+                            אנחנו כאן בכל עת לכל שאלה. כאשר תרצה/י להירשם או לשאול, פשוט כתוב/י לנו כאן בוואטסאפ!
+                        </p>
+                        <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                    </div>
+                `;
+            }
+            scrollChat();
+        }
+
+        // Live Step 1 Choice
+        async function handleLiveStep1Choice(idx) {
+            const chosen = TRAUMA_CONFIG.q1Options[idx];
+            const q1Btns = document.getElementById('liveTraumaQ1Btns');
+            if (q1Btns) q1Btns.classList.add('hidden');
+
+            const container = document.getElementById('liveTraumaAfterQ1Feed');
+            const now = getNow();
+
+            // Render user response immediately
+            container.innerHTML += `
+                <div class="chat-bubble-sent p-3 max-w-[85%] self-end">
+                    <p class="font-medium text-slate-900">${chosen.label} ✓</p>
+                    <span class="text-[9px] text-slate-500 block text-left mt-1">${now} ✓✓</span>
+                </div>
+            `;
+            scrollChat();
+
+            // Typing delay
+            await wait(350);
+            showTyping(true);
+            await wait(1200);
+            showTyping(false);
+            playWhatsAppPop();
+
+            if (!chosen.qualified) {
+                container.innerHTML += `
+                    <div class="chat-bubble-received p-3 max-w-[90%] self-start space-y-1.5 border-r-4 border-amber-500">
+                        <p class="font-bold text-slate-900">תודה על פנייתך!</p>
+                        <p class="text-slate-700 leading-relaxed text-[11px]">
+                            התוכנית מיועדת ספציפית לבעלי תואר שני טיפולי מוכר. היות שציינת רקע מקצועי אחר, נשמח להציע לך קורסים וימי עיון נוספים ביחידה הפתוחים לקהל מקצועי רחב יותר.
+                        </p>
+                        <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                    </div>
+                `;
+            } else {
+                let q2Buttons = TRAUMA_CONFIG.q2Options.map((opt, i) => `
+                    <button type="button" onclick="handleLiveStep2Choice(${i})" class="bg-white hover:bg-sky-50 text-slate-800 font-semibold p-2.5 rounded-xl border border-sky-200 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>${opt.label}</span>
+                        <i class="fa-solid fa-chevron-left text-[10px] text-sky-600"></i>
+                    </button>
+                `).join('');
+
+                container.innerHTML += `
+                    <div class="chat-bubble-received p-3 max-w-[90%] self-start space-y-1.5">
+                        <p class="font-bold text-emerald-800">מצוין! ההכשרה האקדמית עומדת בתנאי הסף.</p>
+                        <p class="font-semibold text-sky-950 text-xs">${TRAUMA_CONFIG.q2}</p>
+                        <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                    </div>
+                    <div id="liveTraumaQ2Btns" class="flex flex-col gap-1.5 pt-1">
+                        ${q2Buttons}
+                    </div>
+                    <div id="liveTraumaAfterQ2Feed" class="space-y-3"></div>
+                `;
+            }
+            scrollChat();
+        }
+
+        // Live Step 2 Choice (Experience)
+        async function handleLiveStep2Choice(idx) {
+            const chosen = TRAUMA_CONFIG.q2Options[idx];
+            const q2Btns = document.getElementById('liveTraumaQ2Btns');
+            if (q2Btns) q2Btns.classList.add('hidden');
+
+            const container = document.getElementById('liveTraumaAfterQ2Feed');
+            const now = getNow();
+
+            container.innerHTML += `
+                <div class="chat-bubble-sent p-3 max-w-[85%] self-end">
+                    <p class="font-medium text-slate-900">${chosen.label} ✓</p>
+                    <span class="text-[9px] text-slate-500 block text-left mt-1">${now} ✓✓</span>
+                </div>
+            `;
+            scrollChat();
+
+            await wait(350);
+            showTyping(true);
+            await wait(1300);
+            showTyping(false);
+            playWhatsAppPop();
+
+            if (chosen.qualified) {
+                container.innerHTML += `
+                    <div class="chat-bubble-received p-3 max-w-[90%] self-start space-y-2 border-r-4 border-emerald-500">
+                        <p class="text-emerald-700 font-bold">נפלא! נתוני ההתאמה שלך עומדים בדרישות הסף של התוכנית 🎉</p>
+                        <div class="p-2.5 bg-slate-100 rounded-xl border border-slate-200 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-file-pdf text-red-500 text-2xl"></i>
+                                <div>
+                                    <p class="font-bold text-[11px] text-slate-800">סילבוס: טיפול הורה-ילד (טראומה).pdf</p>
+                                    <span class="text-[9px] text-slate-500">תשפ״ז • תנאי קבלה, שעות ושכ״ל</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] text-sky-700 font-bold bg-sky-50 px-2 py-1 rounded border border-sky-200">הורדה ⬇</span>
+                        </div>
+                        <p class="text-slate-800 font-semibold text-xs pt-1">איך תרצה/י שניצור איתך קשר להמשך?</p>
+                        <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                    </div>
+
+                    <div id="liveContactChannelBtns" class="flex flex-col gap-1.5 pt-1">
+                        <button type="button" onclick="chooseLiveContactChannel('whatsapp')" class="bg-white hover:bg-emerald-50 text-emerald-800 font-bold p-2.5 rounded-xl border border-emerald-300 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                            <span class="flex items-center gap-2"><i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i> בוואטסאפ (במספר זה)</span>
+                            <i class="fa-solid fa-chevron-left text-[10px] text-emerald-600"></i>
+                        </button>
+                        <button type="button" onclick="chooseLiveContactChannel('phone')" class="bg-white hover:bg-sky-50 text-sky-900 font-bold p-2.5 rounded-xl border border-sky-200 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-phone text-sky-600 text-xs"></i> טלפונית (שיחה קצרה)</span>
+                            <i class="fa-solid fa-chevron-left text-[10px] text-sky-600"></i>
+                        </button>
+                        <button type="button" onclick="chooseLiveContactChannel('email')" class="bg-white hover:bg-slate-100 text-slate-800 font-bold p-2.5 rounded-xl border border-slate-300 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-envelope text-slate-500 text-xs"></i> במייל</span>
+                            <i class="fa-solid fa-chevron-left text-[10px] text-slate-400"></i>
+                        </button>
+                    </div>
+                    <div id="liveContactChannelFeed" class="space-y-3"></div>
+                `;
+            } else {
+                container.innerHTML += `
+                    <div class="chat-bubble-received p-3 max-w-[90%] self-start space-y-1.5 border-r-4 border-amber-500">
+                        <p class="text-slate-800 font-medium">תודה על המענה!</p>
+                        <p class="text-slate-600 text-[11px] leading-relaxed">
+                            תוכנית זו דורשת ניסיון טיפולי קודם של שנה לפחות בעבודה עם הורים וילדים. במידה ותרצה לבחון התאמה חריגה מול ועדת הקבלה, נשמח לחבר אותך לרכזת.
+                        </p>
+                        <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                    </div>
+                `;
+            }
+            scrollChat();
+        }
+
+        // Live Channel selection
+        async function chooseLiveContactChannel(channel) {
+            const channelBtns = document.getElementById('liveContactChannelBtns');
+            if (channelBtns) channelBtns.classList.add('hidden');
+
+            const container = document.getElementById('liveContactChannelFeed');
+            const now = getNow();
+
+            let label = channel === 'whatsapp' ? 'בוואטסאפ (במספר זה)' : (channel === 'phone' ? 'טלפונית (שיחה קצרה)' : 'במייל');
+
+            container.innerHTML += `
+                <div class="chat-bubble-sent p-3 max-w-[85%] self-end">
+                    <p class="font-medium text-slate-900">${label}</p>
+                    <span class="text-[9px] text-slate-500 block text-left mt-1">${now} ✓✓</span>
+                </div>
+            `;
+            scrollChat();
+
+            await wait(350);
+            showTyping(true);
+            await wait(1100);
+            showTyping(false);
+            playWhatsAppPop();
+
+            if (channel === 'whatsapp') {
+                container.innerHTML += `
+                    <div class="chat-bubble-received p-3 max-w-[90%] self-start border-r-4 border-emerald-500 space-y-1.5">
+                        <p class="font-bold text-slate-900">מצוין! הפרטים הועברו לרכזת התוכנית 📲</p>
+                        <p class="text-slate-600 text-[11px] leading-relaxed">
+                            ההתכתבות, יחד עם נתוני ההשכלה והניסיון שלך, הועברה ישירות לרכזת הרלוונטית. היא תמשיך את השיחה עמך ישירות כאן בוואטסאפ בהקדם.
+                        </p>
+                        <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                    </div>
+                `;
+            } else if (channel === 'phone') {
+                container.innerHTML += `
+                    <div class="chat-bubble-received p-3 max-w-[90%] self-start space-y-2 border-r-4 border-sky-500">
+                        <p class="font-bold text-slate-900">בשמחה! לאיזה מספר טלפון נוח לך שנתקשר?</p>
+                        <div class="flex items-center gap-1.5 pt-1">
+                            <input type="tel" id="liveDemoPhoneInput" placeholder="05X-XXXXXXX" value="050-1234567" class="w-full p-2 text-xs rounded-lg border border-slate-300 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-sky-500">
+                            <button type="button" onclick="submitLiveCustomContact('phone')" class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-3 py-2 rounded-lg text-xs flex-shrink-0 transition active:scale-95">
+                                שלח
+                            </button>
+                        </div>
+                        <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                    </div>
+                    <div id="liveFinalChannelConfirmFeed"></div>
+                `;
+            } else if (channel === 'email') {
+                container.innerHTML += `
+                    <div class="chat-bubble-received p-3 max-w-[90%] self-start space-y-2 border-r-4 border-slate-500">
+                        <p class="font-bold text-slate-900">בשמחה! מהי כתובת המייל המועדפת עליך?</p>
+                        <div class="flex items-center gap-1.5 pt-1">
+                            <input type="email" id="liveDemoEmailInput" placeholder="your@email.com" value="therapist@example.com" class="w-full p-2 text-xs rounded-lg border border-slate-300 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-500">
+                            <button type="button" onclick="submitLiveCustomContact('email')" class="bg-slate-800 hover:bg-slate-900 text-white font-bold px-3 py-2 rounded-lg text-xs flex-shrink-0 transition active:scale-95">
+                                שלח
+                            </button>
+                        </div>
+                        <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                    </div>
+                    <div id="liveFinalChannelConfirmFeed"></div>
+                `;
+            }
+            scrollChat();
+        }
+
+        async function submitLiveCustomContact(type) {
+            const container = document.getElementById('liveFinalChannelConfirmFeed');
+            const now = getNow();
+
+            let val = '';
+            let label = '';
+            if (type === 'phone') {
+                val = document.getElementById('liveDemoPhoneInput').value.trim() || '050-1234567';
+                label = `מספר טלפון: ${val}`;
+            } else {
+                val = document.getElementById('liveDemoEmailInput').value.trim() || 'therapist@example.com';
+                label = `דוא"ל: ${val}`;
+            }
+
+            container.innerHTML += `
+                <div class="chat-bubble-sent p-3 max-w-[85%] self-end">
+                    <p class="font-medium text-slate-900">${val}</p>
+                    <span class="text-[9px] text-slate-500 block text-left mt-1">${now} ✓✓</span>
+                </div>
+            `;
+            scrollChat();
+
+            await wait(350);
+            showTyping(true);
+            await wait(1100);
+            showTyping(false);
+            playWhatsAppPop();
+
+            container.innerHTML += `
+                <div class="chat-bubble-received p-3 max-w-[90%] self-start border-r-4 border-emerald-500 space-y-1.5">
+                    <p class="font-bold text-slate-900">תודה רבה! הפרטים נקלטו בהצלחה 📬</p>
+                    <p class="text-slate-600 text-[11px] leading-relaxed">
+                        הפרטים ופרטי הקשר (${label}) הועברו ישירות לרכזת התוכנית. ניצור איתך קשר בהקדם לפי העדפתך!
+                    </p>
+                    <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                </div>
+            `;
+            scrollChat();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Automatically launch live trauma flow on load
+            startLiveTraumaFlow();
+
+            // Set dynamic date automatically
+            const today = new Date();
+            const formattedDate = today.toLocaleDateString('he-IL', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            });
+
+            const dateInput = document.getElementById('approvalDate');
+            if (dateInput) dateInput.value = formattedDate;
+
+            const docDateSpan = document.getElementById('currentDocDate');
+            if (docDateSpan) docDateSpan.innerText = formattedDate;
+
+            // Form submission handling
+            const proposalForm = document.getElementById('proposalForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const feedbackMessage = document.getElementById('feedbackMessage');
+
+            if (proposalForm) {
+                proposalForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    const signerName = document.getElementById('signerName').value.trim();
+                    const orgName = document.getElementById('orgName').value.trim();
+                    const email = document.getElementById('clientEmail').value.trim();
+                    const date = document.getElementById('approvalDate').value;
+                    const notes = document.getElementById('clientNotes').value.trim();
+
+                    if (!signerName) return;
+
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> מעבד אישור...`;
+
+                    try {
+                        if (FORMSPREE_ENDPOINT && FORMSPREE_ENDPOINT.trim().length > 5) {
+                            await fetch(FORMSPREE_ENDPOINT, {
+                                method: 'POST',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    organization: orgName,
+                                    signer_name: signerName,
+                                    email: email,
+                                    date: date,
+                                    notes: notes,
+                                    proposal: "TAU-SW-2026-05"
+                                })
+                            });
+                        } else {
+                            await new Promise(r => setTimeout(r, 600));
+                        }
+
+                        if (typeof confetti === 'function') {
+                            confetti({
+                                particleCount: 120,
+                                spread: 80,
+                                origin: { y: 0.6 }
+                            });
+                        }
+
+                        proposalForm.classList.add('hidden');
+                        feedbackMessage.classList.remove('hidden');
+
+                    } catch (err) {
+                        console.error("Submission error:", err);
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = `<span>אני מאשרת ורוצה להתחיל!</span>`;
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
