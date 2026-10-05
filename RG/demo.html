@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מערך WhatsApp Business API לפרויקטי הנדל״ן | גולדווסר מינצר</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Assistant & Heebo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        luxury: {
+                            navy: '#0E1726',
+                            gold: '#C5A059',
+                            goldLight: '#E8D5B5',
+                            bronze: '#9B783E',
+                            slate: '#1E293B',
+                            bg: '#F8FAFC'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Assistant', 'Heebo', 'sans-serif'],
+                        heading: ['Heebo', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #F8FAFC;
+            color: #1E293B;
+            scroll-behavior: smooth;
+        }
+        .chat-bubble-received {
+            background-color: #FFFFFF;
+            border-radius: 14px 14px 14px 2px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            animation: popIn 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+        }
+        .chat-bubble-sent {
+            background-color: #DCF8C6;
+            border-radius: 14px 14px 2px 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            animation: popIn 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: translateY(8px) scale(0.97); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #64748B;
+            border-radius: 50%;
+            display: inline-block;
+            animation: typingBounce 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+        .card-hover {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -10px rgba(15, 23, 42, 0.08);
+        }
+
+        /* Print & PDF Export Rules */
+        @media print {
+            body {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                padding-bottom: 0 !important;
+            }
+            .no-print, header, #interactive-demo, #floatingBar, .no-print * {
+                display: none !important;
+            }
+            .page-break-before {
+                page-break-before: always;
+            }
+            section, .bg-white, table {
+                box-shadow: none !important;
+                border-color: #CBD5E1 !important;
+                break-inside: avoid;
+            }
+            @page {
+                size: A4;
+                margin: 12mm;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen pb-24 selection:bg-amber-600 selection:text-white">
+
+    <!-- Top Sticky Navigation Bar -->
+    <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-40 transition-all no-print">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between">
+            <!-- Supplier Branding: Eliran Or Only -->
+            <div class="flex items-center gap-3">
+                <img src="https://i0.wp.com/eliranor.com/wp-content/uploads/2020/02/eliran-OR-%D7%9C%D7%95%D7%92%D7%95-%D7%A9%D7%A0%D7%99-%D7%A9%D7%A7%D7%95%D7%A3.png?w=500&ssl=1" 
+                     alt="אלירן אור - מתכנן תהליכי שיווק ואוטומציה" 
+                     class="h-9 sm:h-11 w-auto object-contain"
+                     onerror="this.onerror=null; this.src='https://placehold.co/180x45/0E1726/FFFFFF?text=אלירן+אור';">
+                <div class="hidden sm:block border-r border-slate-200 pr-3">
+                    <span class="text-xs font-bold text-slate-800 block leading-tight">אלירן אור</span>
+                    <span class="text-[10px] text-slate-500 block">מתכנן תהליכי שיווק ואוטומציה</span>
+                </div>
+            </div>
+
+            <!-- Quick Action Links -->
+            <div class="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm">
+                <button onclick="window.print()" class="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-3 py-2 rounded-xl border border-slate-300 transition shadow-sm" title="הדפסה או שמירה כ-PDF">
+                    <i class="fa-solid fa-file-pdf text-rose-600 text-sm"></i>
+                    <span class="hidden sm:inline">ייצוא ל-PDF</span>
+                </button>
+                <a href="#company-capabilities" class="hidden lg:inline-flex items-center gap-1.5 text-slate-600 hover:text-amber-700 font-semibold px-3 py-2 rounded-xl hover:bg-slate-50 transition">
+                    <i class="fa-solid fa-city text-amber-600"></i> פרויקטי החברה
+                </a>
+                <a href="#interactive-demo" class="hidden md:inline-flex items-center gap-1.5 text-slate-600 hover:text-amber-700 font-semibold px-3 py-2 rounded-xl hover:bg-slate-50 transition">
+                    <i class="fa-brands fa-whatsapp text-emerald-500 text-base"></i> הדגמה: אנסמבל
+                </a>
+                <a href="#pricing-section" class="hidden sm:inline-flex items-center gap-1.5 text-slate-600 hover:text-amber-700 font-semibold px-3 py-2 rounded-xl hover:bg-slate-50 transition">
+                    <i class="fa-solid fa-layer-group text-amber-600"></i> שלב התשתית
+                </a>
+                <a href="#next-steps-section" class="bg-luxury-navy hover:bg-slate-800 text-white font-bold px-4 py-2 rounded-xl shadow-md hover:shadow-lg transition flex items-center gap-2">
+                    <span>תיאום שיחת אפיון</span>
+                    <i class="fa-solid fa-arrow-down text-xs"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        
+        <!-- Proposal Header & Meta Section -->
+        <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200/90 mb-8 relative overflow-hidden">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-100">
+                <div class="w-full">
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-900 border border-amber-200">
+                            <i class="fa-solid fa-building-circle-check text-amber-600"></i> גולדווסר מינצר (Goldwasser Münzer)
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                            <i class="fa-brands fa-whatsapp"></i> תשתית Meta Cloud API רשמית
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200 mr-auto">
+                            <i class="fa-regular fa-calendar"></i> <span id="currentDocDate">05/10/2026</span>
+                        </span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-black font-heading text-luxury-navy tracking-tight leading-snug">
+                        הצגת יכולות: מערך WhatsApp Business API חכם לכלל פרויקטי החברה
+                    </h1>
+                    <p class="text-slate-600 mt-2 text-base sm:text-lg">
+                        מענה מיידי 24/7 לכלל קמפייני הנדל״ן של גולדווסר מינצר, סינון תקציבי ואיכותי, הצעות לפרויקטים נוספים בהתאם לצורך, ושליחת חומרי מכר אקסקלוסיביים — עם הדגמה חיה ומלאה על פרויקט הדגל <strong>"אנסמבל"</strong> ברביבים.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Client & Supplier Match Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
+                <!-- Client Box: Tal Levi (Clean Title: שיווק ומכירות) -->
+                <div class="bg-amber-50/40 rounded-2xl p-5 border border-amber-200/70 flex flex-col justify-between">
+                    <div>
+                        <p class="text-[11px] uppercase tracking-wider font-extrabold text-amber-800 mb-1.5 flex items-center gap-1.5">
+                            <i class="fa-solid fa-building"></i> מוכנה במיוחד עבור:
+                        </p>
+                        <h3 class="text-lg font-bold text-slate-900">טל לוי | גולדווסר מינצר (Goldwasser Münzer)</h3>
+                        <p class="text-slate-600 text-sm mt-0.5">שיווק ומכירות • פרויקטי הבוטיק והיוקרה של החברה בתל אביב והמרכז</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-amber-200 text-xs text-amber-900 flex items-center gap-2">
+                        <i class="fa-solid fa-check-circle text-amber-700"></i>
+                        <span>מותאם לפורטפוליו הפרויקטים: אנסמבל (רביבים), המכבי 3 (רובע 5), לוינסקי לשימור, והוד השרון</span>
+                    </div>
+                </div>
+
+                <!-- Supplier Box (Eliran Or Only) -->
+                <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <p class="text-[11px] uppercase tracking-wider font-extrabold text-slate-500 mb-1.5 flex items-center gap-1.5">
+                            <i class="fa-solid fa-briefcase"></i> תכנון, אפיון וביצוע מקצועי:
+                        </p>
+                        <div class="flex items-center justify-between gap-3">
+                            <h3 class="text-base sm:text-lg font-bold text-slate-900">אלירן אור - מתכנן תהליכי שיווק ואוטומציה</h3>
+                            <span class="text-[10px] bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-bold border border-amber-200">מומחה תשתיות אוטומציה</span>
+                        </div>
+                        <p class="text-slate-600 text-xs mt-1.5 leading-relaxed">
+                            מומחה בהקמת מערכי אוטומציה מבוססי WhatsApp Business API רשמי, מנגנוני סינון והתאמה חכמים, וחיבור למערכות נתונים ו-CRM. מחויב לאיכות בלתי מתפשרת, שירות אישי וליווי מלא עד לפעילות שוטפת ויציבה.
+                        </p>
+                        <div class="grid grid-cols-2 gap-2 mt-3 pt-2.5 border-t border-slate-200/80 text-xs text-slate-600">
+                            <div class="flex items-center gap-1.5">
+                                <i class="fa-solid fa-phone text-slate-400"></i>
+                                <a href="tel:0553187548" class="hover:text-amber-700 font-bold">055-3187548</a>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <i class="fa-solid fa-envelope text-slate-400"></i>
+                                <a href="mailto:info@eliranor.com" class="hover:text-amber-700 font-medium truncate">info@eliranor.com</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-slate-200 text-xs text-slate-500 flex items-center justify-between">
+                        <span>אתר: <a href="https://eliranor.com" target="_blank" class="text-amber-700 font-bold hover:underline">eliranor.com</a></span>
+                        <span class="text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Meta Verified Cloud API</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portfolio-Wide Capabilities Section -->
+        <section id="company-capabilities" class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 mb-8">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-lg">
+                    <i class="fa-solid fa-city"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-luxury-navy">מגוון האפשרויות שמערך הבוט מביא לפרויקטים של החברה</h2>
+                    <p class="text-xs text-slate-500">תשתית שיווק ומכירות רב-פרויקטלית המשרתת את כלל הפעילות של גולדווסר מינצר</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <!-- Box 1: 0-Seconds Instant Response (Now First as Requested) -->
+                <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/50 card-hover">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold mb-3">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-sm mb-1">מענה מיידי 0-Seconds בכל קמפיין שיווקי</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        קליטה אוטומטית של פניות מכל מקורות השיווק של החברה (פייסבוק, אינסטגרם, גוגל, אתרי מדלן ויד2, ושלטי חוצות). הבוט מגיב תוך 2 שניות בשיחת וואטסאפ אישית ברגע שבו הקשב של הרוכש בשיאו.
+                    </p>
+                </div>
+
+                <!-- Box 2: Additional Projects Offer -->
+                <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/50 card-hover">
+                    <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold mb-3">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-sm mb-1">הצעות לפרויקטים נוספים במידה והלקוח מעוניין לשמוע על אפשרויות נוספות</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        במידה ומתעניין בפרויקט מסוים (כגון ״אנסמבל״ ברביבים) מציין שהוא מעוניין לבחון אפשרויות נוספות או אזורים אחרים, המערכת מציגה לו בעדינות ובהתאמה אישית פרויקטים רלוונטיים נוספים מתוך הפורטפוליו של החברה (כמו פרויקטים בלב תל אביב או בהוד השרון).
+                    </p>
+                </div>
+
+                <!-- Box 3: Digital Catalog & Specs -->
+                <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/50 card-hover">
+                    <div class="w-9 h-9 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold mb-3">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-sm mb-1">הזרמת תוכניות מכר, חוברות ומפרטי פרימיום</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        הנגשה מיידית ב-PDF לנייד של חוברות פרויקט, תוכניות אדריכליות מדויקות, מפרטי מטבחי יוקרה (DADA), מפרט מערכות VRF וסרטוני הדמיה — במקום שליחה ידנית במייל שעלול להיבלע בתיבת הספאם.
+                    </p>
+                </div>
+
+                <!-- Box 4: Budget & Timeline Qualification -->
+                <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/50 card-hover">
+                    <div class="w-9 h-9 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold mb-3">
+                        <i class="fa-solid fa-filter-circle-dollar"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-sm mb-1">סינון תקציבי וטיוב לקוחות VIP</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        בירור דיסקרטי של טווח תקציב, אזור מבוקש (צפון העיר מול לב העיר) ומוכנות לביצוע עסקה. יועצי המכירות מקבלים לידים בשלים ואיכותיים בלבד, וחוסכים עשרות שעות של שיחות בירור לא רלוונטיות.
+                    </p>
+                </div>
+
+                <!-- Box 5: CRM Sync & Central Dashboard -->
+                <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/50 card-hover">
+                    <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold mb-3">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-sm mb-1">סנכרון מלא ל-CRM המרכזי של החברה</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        עדכון אוטומטי של כרטיס הלקוח ב-CRM (כולל תיוג הפרויקט המבוקש, סוג הנכס, טווח תקציבי, תיעוד מלא של הסכמת דיוור כחוק והיסטוריית שיחה מלאה) בשקיפות מלאה להנהלת החברה.
+                    </p>
+                </div>
+
+                <!-- Box 6: VIP Broadcast Campaigns -->
+                <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/50 card-hover">
+                    <div class="w-9 h-9 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center font-bold mb-3">
+                        <i class="fa-solid fa-bullhorn"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-sm mb-1">שידורי ברודקאסט VIP להשקת פרויקטים חדשים</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        אפשרות לשגר מסרים יזומים לרשימות רוכשים קיימות ומתענייני פרימיום בעת פתיחת פריסייל בלעדי, השקת פרויקט חדש או מבצע מימוני ייחודי (כגון 20/80), עם כ-93% פתיחה מיידית בוואטסאפ.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive WhatsApp Simulator Section with 5 Rich Demos (Focused on Ensemble) -->
+        <section id="interactive-demo" class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 mb-8">
+            <div class="max-w-2xl mx-auto text-center mb-6">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200 mb-2.5">
+                    <i class="fa-brands fa-whatsapp text-emerald-600"></i> סימולטור חי • הדגמת עומק על פרויקט "אנסמבל" (רביבים, ת״א)
+                </span>
+                <h2 class="text-xl sm:text-2xl font-bold font-heading text-luxury-navy">
+                    הדגמת מגוון היכולות בפועל: פרויקט הבוטיק "אנסמבל"
+                </h2>
+                <p class="text-slate-600 text-xs sm:text-sm mt-1 max-w-lg mx-auto">
+                    כדי להמחיש את העוצמה של המערכת, בנינו הדמיה חיה של 5 תרחישים מרכזיים המותאמים אישית ל-8 דירות היוקרה בפרויקט אנסמבל ברחוב יעקב חזן 19:
+                </p>
+
+                <!-- Demo Flow Selection Buttons (5 Modes) -->
+                <div class="mt-4 grid grid-cols-2 sm:grid-cols-5 gap-2">
+                    <button type="button" id="tabMatchBtn" onclick="switchNadlanDemo('match')" class="p-2.5 rounded-xl bg-slate-800 text-white text-xs font-bold transition flex flex-col items-center gap-1 shadow-sm">
+                        <i class="fa-solid fa-house-chimney text-amber-400 text-sm"></i>
+                        <span>1. אפיון דירה</span>
+                    </button>
+                    <button type="button" id="tabLocationBtn" onclick="switchNadlanDemo('location')" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-xs font-bold transition flex flex-col items-center gap-1">
+                        <i class="fa-solid fa-tree-city text-emerald-600 text-sm"></i>
+                        <span>2. סיור בשכונה</span>
+                    </button>
+                    <button type="button" id="tabTourBtn" onclick="switchNadlanDemo('tour')" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-xs font-bold transition flex flex-col items-center gap-1">
+                        <i class="fa-solid fa-calendar-check text-sky-600 text-sm"></i>
+                        <span>3. תיאום סיור</span>
+                    </button>
+                    <button type="button" id="tabSpecsBtn" onclick="switchNadlanDemo('specs')" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-xs font-bold transition flex flex-col items-center gap-1">
+                        <i class="fa-solid fa-couch text-purple-600 text-sm"></i>
+                        <span>4. מפרט טכני</span>
+                    </button>
+                    <button type="button" id="tabBroadcastBtn" onclick="switchNadlanDemo('broadcast')" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-xs font-bold transition flex flex-col items-center gap-1 col-span-2 sm:col-span-1">
+                        <i class="fa-solid fa-bullhorn text-rose-500 text-sm"></i>
+                        <span>5. ברודקאסט VIP</span>
+                    </button>
+                </div>
+
+                <!-- Strategic Context Box -->
+                <div id="demoContextCard" class="mt-4 text-right bg-slate-50 border border-slate-200 rounded-2xl p-4 transition-all duration-300">
+                    <!-- Populated dynamically via switchNadlanDemo -->
+                </div>
+
+                <div class="mt-2 text-center">
+                    <button type="button" onclick="restartCurrentNadlanDemo()" class="text-xs text-slate-500 hover:text-slate-800 font-medium inline-flex items-center gap-1.5 py-1">
+                        <i class="fa-solid fa-rotate-right"></i> הפעל הדמיה נוכחית מחדש
+                    </button>
+                </div>
+            </div>
+
+            <!-- Phone Frame -->
+            <div class="max-w-md mx-auto bg-slate-900 rounded-[2.5rem] p-3 shadow-lg border-4 border-slate-200">
+                <!-- Phone Top Bar -->
+                <div class="bg-[#075E54] rounded-t-[1.8rem] px-4 py-3 flex items-center justify-between text-white">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-full bg-amber-600 flex items-center justify-center font-black text-xs text-white tracking-wider border border-amber-300">
+                            GM
+                        </div>
+                        <div>
+                            <p class="font-bold text-xs">ENSEMBLE • גולדווסר מינצר</p>
+                            <p id="chatHeaderStatus" class="text-[10px] text-emerald-200 flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse"></span> מחובר/ת (מענה VIP רשמי)
+                            </p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-ellipsis-vertical text-sm text-emerald-100"></i>
+                </div>
+
+                <!-- Chat Canvas Window -->
+                <div id="chatMessages" class="bg-[#EFEAE2] p-3 text-slate-800 text-xs min-h-[440px] max-h-[520px] overflow-y-auto space-y-3 flex flex-col justify-start rounded-b-[1.8rem]">
+                    
+                    <!-- Dynamic chat container for live flows -->
+                    <div id="dynamicChatFeed" class="space-y-3"></div>
+
+                    <!-- Typing indicator placeholder -->
+                    <div id="typingIndicator" class="hidden chat-bubble-received p-2.5 px-3 max-w-[120px] self-start flex items-center gap-1.5 shadow-sm">
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                        <span class="text-[10px] text-slate-500 mr-1.5">מקליד/ה...</span>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Strategic Recommendations for Real Estate Sales Process -->
+        <section id="recommendations-section" class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 mb-8">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-lg">
+                    <i class="fa-solid fa-chess-knight"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-luxury-navy">המלצות אסטרטגיות למסלול המכר (The Buyer Journey)</h2>
+                    <p class="text-xs text-slate-500">כיצד הבוט פועל כ"מכפיל כוח" ליועצי המכירות של גולדווסר מינצר</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Rec 1 -->
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                    <div class="flex items-center gap-2 mb-2 text-amber-800">
+                        <span class="w-6 h-6 rounded-full bg-amber-600 text-white text-xs font-bold flex items-center justify-center">1</span>
+                        <h4 class="font-bold text-sm text-slate-900">סיור סביבתי וקהילתי – מכירת הלוקיישן</h4>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        רוכשי פרימיום קונים קודם כל את השכונה: השקט, הגינות הציבוריות, החינוך והנגישות. הבוט מציע למתעניין "גלה את השכונה ב-60 שניות" עם מפות הגעה ותמונות סביבה עוד לפני שיחת המכירה הראשונית.
+                    </p>
+                </div>
+
+                <!-- Rec 2 -->
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                    <div class="flex items-center gap-2 mb-2 text-amber-800">
+                        <span class="w-6 h-6 rounded-full bg-amber-600 text-white text-xs font-bold flex items-center justify-center">2</span>
+                        <h4 class="font-bold text-sm text-slate-900">פרוטוקול "חימום לקראת פגישה" (Pre-Meeting)</h4>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        24 שעות לפני פגישת המכירה או הסיור באתר, הבוט שולח תזכורת אלגנטית, נקודת Waze ישירה לחניה השמורה, וסרטון קצר בן 15 שניות של הבניין וההדמיה. מפחית ביטולים ומעצים את תחושת היוקרה.
+                    </p>
+                </div>
+
+                <!-- Rec 3 -->
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                    <div class="flex items-center gap-2 mb-2 text-amber-800">
+                        <span class="w-6 h-6 rounded-full bg-amber-600 text-white text-xs font-bold flex items-center justify-center">3</span>
+                        <h4 class="font-bold text-sm text-slate-900">מעקב חכם לאחר סיור (Post-Tour Smart Nurturing)</h4>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        4–6 שעות לאחר שהמתעניין ביקר באתר, כשהוא מתייעץ בבית עם בן/בת הזוג, הבוט שולח חבילת סיכום דיגיטלית: תוכנית מכר מדויקת, מפרט DADA, ואפשרות לחיוג ישיר למנהל המכירות.
+                    </p>
+                </div>
+
+                <!-- Rec 4 -->
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                    <div class="flex items-center gap-2 mb-2 text-amber-800">
+                        <span class="w-6 h-6 rounded-full bg-amber-600 text-white text-xs font-bold flex items-center justify-center">4</span>
+                        <h4 class="font-bold text-sm text-slate-900">החזרת "לידים קפואים" בעדכוני בנייה (Re-engagement)</h4>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        במקום שיחות טלפון מעיקות ("מה קורה?"), הבוט שולח עדכון חדשותי מלהיב בווטסאפ (מעל 90% פתיחה): סיום יציקת השלד, מבצע תנאי מימון 20/80 או עדכון על דירות אחרונות שנשארו.
+                    </p>
+                </div>
+
+                <!-- Rec 5 (Highlighted Full Width) -->
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl md:col-span-2">
+                    <div class="flex items-center gap-2 mb-2 text-amber-800">
+                        <span class="w-6 h-6 rounded-full bg-amber-600 text-white text-xs font-bold flex items-center justify-center">5</span>
+                        <h4 class="font-bold text-sm text-slate-900">סינון תקציבי דיסקרטי ונעים (Budget Qualification)</h4>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        היועצים לא מבזבזים זמן יקר על לקוחות ללא התאמה תקציבית. הבוט מציג את טווחי ההשקעה בפרויקט בעדינות, ומתעניין בתקציב מתאים מקבל תיוג `Hot VIP` והתראה מיידית לחיוג ליועץ המכירות.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Foundation Phase & Infrastructure Breakdown -->
+        <section id="pricing-section" class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 mb-8">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-lg">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-luxury-navy">שלב א׳: הקמת תשתית WhatsApp Business API רשמית</h2>
+                    <p class="text-xs text-slate-500">הנחת הבסיס הטכנולוגי המאושר, חיבור הממשקים ומנגנוני האבטחה והחוק</p>
+                </div>
+            </div>
+
+            <!-- Foundation Pricing Card -->
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 mb-6">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-5 border-b border-slate-200">
+                    <div>
+                        <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full uppercase tracking-wider inline-block mb-1.5">
+                            שלב התשתית הבסיסי
+                        </span>
+                        <h3 class="text-xl font-bold text-slate-900">הקמת מערך הבוט, חיבור ממשקים ואימות מטא רשמי</h3>
+                        <p class="text-xs text-slate-600 mt-1">
+                            התקנה כוללת, רישוי ערוץ Cloud API, אימות ביזנס, חיבור מקורות קמפיינים ומנגנוני ציות כחוק.
+                        </p>
+                    </div>
+                    <div class="text-right sm:text-left flex-shrink-0 bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm">
+                        <p class="text-xs text-slate-500 font-medium">עלות הקמת תשתית</p>
+                        <p class="text-2xl font-black font-mono text-emerald-700 mt-0.5">₪4,000</p>
+                        <p class="text-[10px] text-slate-400">+ מע"מ כחוק</p>
+                    </div>
+                </div>
+
+                <!-- Scope items of the 4,000 NIS Phase -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-5 text-xs text-slate-700">
+                    <div class="flex items-start gap-2.5">
+                        <i class="fa-solid fa-circle-check text-emerald-600 mt-0.5 flex-shrink-0 text-sm"></i>
+                        <div>
+                            <strong class="text-slate-900 block font-bold">אימות חשבון ביזנס רשמי (Business Verification):</strong>
+                            אימות מול חברת Meta להגנה מלאה מחסימות, קבלת V ירוק רשמי, והגדרת פרופיל חברה יוקרתי.
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-2.5">
+                        <i class="fa-solid fa-circle-check text-emerald-600 mt-0.5 flex-shrink-0 text-sm"></i>
+                        <div>
+                            <strong class="text-slate-900 block font-bold">מנגנון הסרה וציות כחוק (Opt-out):</strong>
+                            הטמעת מנגנון "הסר" אוטומטי בהתאם לחוק הספאם והנחיות Meta הרשמיות, המגן על המספר מפני דיווחים.
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-2.5">
+                        <i class="fa-solid fa-circle-check text-emerald-600 mt-0.5 flex-shrink-0 text-sm"></i>
+                        <div>
+                            <strong class="text-slate-900 block font-bold">חיבור ממשקי קמפיינים ודפי נחיתה:</strong>
+                            קישור מודעות Click-to-WhatsApp, טפסי לידים ודפי הנחיתה של החברה לקליטה ישירה בבוט.
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-2.5">
+                        <i class="fa-solid fa-circle-check text-emerald-600 mt-0.5 flex-shrink-0 text-sm"></i>
+                        <div>
+                            <strong class="text-slate-900 block font-bold">הקצאת מספר ייעודי ואישור תבניות ראשוניות:</strong>
+                            הגדרת מספר הטלפון המרכזי ואישור תבניות הודעות השירות והקליטה הרשמיות מול Meta.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Future Flows Scoping Clarification -->
+            <div class="bg-amber-50/70 border border-amber-200/90 rounded-2xl p-5 mb-5 flex items-start gap-3.5">
+                <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center flex-shrink-0 text-base font-bold">
+                    <i class="fa-solid fa-diagram-project"></i>
+                </div>
+                <div class="text-xs text-slate-700 leading-relaxed">
+                    <h4 class="font-bold text-slate-900 text-sm mb-1">השלב הבא: אפיון תרחישי השיחה (Flows) ותמחור בהתאם לצורך</h4>
+                    <p>
+                        לאחר הקמת התשתית הרשמית, נקיים פגישת אפיון מעמיקה למיפוי הצרכים המדויקים של צוות המכירות. 
+                        <strong>תהליכי הפלואו השונים</strong> (כגון: עצי שיחה מותאמים אישית לכל פרויקט, מנגנוני סינון מתקדמים, שליחת תוכניות מכר, ברודקאסטים וחיבורי עומק ל-CRM) <strong>יתומחרו בנפרד ובהתאמה אישית</strong> לפי היקף התרחישים שיוגדרו בפועל.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Third Party Software Costs Box -->
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="flex items-start gap-3.5">
+                    <div class="w-10 h-10 rounded-xl bg-slate-200 text-slate-700 flex items-center justify-center flex-shrink-0 text-lg">
+                        <i class="fa-solid fa-server"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm">עלויות מערכת צד ג׳: Manychat & תעריפי Meta</h4>
+                        <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                            העלויות השוטפות משולמות ישירות ל-Manychat, נעות בהתאם לכמות אנשי הקשר ומתחילות מ-<strong class="text-slate-900 font-semibold">$14 לחודש</strong>. שיחות ודיוורי ברודקאסט משולמים ישירות ל-Meta ע"פ תעריפי שיחות רשמיים.
+                        </p>
+                    </div>
+                </div>
+                <div class="bg-white px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 whitespace-nowrap self-end sm:self-center shadow-sm">
+                    החל מ-$14 / חודש (שנתי)
+                </div>
+            </div>
+        </section>
+
+        <!-- Next Steps / Consultation Callout -->
+        <section id="next-steps-section" class="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200/90 mb-8 text-center relative overflow-hidden">
+            <div class="max-w-2xl mx-auto">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200 mb-3">
+                    <i class="fa-solid fa-handshake"></i> השלב הבא
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold font-heading text-luxury-navy">
+                    מוכנים לצאת לדרך עם תשתית הוואטסאפ של גולדווסר מינצר?
+                </h2>
+                <p class="text-slate-600 text-sm mt-2 leading-relaxed">
+                    נתאם שיחת אפיון קצרה להתנעת שלב התשתית (אימות מטא, חיבור המספר והממשקים), ולאחריה נגדיר יחד את תרחישי השיחה המנצחים עבור פרויקט אנסמבל וכלל נכסי החברה.
+                </p>
+
+                <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+                    <a href="tel:0553187548" class="bg-luxury-navy hover:bg-slate-800 text-white font-bold py-3.5 px-6 rounded-2xl shadow-md hover:shadow-lg transition flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>חיוג ישיר: 055-3187548</span>
+                    </a>
+                    <a href="https://wa.me/972553187548?text=%D7%94%D7%99%20%D7%90%D7%94%D7%9C%D7%9F%2C%20%D7%A7%D7%A8%D7%90%D7%AA%D7%99%20%D7%90%D7%AA%20%D7%9E%D7%A1%D7%9E%D7%9A%20%D7%94%D7%99%D7%9B%D7%95%D7%9C%D7%95%D7%AA%20%D7%A2%D7%91%D7%95%D7%A8%20%D7%92%D7%95%D7%9C%D7%93%D7%95%D7%5B%D7%A1%D7%A8%20%D7%9E%D7%99%D7%A0%D7%A6%D7%A8%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%A9%D7%A0%D7%AA%D7%90%D7%9D%20%D7%A9%D7%99%D7%97%D7%AA%20%D7%90%D7%A4%D7%99%D7%95%D7%9F." target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-6 rounded-2xl shadow-md hover:shadow-lg transition flex items-center gap-2 text-sm">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>הודעת וואטסאפ לתיאום</span>
+                    </a>
+                    <a href="mailto:info@eliranor.com?subject=%D7%AA%D7%99%D7%90%D7%95%D7%9D%20%D7%A4%D7%92%D7%99%D7%A9%D7%AA%20%D7%90%D7%A4%D7%99%D7%95%D7%9F%20-%20%D7%92%D7%95%D7%9C%D7%93%D7%95%D7%5B%D7%A1%D7%A8%20%D7%9E%D7%99%D7%A0%D7%A6%D7%A8" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3.5 px-6 rounded-2xl border border-slate-300 transition flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-envelope"></i>
+                        <span>שליחת אימייל</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer (Clean Eliran Or Only) -->
+        <footer class="text-center text-xs text-slate-500 py-6 border-t border-slate-200">
+            <p class="font-semibold text-slate-700">אלירן אור | מתכנן תהליכי שיווק ואוטומציה</p>
+            <p class="mt-1">טלפון: 055-3187548 | דוא"ל: info@eliranor.com | אתר: eliranor.com</p>
+        </footer>
+    </main>
+
+    <!-- Floating Action Bar for Quick Access -->
+    <div id="floatingBar" class="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200 py-3 px-4 shadow-xl z-30 flex items-center justify-between max-w-5xl mx-auto rounded-t-2xl no-print">
+        <div class="flex items-center gap-3">
+            <div class="hidden sm:block">
+                <p class="text-xs font-bold text-slate-800">מערך WhatsApp לפרויקטי הנדל״ן</p>
+                <p class="text-[11px] text-slate-500">גולדווסר מינצר (Goldwasser Münzer)</p>
+            </div>
+            <div class="sm:hidden text-xs">
+                <span class="font-bold text-slate-800">תשתית: ₪4,000</span>
+                <span class="text-slate-400 text-[10px] block">+ מע"מ</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <button onclick="window.print()" class="px-3 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 border border-slate-200 rounded-xl hover:bg-slate-50 transition">
+                <i class="fa-solid fa-file-pdf text-rose-600 ml-1"></i> PDF
+            </button>
+            <a href="https://wa.me/972553187548?text=%D7%94%D7%99%20%D7%90%D7%94%D7%9C%D7%9F%2C%20%D7%A7%D7%A8%D7%90%D7%AA%D7%99%20%D7%90%D7%AA%20%D7%9E%D7%A1%D7%9E%D7%9A%20%D7%94%D7%99%D7%9B%D7%95%D7%9C%D7%95%D7%AA%20%D7%A2%D7%91%D7%95%D7%A8%20%D7%92%D7%95%D7%9C%D7%93%D7%95%D7%5B%D7%A1%D7%A8%20%D7%9E%D7%99%D7%A0%D7%A6%D7%A8." target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl shadow-md transition flex items-center gap-1.5">
+                <i class="fa-brands fa-whatsapp text-base"></i>
+                <span>תיאום פגישת אפיון</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Interactive Scripts -->
+    <script>
+        let currentActiveNadlanMode = 'match'; // 'match', 'location', 'tour', 'specs', 'broadcast'
+
+        // Strategic Buyer Journey Descriptions for each step (Ensemble showcase)
+        const STAGE_DESCRIPTIONS = {
+            match: {
+                badge: 'שלב 1 • קליטה ראשונית וסינון (Top of Funnel)',
+                badgeClass: 'bg-amber-100 text-amber-900 border-amber-300',
+                target: 'למי מיועד: לכל מי שהשאיר פרטים באתר אנסמבל, במודעות פייסבוק/אינסטגרם/גוגל ממומנות, או לחץ על כפתור WhatsApp באתר.',
+                timing: 'מתי מופעל: תוך 2 שניות מרגע השארת הפרט (מענה מיידי 24/7).',
+                purpose: 'מטרת השלב: בירור ראשוני של סוג הנכס המבוקש (גן, קומה שלמה, פנטהאוז), שליחה אוטומטית של תוכנית המכר הרלוונטית, וסינון מקדים כדי שהיועצים של גולדווסר מינצר ישוחחו רק עם מתעניינים רלוונטיים וממוקדים.'
+            },
+            location: {
+                badge: 'שלב 2 • סיור סביבתי וקהילתי (Location & Lifestyle Selling)',
+                badgeClass: 'bg-emerald-100 text-emerald-900 border-emerald-300',
+                target: 'למי מיועד: למתעניינים שבוחנים מעבר לשכונת רביבים בצפון ת"א ומבקשים להכיר את איכות החיים, הקהילה והחינוך.',
+                timing: 'מתי מופעל: בהתעניינות ראשונית או כהצעה בשיחה: "גלה את שכונת רביבים ב-60 שניות".',
+                purpose: 'מטרת השלב: מכירת הלוקיישן והסביבה לפני מכירת הדירה: הגינה הציבורית המטופחת הנמצאת ממש מול הבניין ברחוב יעקב חזן 19, מוסדות החינוך המובילים, והקרבה המהירה למוקדי הבילוי ברמת החייל, טופ דן ונתיבי איילון.'
+            },
+            tour: {
+                badge: 'שלב 3 • הפיכת מתעניין לביקור פיזי בשטח (Bottom of Funnel)',
+                badgeClass: 'bg-sky-100 text-sky-900 border-sky-300',
+                target: 'למי מיועד: ללידים חמים שהורידו תוכנית מכר, התעניינו במחיר, או כהודעת פולו-אפ אוטומטית 24–48 שעות לאחר קבלת הפרטים.',
+                timing: 'מתי מופעל: ברגע שהמתעניין הביע עניין אמיתי אך טרם קבע פגישה, או כהצעה יזומה בסיום שיחת האפיון.',
+                purpose: 'מטרת השלב: לגרום לרוכש הפוטנציאלי להגיע פיזית לרחוב יעקב חזן 19 ברביבים. הבוט מאפשר בחירת מועד (שישי בבוקר או אמצע שבוע), שולח מיקום Waze ישיר, ומכין את יועץ המכירות לפגישה סגורה.'
+            },
+            specs: {
+                badge: 'שלב 4 • מענה להתלבטויות וחיזוק הערך היוקרתי (Decision & Closing Stage)',
+                badgeClass: 'bg-purple-100 text-purple-900 border-purple-300',
+                target: 'למי מיועד: לרוכשים מתלבטים, מתעניינים שמשווים מול פרויקטים מתחרים בשכונה, או כהכנה מקדימה לקראת פגישת מו"מ.',
+                timing: 'מתי מופעל: בשלב מתקדם של המשפך – בעת שאלות על שווי הנכס, רמת הגמר או לפני סגירת חוזה.',
+                purpose: 'מטרת השלב: ביסוס השווי הגבוה של הדירה ע"י הצגת רכיבי העל של אנסמבל: תכנון פיצו קדם, מטבחי DADA מבית טולמנ\'ס, מערכות VRF, חימום תת-רצפתי, וגובה דלתות 2.40 מ\'. מונע ויכוחי מחיר ומחזק את תחושת הפרימיום.'
+            },
+            broadcast: {
+                badge: 'שלב 5 • חימום והנעת קהל קיים (Nurturing & VIP Re-engagement)',
+                badgeClass: 'bg-rose-100 text-rose-900 border-rose-300',
+                target: 'למי מיועד: לרשימת מתעניינים היסטורית, לקוחות VIP של החברה, או מאגר מתענייני פרימיום בצפון תל אביב שאישרו דיוור.',
+                timing: 'מתי מופעל: באירועי שיא שיווקיים – פתיחת פריסייל בלעדי, השקת מבצע תנאי תשלום (למשל 20/80), או אירוע מכירות מיוחד באתר הפרויקט.',
+                purpose: 'מטרת השלב: ייצור גל פניות מרוכז ואחיד בלחיצת כפתור בוואטסאפ (עם כ-93% פתיחה), ללא תלות באלגוריתמים של מטא או מיילים שמגיעים לספאם.'
+            }
+        };
+
+        // Real Estate Ensemble Data
+        const ENSEMBLE_DATA = {
+            apartments: [
+                { id: 'garden', name: 'דירת גן (דירה 2)', desc: '6 חדרים | 186 מ"ר + 130 מ"ר חצרות', file: 'תוכנית_מכר_דירת_גן_אנסמבל.pdf' },
+                { id: 'full_floor', name: 'קומה שלמה (דירה 3)', desc: '6 חדרים | קומה שלמה | 180 מ"ר + 43 מ"ר מרפסות', file: 'תוכנית_מכר_קומה_שלמה_אנסמבל.pdf' },
+                { id: 'penthouse', name: 'פנטהאוז יוקרתי (דירה 8)', desc: '128 מ"ר + 62 מ"ר מרפסות פתוחות לנוף', file: 'תוכנית_מכר_פנטהאוז_אנסמבל.pdf' },
+                { id: 'boutique_3', name: '3 חדרים מעוצבת (דירה 5)', desc: '77 מ"ר + 20 מ"ר מרפסת שמש', file: 'תוכנית_מכר_3_חדרים_אנסמבל.pdf' }
+            ]
+        };
+
+        function getNow() {
+            return new Date().toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function playWhatsAppPop() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.04, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.12);
+            } catch (e) {}
+        }
+
+        function scrollChat() {
+            const chatMessages = document.getElementById('chatMessages');
+            if (chatMessages) {
+                setTimeout(() => {
+                    chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
+                }, 40);
+            }
+        }
+
+        function showTyping(isTyping) {
+            const indicator = document.getElementById('typingIndicator');
+            const headerStatus = document.getElementById('chatHeaderStatus');
+            if (indicator) {
+                if (isTyping) {
+                    indicator.classList.remove('hidden');
+                    indicator.classList.add('flex');
+                    if (headerStatus) {
+                        headerStatus.innerHTML = `<span class="text-amber-300 font-bold animate-pulse">מקליד/ה...</span>`;
+                    }
+                } else {
+                    indicator.classList.add('hidden');
+                    indicator.classList.remove('flex');
+                    if (headerStatus) {
+                        headerStatus.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse"></span> מחובר/ת (מענה VIP רשמי)`;
+                    }
+                }
+            }
+            scrollChat();
+        }
+
+        const wait = (ms) => new Promise(res => setTimeout(res, ms));
+
+        function updateDemoContextCard(mode) {
+            const card = document.getElementById('demoContextCard');
+            if (!card) return;
+            const info = STAGE_DESCRIPTIONS[mode];
+            if (!info) return;
+
+            card.innerHTML = `
+                <div class="flex items-center justify-between gap-2 border-b border-slate-200/80 pb-2 mb-2">
+                    <span class="inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${info.badgeClass}">
+                        <i class="fa-solid fa-route"></i> ${info.badge}
+                    </span>
+                    <span class="text-[10px] text-slate-400 font-mono">הדגמת מסלול לקוח: פרויקט אנסמבל</span>
+                </div>
+                <div class="space-y-1.5 text-xs text-slate-700">
+                    <p class="font-semibold text-slate-900 flex items-start gap-1.5">
+                        <i class="fa-solid fa-users text-slate-500 mt-0.5"></i>
+                        <span>${info.target}</span>
+                    </p>
+                    <p class="text-slate-600 flex items-start gap-1.5">
+                        <i class="fa-solid fa-clock text-slate-400 mt-0.5"></i>
+                        <span>${info.timing}</span>
+                    </p>
+                    <p class="text-slate-600 leading-relaxed flex items-start gap-1.5 bg-white p-2 rounded-xl border border-slate-200/70">
+                        <i class="fa-solid fa-bullseye text-amber-600 mt-0.5"></i>
+                        <span>${info.purpose}</span>
+                    </p>
+                </div>
+            `;
+        }
+
+        function switchNadlanDemo(mode) {
+            currentActiveNadlanMode = mode;
+            
+            const tabs = {
+                match: document.getElementById('tabMatchBtn'),
+                location: document.getElementById('tabLocationBtn'),
+                tour: document.getElementById('tabTourBtn'),
+                specs: document.getElementById('tabSpecsBtn'),
+                broadcast: document.getElementById('tabBroadcastBtn')
+            };
+
+            const activeClass = "p-2.5 rounded-xl bg-slate-800 text-white text-xs font-bold transition flex flex-col items-center gap-1 shadow-sm";
+            const inactiveClass = "p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-xs font-bold transition flex flex-col items-center gap-1";
+
+            Object.keys(tabs).forEach(key => {
+                if (tabs[key]) {
+                    tabs[key].className = (key === mode) ? activeClass : inactiveClass;
+                }
+            });
+
+            updateDemoContextCard(mode);
+
+            if (mode === 'match') startFlowMatch();
+            else if (mode === 'location') startFlowLocation();
+            else if (mode === 'tour') startFlowTour();
+            else if (mode === 'specs') startFlowSpecs();
+            else if (mode === 'broadcast') startFlowBroadcast();
+        }
+
+        function restartCurrentNadlanDemo() {
+            switchNadlanDemo(currentActiveNadlanMode);
+        }
+
+        // --- Flow 1: Matching & Lead Qualification (Ensemble) ---
+        async function startFlowMatch() {
+            const feed = document.getElementById('dynamicChatFeed');
+            const chatMessages = document.getElementById('chatMessages');
+            feed.innerHTML = '';
+            showTyping(false);
+            if (chatMessages) chatMessages.scrollTop = 0;
+
+            await wait(200);
+            showTyping(true);
+            await wait(700);
+            showTyping(false);
+            playWhatsAppPop();
+
+            feed.innerHTML = `
+                <div class="chat-bubble-received p-3 max-w-[92%] self-start space-y-1.5 shadow-sm border-r-2 border-amber-600">
+                    <p class="font-bold text-amber-950 text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-gem text-amber-600"></i>
+                        <span>ENSEMBLE • גולדווסר מינצר</span>
+                    </p>
+                    <p class="text-slate-700 leading-relaxed text-[11px]">
+                        שלום ותודה על התעניינותך בפרויקט הבוטיק <strong>אנסמבל</strong> ברחוב יעקב חזן 19, שכונת רביבים תל אביב ✨<br>
+                        בבניין 8 דירות בלבד בעיצוב אדריכלי ייחודי. כדי שנתאים עבורך את התוכנית המדויקת ביותר, איזה סגנון מגורים את/ה מחפש/ת?
+                    </p>
+                    <span class="text-[9px] text-slate-400 block text-left mt-0.5">${getNow()}</span>
+                </div>
+
+                <div id="matchQ1Btns" class="flex flex-col gap-1.5 pt-1">
+                    <button type="button" onclick="handleMatchQ1Choice('garden')" class="bg-white hover:bg-amber-50 text-slate-800 font-semibold p-2.5 rounded-xl border border-amber-200 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>🏡 דירת גן עם חצר פרטית ענקית (130 מ"ר)</span>
+                        <i class="fa-solid fa-chevron-left text-[10px] text-amber-700"></i>
+                    </button>
+                    <button type="button" onclick="handleMatchQ1Choice('full_floor')" class="bg-white hover:bg-amber-50 text-slate-800 font-semibold p-2.5 rounded-xl border border-amber-200 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>🏛️ קומה שלמה עצמאית (180 מ"ר + 43 מ"ר מרפסת)</span>
+                        <i class="fa-solid fa-chevron-left text-[10px] text-amber-700"></i>
+                    </button>
+                    <button type="button" onclick="handleMatchQ1Choice('penthouse')" class="bg-white hover:bg-amber-50 text-slate-800 font-semibold p-2.5 rounded-xl border border-amber-200 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>🌅 פנטהאוז יוקרתי עם מרפסות גג פתוחות</span>
+                        <i class="fa-solid fa-chevron-left text-[10px] text-amber-700"></i>
+                    </button>
+                    <button type="button" onclick="handleMatchQ1Choice('boutique_3')" class="bg-white hover:bg-amber-50 text-slate-800 font-semibold p-2.5 rounded-xl border border-amber-200 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>✨ דירת 3 חדרים מעוצבת ואינטימית</span>
+                        <i class="fa-solid fa-chevron-left text-[10px] text-amber-700"></i>
+                    </button>
+                </div>
+
+                <div id="matchAfterQ1Feed" class="space-y-3"></div>
+            `;
+            if (chatMessages) chatMessages.scrollTop = 0;
+        }
+
+        async function handleMatchQ1Choice(aptType) {
+            const btns = document.getElementById('matchQ1Btns');
+            if (btns) btns.classList.add('hidden');
+
+            const container = document.getElementById('matchAfterQ1Feed');
+            const now = getNow();
+
+            const aptMap = {
+                garden: ENSEMBLE_DATA.apartments[0],
+                full_floor: ENSEMBLE_DATA.apartments[1],
+                penthouse: ENSEMBLE_DATA.apartments[2],
+                boutique_3: ENSEMBLE_DATA.apartments[3]
+            };
+            const chosen = aptMap[aptType];
+
+            container.innerHTML += `
+                <div class="chat-bubble-sent p-3 max-w-[85%] self-end">
+                    <p class="font-medium text-slate-900">${chosen.name} ✓</p>
+                    <span class="text-[9px] text-slate-500 block text-left mt-1">${now} ✓✓</span>
+                </div>
+            `;
+            scrollChat();
+
+            await wait(300);
+            showTyping(true);
+            await wait(1100);
+            showTyping(false);
+            playWhatsAppPop();
+
+            container.innerHTML += `
+                <div class="chat-bubble-received p-3 max-w-[92%] self-start space-y-2 border-r-4 border-amber-600">
+                    <p class="font-bold text-slate-900 text-xs">בחירה מצוינת! הנה תוכנית המכר האדריכלית:</p>
+                    <div class="p-2.5 bg-slate-100 rounded-xl border border-slate-200 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-file-pdf text-red-500 text-2xl"></i>
+                            <div>
+                                <p class="font-bold text-[11px] text-slate-800">${chosen.file}</p>
+                                <span class="text-[9px] text-slate-500">${chosen.desc}</span>
+                            </div>
+                        </div>
+                        <span class="text-[10px] text-amber-900 font-bold bg-amber-100 px-2 py-1 rounded border border-amber-300">הורדה ⬇</span>
+                    </div>
+                    <p class="text-slate-700 text-[11px] pt-1">
+                        האם תרצה/י שיועץ הנדל"ן הבכיר של הפרויקט ייצור עמך קשר לבירור מחיר ולוח תשלומים?
+                    </p>
+                    <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                </div>
+
+                <div id="matchFollowupBtns" class="flex flex-col gap-1.5 pt-1">
+                    <button type="button" onclick="confirmMatchAgent(true, '${chosen.name}')" class="bg-white hover:bg-emerald-50 text-emerald-800 font-bold p-2.5 rounded-xl border border-emerald-300 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>כן, אשמח לקבל שיחה מיועץ המכירות</span>
+                        <i class="fa-solid fa-phone text-[10px] text-emerald-600"></i>
+                    </button>
+                    <button type="button" onclick="confirmMatchAgent(false, '${chosen.name}')" class="bg-white hover:bg-slate-50 text-slate-700 font-medium p-2.5 rounded-xl border border-slate-300 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>בינתיים אעיין בתוכנית, תודה</span>
+                        <i class="fa-solid fa-check text-[10px] text-slate-400"></i>
+                    </button>
+                </div>
+                <div id="matchFinalFeed" class="space-y-3"></div>
+            `;
+            scrollChat();
+        }
+
+        async function confirmMatchAgent(wantsCall, aptName) {
+            const btns = document.getElementById('matchFollowupBtns');
+            if (btns) btns.classList.add('hidden');
+
+            const container = document.getElementById('matchFinalFeed');
+            const now = getNow();
+
+            container.innerHTML += `
+                <div class="chat-bubble-sent p-3 max-w-[85%] self-end">
+                    <p class="font-medium text-slate-900">${wantsCall ? 'כן, אשמח לקבל שיחה מיועץ המכירות' : 'בינתיים אעיין בתוכנית, תודה'}</p>
+                    <span class="text-[9px] text-slate-500 block text-left mt-1">${now} ✓✓</span>
+                </div>
+            `;
+            scrollChat();
+
+            await wait(300);
+            showTyping(true);
+            await wait(900);
+            showTyping(false);
+            playWhatsAppPop();
+
+            if (wantsCall) {
+                container.innerHTML += `
+                    <div class="chat-bubble-received p-3 max-w-[90%] self-start border-r-4 border-emerald-500 space-y-1.5">
+                        <p class="font-bold text-slate-900">תודה רבה! הפנייה נקלטה במערכת 📋</p>
+                        <p class="text-slate-600 text-[11px] leading-relaxed">
+                            ההתעניינות ב-<strong>${aptName}</strong> הועברה ישירות למנהל המכירות של גולדווסר מינצר יחד עם פרטיך. ניצור עמך קשר טלפוני בהקדם!
+                        </p>
+                        <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                    </div>
+                `;
+            } else {
+                container.innerHTML += `
+                    <div class="chat-bubble-received p-3 max-w-[90%] self-start border-r-4 border-amber-600 space-y-1.5">
+                        <p class="font-bold text-slate-900">קריאה והתרשמות מהנה! 🏢</p>
+                        <p class="text-slate-600 text-[11px] leading-relaxed">
+                            אנו זמינים כאן בוואטסאפ לכל שאלה. בכל רגע תרצה/י מידע נוסף, פשוט הקלד/י לנו כאן.
+                        </p>
+                        <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                    </div>
+                `;
+            }
+            scrollChat();
+        }
+
+        // --- Flow 2: Location & Neighborhood Tour (Ensemble) ---
+        async function startFlowLocation() {
+            const feed = document.getElementById('dynamicChatFeed');
+            feed.innerHTML = '';
+            showTyping(false);
+
+            await wait(200);
+            showTyping(true);
+            await wait(800);
+            showTyping(false);
+            playWhatsAppPop();
+
+            feed.innerHTML = `
+                <div class="chat-bubble-received p-3.5 max-w-[92%] self-start space-y-2 border-r-4 border-emerald-600 shadow-sm">
+                    <p class="font-bold text-emerald-950 text-xs">🌳 גלו את שכונת רביבים ב-60 שניות</p>
+                    <p class="text-slate-700 leading-relaxed text-[11px]">
+                        פרויקט <strong>אנסמבל</strong> ממוקם בלב הפסטורלי של שכונת רביבים (יעקב חזן 19), מול גינה ציבורית ירוקה ומטופחת.<br>
+                        מה מעניין אותך לדעת על הסביבה וחיי הקהילה בשכונה?
+                    </p>
+                    <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                </div>
+
+                <div id="locationBtns" class="flex flex-col gap-1.5 pt-1">
+                    <button type="button" onclick="handleLocationChoice('park')" class="bg-white hover:bg-emerald-50 text-slate-800 font-semibold p-2.5 rounded-xl border border-emerald-200 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>🌸 הגינה הציבורית והשקט מול הבניין</span>
+                        <i class="fa-solid fa-chevron-left text-[10px] text-emerald-600"></i>
+                    </button>
+                    <button type="button" onclick="handleLocationChoice('education')" class="bg-white hover:bg-emerald-50 text-slate-800 font-semibold p-2.5 rounded-xl border border-emerald-200 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>🎒 בתי ספר מובילים, גנים וחינוך</span>
+                        <i class="fa-solid fa-chevron-left text-[10px] text-emerald-600"></i>
+                    </button>
+                    <button type="button" onclick="handleLocationChoice('access')" class="bg-white hover:bg-emerald-50 text-slate-800 font-semibold p-2.5 rounded-xl border border-emerald-200 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>🚗 יציאה לנתיבי איילון, רמת החייל וטופ דן</span>
+                        <i class="fa-solid fa-chevron-left text-[10px] text-emerald-600"></i>
+                    </button>
+                </div>
+
+                <div id="locationFollowupFeed" class="space-y-3"></div>
+            `;
+            scrollChat();
+        }
+
+        async function handleLocationChoice(choice) {
+            const btns = document.getElementById('locationBtns');
+            if (btns) btns.classList.add('hidden');
+
+            const container = document.getElementById('locationFollowupFeed');
+            const now = getNow();
+
+            const titles = {
+                park: 'הגינה הציבורית והשקט מול הבניין',
+                education: 'בתי ספר מובילים, גנים וחינוך',
+                access: 'יציאה לנתיבי איילון, רמת החייל וטופ דן'
+            };
+
+            container.innerHTML += `
+                <div class="chat-bubble-sent p-3 max-w-[85%] self-end">
+                    <p class="font-medium text-slate-900">${titles[choice]} ✓</p>
+                    <span class="text-[9px] text-slate-500 block text-left mt-1">${now} ✓✓</span>
+                </div>
+            `;
+            scrollChat();
+
+            await wait(300);
+            showTyping(true);
+            await wait(1100);
+            showTyping(false);
+            playWhatsAppPop();
+
+            let responseContent = '';
+            if (choice === 'park') {
+                responseContent = `
+                    <p class="text-slate-700 text-[11px] leading-relaxed">
+                        בניין אנסמבל פונה ישירות לגינה ציבורית פסטורלית ומוצלת. הבנייה הנמוכה והרחוב ללא מוצא מבטיחים שקט מוחלט, ציוץ ציפורים ומרחב פתוח לילדים ולנכדים, ללא תנועת כלי רכב כבדה.
+                    </p>
+                `;
+            } else if (choice === 'education') {
+                responseContent = `
+                    <p class="text-slate-700 text-[11px] leading-relaxed">
+                        שכונת רביבים מדורגת בין הטובות בעיר במדדי חינוך. במרחק הליכה קצר של עד 5 דקות נמצאים גני ילדים מבוקשים, בית ספר יסודי קהילתי, ותנועות נוער פעילות.
+                    </p>
+                `;
+            } else {
+                responseContent = `
+                    <p class="text-slate-700 text-[11px] leading-relaxed">
+                        מיקום אסטרטגי נדיר: 3 דקות נסיעה ממתחם הבילוי והמסעדות ברמת החייל, קריית עתידים וקאנטרי הגולף, עם יציאה ישירה ונוחה למחלף קק"ל ונתיבי איילון ללא פקקים פנימיים.
+                    </p>
+                `;
+            }
+
+            container.innerHTML += `
+                <div class="chat-bubble-received p-3 max-w-[92%] self-start space-y-2 border-r-4 border-emerald-500">
+                    <p class="font-bold text-slate-900 text-xs">איכות חיים כפרית בצפון תל אביב:</p>
+                    ${responseContent}
+                    <div class="p-2 bg-emerald-50 rounded-xl border border-emerald-200 text-[10px] text-emerald-900 flex items-center justify-between">
+                        <span>📍 יעקב חזן 19, שכונת רביבים</span>
+                        <span class="font-bold">8 דירות בלבד</span>
+                    </div>
+                    <p class="text-slate-700 text-[11px] pt-1">תרצה/י לתאם סיור שקט באזור להרגיש את האווירה מקרוב?</p>
+                    <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                </div>
+
+                <div class="flex flex-col gap-1.5 pt-1">
+                    <button type="button" onclick="switchNadlanDemo('tour')" class="bg-white hover:bg-emerald-50 text-emerald-800 font-bold p-2.5 rounded-xl border border-emerald-300 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>כן, אשמח לתאם סיור ברחוב יעקב חזן 🚗</span>
+                        <i class="fa-solid fa-arrow-left text-[10px] text-emerald-600"></i>
+                    </button>
+                </div>
+            `;
+            scrollChat();
+        }
+
+        // --- Flow 3: Tour Booking (Site Visit) ---
+        async function startFlowTour() {
+            const feed = document.getElementById('dynamicChatFeed');
+            feed.innerHTML = '';
+            showTyping(false);
+
+            await wait(200);
+            showTyping(true);
+            await wait(800);
+            showTyping(false);
+            playWhatsAppPop();
+
+            feed.innerHTML = `
+                <div class="chat-bubble-received p-3 max-w-[92%] self-start space-y-2 border-r-4 border-sky-600 shadow-sm">
+                    <p class="font-bold text-slate-900 text-xs">📍 תיאום ביקור וסיור בשכונת רביבים</p>
+                    <p class="text-slate-700 leading-relaxed text-[11px]">
+                        הפרויקט ממוקם בפינה הפסטורלית של רחוב יעקב חזן 19, מול גינה ציבורית ירוקה ומטופחת.<br>
+                        נשמח לתאם עמך סיור אישי להכרת האזור והסבר אדריכלי על המבנה. מתי יהיה לך הכי נוח?
+                    </p>
+                    <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                </div>
+
+                <div id="tourDayBtns" class="flex flex-col gap-1.5 pt-1">
+                    <button type="button" onclick="handleTourSlot('שישי בבוקר')" class="bg-white hover:bg-sky-50 text-slate-800 font-semibold p-2.5 rounded-xl border border-sky-200 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>☀️ יום שישי הקרוב בבוקר (09:30–12:30)</span>
+                        <i class="fa-solid fa-calendar-day text-[10px] text-sky-600"></i>
+                    </button>
+                    <button type="button" onclick="handleTourSlot('אמצע שבוע אחה״צ')" class="bg-white hover:bg-sky-50 text-slate-800 font-semibold p-2.5 rounded-xl border border-sky-200 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>🌆 אמצע השבוע בשעות אחר הצהריים (16:00–18:30)</span>
+                        <i class="fa-solid fa-calendar-day text-[10px] text-sky-600"></i>
+                    </button>
+                    <button type="button" onclick="handleTourSlot('תיאום גמיש טלפוני')" class="bg-white hover:bg-slate-100 text-slate-700 font-medium p-2.5 rounded-xl border border-slate-300 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>📞 תאמו איתי טלפונית מועד מותאם אישית</span>
+                        <i class="fa-solid fa-phone text-[10px] text-slate-400"></i>
+                    </button>
+                </div>
+
+                <div id="tourAfterFeed" class="space-y-3"></div>
+            `;
+            scrollChat();
+        }
+
+        async function handleTourSlot(slotName) {
+            const btns = document.getElementById('tourDayBtns');
+            if (btns) btns.classList.add('hidden');
+
+            const container = document.getElementById('tourAfterFeed');
+            const now = getNow();
+
+            container.innerHTML += `
+                <div class="chat-bubble-sent p-3 max-w-[85%] self-end">
+                    <p class="font-medium text-slate-900">${slotName} ✓</p>
+                    <span class="text-[9px] text-slate-500 block text-left mt-1">${now} ✓✓</span>
+                </div>
+            `;
+            scrollChat();
+
+            await wait(300);
+            showTyping(true);
+            await wait(1000);
+            showTyping(false);
+            playWhatsAppPop();
+
+            container.innerHTML += `
+                <div class="chat-bubble-received p-3 max-w-[92%] self-start space-y-2 border-r-4 border-sky-500">
+                    <p class="font-bold text-slate-900 text-xs">נפלא! הבקשה לסיור (${slotName}) אושרה 🚗</p>
+                    <p class="text-slate-700 text-[11px] leading-relaxed">
+                        נציג המכירות יחזור אליך לאישור סופי של השעה. הכנו עבורך נקודת ציון ישירה ב-Waze להגעה נוחה:
+                    </p>
+                    <div class="p-2.5 bg-slate-100 rounded-xl border border-slate-200 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-location-dot text-sky-600 text-xl"></i>
+                            <div>
+                                <p class="font-bold text-[11px] text-slate-800">יעקב חזן 19, שכונת רביבים ת״א</p>
+                                <span class="text-[9px] text-slate-500">חניה מוסדרת שמורה מול הגינה</span>
+                            </div>
+                        </div>
+                        <span class="text-[10px] text-sky-700 font-bold bg-sky-50 px-2 py-1 rounded border border-sky-200">Waze 🗺️</span>
+                    </div>
+                    <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                </div>
+            `;
+            scrollChat();
+        }
+
+        // --- Flow 4: Premium Specifications & Multimedia ---
+        async function startFlowSpecs() {
+            const feed = document.getElementById('dynamicChatFeed');
+            feed.innerHTML = '';
+            showTyping(false);
+
+            await wait(200);
+            showTyping(true);
+            await wait(800);
+            showTyping(false);
+            playWhatsAppPop();
+
+            feed.innerHTML = `
+                <div class="chat-bubble-received p-3 max-w-[92%] self-start space-y-2 border-r-4 border-purple-600 shadow-sm">
+                    <p class="font-bold text-purple-950 text-xs">✨ מפרט פרימיום וסטנדרט בנייה עילאי</p>
+                    <p class="text-slate-700 leading-relaxed text-[11px]">
+                        פרויקט אנסמבל תוכנן במחשבה על כל פרט קטן. על איזה מרכיב במפרט היוקרה תרצה/י לקרוא בהרחבה?
+                    </p>
+                    <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                </div>
+
+                <div id="specsBtns" class="flex flex-col gap-1.5 pt-1">
+                    <button type="button" onclick="handleSpecsChoice('kitchen')" class="bg-white hover:bg-purple-50 text-slate-800 font-semibold p-2.5 rounded-xl border border-purple-200 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>🍳 מטבחי פרימיום DADA מבית Tollman's</span>
+                        <i class="fa-solid fa-chevron-left text-[10px] text-purple-600"></i>
+                    </button>
+                    <button type="button" onclick="handleSpecsChoice('climate')" class="bg-white hover:bg-purple-50 text-slate-800 font-semibold p-2.5 rounded-xl border border-purple-200 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>🌡️ חימום תת-רצפתי ומערכות VRF מתקדמות</span>
+                        <i class="fa-solid fa-chevron-left text-[10px] text-purple-600"></i>
+                    </button>
+                    <button type="button" onclick="handleSpecsChoice('smart')" class="bg-white hover:bg-purple-50 text-slate-800 font-semibold p-2.5 rounded-xl border border-purple-200 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>📱 בית חכם עם שליטה באפליקציה ומפסקי טאץ'</span>
+                        <i class="fa-solid fa-chevron-left text-[10px] text-purple-600"></i>
+                    </button>
+                </div>
+
+                <div id="specsAfterFeed" class="space-y-3"></div>
+            `;
+            scrollChat();
+        }
+
+        async function handleSpecsChoice(feature) {
+            const btns = document.getElementById('specsBtns');
+            if (btns) btns.classList.add('hidden');
+
+            const container = document.getElementById('specsAfterFeed');
+            const now = getNow();
+
+            const map = {
+                kitchen: 'מטבחי פרימיום DADA מבית Tollman\'s',
+                climate: 'חימום תת-רצפתי ומערכות VRF מתקדמות',
+                smart: 'בית חכם עם שליטה באפליקציה ומפסקי טאץ\''
+            };
+
+            container.innerHTML += `
+                <div class="chat-bubble-sent p-3 max-w-[85%] self-end">
+                    <p class="font-medium text-slate-900">${map[feature]} ✓</p>
+                    <span class="text-[9px] text-slate-500 block text-left mt-1">${now} ✓✓</span>
+                </div>
+            `;
+            scrollChat();
+
+            await wait(300);
+            showTyping(true);
+            await wait(1000);
+            showTyping(false);
+            playWhatsAppPop();
+
+            container.innerHTML += `
+                <div class="chat-bubble-received p-3 max-w-[92%] self-start space-y-2 border-r-4 border-purple-600">
+                    <p class="font-bold text-slate-900 text-xs">פירוט מפרט המותג שנבחר:</p>
+                    <p class="text-slate-700 text-[11px] leading-relaxed">
+                        בכל אחת מ-8 הדירות שולבו רכיבי קצה בלתי מתפשרים: דלתות פנים 2.40 מ' יוקרתיות, ריצוף פורצלן 120/120, פרקט אלון תלת שכבתי בחדרי השינה, ופאטיו פתוח עם צמחיה מטפסת לכל גובה הבניין.
+                    </p>
+                    <div class="p-2 bg-purple-50 rounded-xl border border-purple-200 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-book-open text-purple-700 text-lg"></i>
+                            <span class="text-[11px] font-bold text-purple-900">מפרט_טכני_מלא_אנסמבל.pdf</span>
+                        </div>
+                        <span class="text-[10px] text-purple-800 font-bold bg-white px-2 py-0.5 rounded border border-purple-200">הורדה</span>
+                    </div>
+                    <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                </div>
+            `;
+            scrollChat();
+        }
+
+        // --- Flow 5: Broadcast Flow (VIP Presale) ---
+        async function startFlowBroadcast() {
+            const feed = document.getElementById('dynamicChatFeed');
+            feed.innerHTML = '';
+            showTyping(false);
+
+            await wait(200);
+            showTyping(true);
+            await wait(800);
+            showTyping(false);
+            playWhatsAppPop();
+
+            feed.innerHTML = `
+                <div class="text-center my-1">
+                    <span class="bg-amber-100 text-amber-900 border border-amber-300 text-[10px] px-3 py-1 rounded-full font-bold inline-block shadow-sm">
+                        <i class="fa-solid fa-paper-plane mr-1 text-amber-700"></i> דיוור ברודקאסט VIP לרשימת לקוחות פרימיום
+                    </span>
+                </div>
+
+                <div class="chat-bubble-received p-3.5 max-w-[92%] self-start space-y-2 border-r-4 border-rose-500 shadow-sm">
+                    <p class="font-black text-rose-950 text-xs">🏛 פתיחת פריסייל בלעדי: פרויקט אנסמבל | רביבים ת"א</p>
+                    <p class="text-slate-700 leading-relaxed text-[11px]">
+                        שלום רב,<br>
+                        אנו מתכבדים להזמינכם להיכרות ראשונית עם פרויקט הבוטיק האמנותי ברחוב יעקב חזן 19. 
+                        <strong>8 דירות בלבד</strong> בעיצוב האדריכל פיצו קדם, בשכונת רביבים הכפרית והשקטה.<br><br>
+                        באיזה נושא תרצה/י לקבל מידע מקדים לפני כולם?
+                    </p>
+                    <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                </div>
+
+                <div id="broadcastBtns" class="flex flex-col gap-1.5 pt-1">
+                    <button type="button" onclick="handleBroadcastTopic('prices')" class="bg-white hover:bg-amber-50 text-slate-800 font-semibold p-2.5 rounded-xl border border-amber-200 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>💰 מחירי פריסייל ותנאי תשלום בלעדיים</span>
+                        <i class="fa-solid fa-chevron-left text-[10px] text-amber-700"></i>
+                    </button>
+                    <button type="button" onclick="handleBroadcastTopic('penthouse')" class="bg-white hover:bg-amber-50 text-slate-800 font-semibold p-2.5 rounded-xl border border-amber-200 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>👑 תוכנית הפנטהאוז וקומת הגג</span>
+                        <i class="fa-solid fa-chevron-left text-[10px] text-amber-700"></i>
+                    </button>
+                    <button type="button" onclick="handleBroadcastTopic('agent')" class="bg-white hover:bg-amber-50 text-slate-800 font-semibold p-2.5 rounded-xl border border-amber-200 text-right text-xs shadow-sm flex items-center justify-between transition active:scale-[0.98]">
+                        <span>📞 שיחה אישית עם מנהל השיווק</span>
+                        <i class="fa-solid fa-chevron-left text-[10px] text-amber-700"></i>
+                    </button>
+                </div>
+
+                <div id="broadcastFollowupFeed" class="space-y-3"></div>
+            `;
+            scrollChat();
+        }
+
+        async function handleBroadcastTopic(topic) {
+            const btns = document.getElementById('broadcastBtns');
+            if (btns) btns.classList.add('hidden');
+
+            const container = document.getElementById('broadcastFollowupFeed');
+            const now = getNow();
+
+            let title = topic === 'prices' ? 'מחירי פריסייל ותנאי תשלום בלעדיים' : (topic === 'penthouse' ? 'תוכנית הפנטהאוז וקומת הגג' : 'שיחה אישית עם מנהל השיווק');
+
+            container.innerHTML += `
+                <div class="chat-bubble-sent p-3 max-w-[85%] self-end">
+                    <p class="font-medium text-slate-900">${title} ✓</p>
+                    <span class="text-[9px] text-slate-500 block text-left mt-1">${now} ✓✓</span>
+                </div>
+            `;
+            scrollChat();
+
+            await wait(300);
+            showTyping(true);
+            await wait(1100);
+            showTyping(false);
+            playWhatsAppPop();
+
+            container.innerHTML += `
+                <div class="chat-bubble-received p-3 max-w-[92%] self-start space-y-2 border-r-4 border-emerald-500">
+                    <p class="font-bold text-slate-900 text-xs">מצוין! הפרטים בדרך אליך:</p>
+                    <p class="text-slate-700 text-[11px] leading-relaxed">
+                        מנהל קשרי הלקוחות של גולדווסר מינצר יעביר אליך את חוברת הפריסייל הסגורה בוואטסאפ ויתאם עמך שיחה קצרה ודיסקרטית.
+                    </p>
+                    <div class="p-2 bg-slate-50 rounded-lg border border-slate-200 text-[10px] text-slate-600 flex items-center gap-2">
+                        <i class="fa-solid fa-check text-emerald-600"></i>
+                        <span>סטטוס ליד עודכן במערכת: "מתעניין VIP - פריסייל אנסמבל"</span>
+                    </div>
+                    <span class="text-[9px] text-slate-400 block text-left mt-1">${getNow()}</span>
+                </div>
+            `;
+            scrollChat();
+        }
+
+        // On DOM Load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Start default flow with context card initialized
+            updateDemoContextCard('match');
+            startFlowMatch();
+
+            // Set current dynamic date
+            const today = new Date();
+            const formattedDate = today.toLocaleDateString('he-IL', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            });
+
+            const docDateSpan = document.getElementById('currentDocDate');
+            if (docDateSpan) docDateSpan.innerText = formattedDate;
+        });
+    </script>
+</body>
+</html>
